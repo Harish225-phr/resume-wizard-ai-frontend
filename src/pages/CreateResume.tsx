@@ -1,7 +1,7 @@
-
 import { useState } from 'react';
 import { FileText, Download, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { usePayment } from '@/hooks/usePayment';
 import { Button } from '@/components/ui/button';
 import PremiumModal from '@/components/PremiumModal';
 import AIObjectiveModal from '@/components/AIObjectiveModal';
@@ -16,6 +16,8 @@ import { FormData, PaymentState, Template } from '@/types/resume';
 
 const CreateResume = () => {
   const { toast } = useToast();
+  const { processPayment, isProcessing } = usePayment();
+  
   const [formData, setFormData] = useState<FormData>({
     fullName: '',
     email: '',
@@ -80,68 +82,103 @@ const CreateResume = () => {
   };
 
   const handlePremiumPayment = () => {
-    toast({
-      title: "Payment Processing",
-      description: "Redirecting to payment gateway...",
-    });
-    
-    setTimeout(() => {
-      setPaymentState(prev => ({ 
-        ...prev, 
-        hasPremiumAccess: true 
-      }));
-      if (paymentState.selectedTemplate) {
-        setFormData(prev => ({ ...prev, template: paymentState.selectedTemplate!.id }));
+    if (!paymentState.selectedTemplate) return;
+
+    processPayment(
+      {
+        amount: paymentState.selectedTemplate.price || 49,
+        currency: 'INR',
+        description: `Premium Template: ${paymentState.selectedTemplate.name}`,
+        prefill: {
+          name: formData.fullName,
+          email: formData.email,
+          contact: formData.phone
+        }
+      },
+      (result) => {
+        // Payment successful
+        setPaymentState(prev => ({ 
+          ...prev, 
+          hasPremiumAccess: true 
+        }));
+        if (paymentState.selectedTemplate) {
+          setFormData(prev => ({ ...prev, template: paymentState.selectedTemplate!.id }));
+        }
+        setShowPremiumModal(false);
+        toast({
+          title: "🎉 Premium Unlocked!",
+          description: "All premium templates are now available. Download with no watermark!",
+        });
+      },
+      (error) => {
+        console.error('Premium payment failed:', error);
       }
-      setShowPremiumModal(false);
-      toast({
-        title: "🎉 Premium Unlocked!",
-        description: "All premium templates are now available. Download with no watermark!",
-      });
-    }, 2000);
+    );
   };
 
   const handleAIPayment = () => {
-    toast({
-      title: "Payment Processing",
-      description: "Redirecting to payment gateway...",
-    });
-    
-    setTimeout(() => {
-      setPaymentState(prev => ({ 
-        ...prev, 
-        hasAIObjectiveAccess: true 
-      }));
-      setShowAIModal(false);
-      toast({
-        title: "🤖 AI Unlocked!",
-        description: "AI career objective generation is now available.",
-      });
-      generateObjective();
-    }, 2000);
+    processPayment(
+      {
+        amount: 19,
+        currency: 'INR',
+        description: 'AI Career Objective Generation',
+        prefill: {
+          name: formData.fullName,
+          email: formData.email,
+          contact: formData.phone
+        }
+      },
+      (result) => {
+        // Payment successful
+        setPaymentState(prev => ({ 
+          ...prev, 
+          hasAIObjectiveAccess: true 
+        }));
+        setShowAIModal(false);
+        toast({
+          title: "🤖 AI Unlocked!",
+          description: "AI career objective generation is now available.",
+        });
+        generateObjective();
+      },
+      (error) => {
+        console.error('AI payment failed:', error);
+      }
+    );
   };
 
   const handleBundlePurchase = () => {
-    toast({
-      title: "Bundle Payment Processing",
-      description: "Processing your bundle purchase...",
-    });
-    
-    setTimeout(() => {
-      setPaymentState(prev => ({ 
-        ...prev, 
-        hasPremiumAccess: true,
-        hasAIObjectiveAccess: true
-      }));
-      if (paymentState.selectedTemplate) {
-        setFormData(prev => ({ ...prev, template: paymentState.selectedTemplate!.id }));
+    processPayment(
+      {
+        amount: 48,
+        currency: 'INR',
+        description: 'Bundle: Premium Templates + AI Objective',
+        prefill: {
+          name: formData.fullName,
+          email: formData.email,
+          contact: formData.phone
+        }
+      },
+      (result) => {
+        // Payment successful
+        setPaymentState(prev => ({ 
+          ...prev, 
+          hasPremiumAccess: true,
+          hasAIObjectiveAccess: true
+        }));
+        if (paymentState.selectedTemplate) {
+          setFormData(prev => ({ ...prev, template: paymentState.selectedTemplate!.id }));
+        }
+        setShowBundleModal(false);
+        toast({
+          title: "🎊 Bundle Unlocked!",
+          description: "Premium templates + AI objective unlocked! You saved ₹20!",
+        });
+      },
+      (error) => {
+        console.error('Bundle payment failed:', error);
       }
-      setShowBundleModal(false);
-      toast({
-        title: "🎊 Bundle Unlocked!",
-        description: "Premium templates + AI objective unlocked! You saved ₹20!",
-      });
-    }, 2000);
+    );
   };
 
   const generateObjective = async () => {
@@ -309,12 +346,14 @@ const CreateResume = () => {
         templateName={paymentState.selectedTemplate?.name || ''}
         price={paymentState.selectedTemplate?.price || 49}
         onPayment={handlePremiumPayment}
+        isProcessing={isProcessing}
       />
 
       <AIObjectiveModal
         isOpen={showAIModal}
         onClose={() => setShowAIModal(false)}
         onPayment={handleAIPayment}
+        isProcessing={isProcessing}
       />
 
       <BundleOfferModal
@@ -325,6 +364,7 @@ const CreateResume = () => {
           setShowBundleModal(false);
           setShowPremiumModal(true);
         }}
+        isProcessing={isProcessing}
       />
 
       <UpgradeReminderModal

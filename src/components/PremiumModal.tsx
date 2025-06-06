@@ -2,7 +2,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Crown, CreditCard, Check, FileText, Palette, Award, Download } from 'lucide-react';
+import { Crown, CreditCard, Check, FileText, Palette, Award, Download, Loader2 } from 'lucide-react';
 
 interface PremiumModalProps {
   isOpen: boolean;
@@ -10,9 +10,10 @@ interface PremiumModalProps {
   templateName: string;
   price: number;
   onPayment: () => void;
+  isProcessing?: boolean;
 }
 
-const PremiumModal = ({ isOpen, onClose, templateName, price, onPayment }: PremiumModalProps) => {
+const PremiumModal = ({ isOpen, onClose, templateName, price, onPayment, isProcessing = false }: PremiumModalProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-lg">
@@ -94,12 +95,25 @@ const PremiumModal = ({ isOpen, onClose, templateName, price, onPayment }: Premi
           </div>
 
           <div className="flex gap-3">
-            <Button variant="outline" onClick={onClose} className="flex-1">
+            <Button variant="outline" onClick={onClose} className="flex-1" disabled={isProcessing}>
               Maybe Later
             </Button>
-            <Button onClick={onPayment} className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-              <CreditCard className="mr-2 h-4 w-4" />
-              Unlock Now
+            <Button 
+              onClick={onPayment} 
+              className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+              disabled={isProcessing}
+            >
+              {isProcessing ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                <>
+                  <CreditCard className="mr-2 h-4 w-4" />
+                  Unlock Now
+                </>
+              )}
             </Button>
           </div>
         </div>

@@ -1,17 +1,17 @@
-
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Crown, Sparkles, CreditCard, Check, Gift } from 'lucide-react';
+import { Crown, Sparkles, CreditCard, Check, Gift, Loader2 } from 'lucide-react';
 
 interface BundleOfferModalProps {
   isOpen: boolean;
   onClose: () => void;
   onPurchaseBundle: () => void;
   onPurchaseSeparate: () => void;
+  isProcessing?: boolean;
 }
 
-const BundleOfferModal = ({ isOpen, onClose, onPurchaseBundle, onPurchaseSeparate }: BundleOfferModalProps) => {
+const BundleOfferModal = ({ isOpen, onClose, onPurchaseBundle, onPurchaseSeparate, isProcessing = false }: BundleOfferModalProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-lg">
@@ -71,9 +71,19 @@ const BundleOfferModal = ({ isOpen, onClose, onPurchaseBundle, onPurchaseSeparat
                 <Button 
                   onClick={onPurchaseBundle}
                   className="w-full mt-3 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700"
+                  disabled={isProcessing}
                 >
-                  <Gift className="mr-2 h-4 w-4" />
-                  Get Bundle
+                  {isProcessing ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <Gift className="mr-2 h-4 w-4" />
+                      Get Bundle
+                    </>
+                  )}
                 </Button>
               </div>
             </div>
@@ -91,6 +101,7 @@ const BundleOfferModal = ({ isOpen, onClose, onPurchaseBundle, onPurchaseSeparat
                   variant="outline" 
                   onClick={onPurchaseSeparate}
                   className="w-full"
+                  disabled={isProcessing}
                 >
                   <CreditCard className="mr-2 h-4 w-4" />
                   Pay Separately
@@ -100,7 +111,7 @@ const BundleOfferModal = ({ isOpen, onClose, onPurchaseBundle, onPurchaseSeparat
           </div>
 
           <div className="text-center">
-            <Button variant="ghost" onClick={onClose} className="text-gray-500">
+            <Button variant="ghost" onClick={onClose} className="text-gray-500" disabled={isProcessing}>
               Maybe Later
             </Button>
           </div>

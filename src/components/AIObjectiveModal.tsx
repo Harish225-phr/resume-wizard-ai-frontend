@@ -2,15 +2,16 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Sparkles, CreditCard, Check, Brain, Target, TrendingUp } from 'lucide-react';
+import { Sparkles, CreditCard, Check, Brain, Target, TrendingUp, Loader2 } from 'lucide-react';
 
 interface AIObjectiveModalProps {
   isOpen: boolean;
   onClose: () => void;
   onPayment: () => void;
+  isProcessing?: boolean;
 }
 
-const AIObjectiveModal = ({ isOpen, onClose, onPayment }: AIObjectiveModalProps) => {
+const AIObjectiveModal = ({ isOpen, onClose, onPayment, isProcessing = false }: AIObjectiveModalProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-lg">
@@ -90,12 +91,25 @@ const AIObjectiveModal = ({ isOpen, onClose, onPayment }: AIObjectiveModalProps)
           </div>
 
           <div className="flex gap-3">
-            <Button variant="outline" onClick={onClose} className="flex-1">
+            <Button variant="outline" onClick={onClose} className="flex-1" disabled={isProcessing}>
               Write Manually
             </Button>
-            <Button onClick={onPayment} className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
-              <CreditCard className="mr-2 h-4 w-4" />
-              Generate with AI
+            <Button 
+              onClick={onPayment} 
+              className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+              disabled={isProcessing}
+            >
+              {isProcessing ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                <>
+                  <CreditCard className="mr-2 h-4 w-4" />
+                  Generate with AI
+                </>
+              )}
             </Button>
           </div>
         </div>
