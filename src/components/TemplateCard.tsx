@@ -1,7 +1,7 @@
 
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Crown, Check } from 'lucide-react';
+import { Crown, Check, Sparkles } from 'lucide-react';
 import { Template } from '@/types/resume';
 
 interface TemplateCardProps {
@@ -13,31 +13,52 @@ interface TemplateCardProps {
 
 const TemplateCard = ({ template, isSelected, onSelect, hasPremiumAccess }: TemplateCardProps) => {
   const canSelect = template.type === 'free' || hasPremiumAccess;
+  const isPremium = template.type === 'premium';
   
   return (
     <Card 
-      className={`relative p-4 cursor-pointer transition-all duration-200 ${
-        isSelected ? 'ring-2 ring-blue-500 bg-blue-50' : 'hover:shadow-lg'
-      } ${!canSelect ? 'opacity-75' : ''}`}
+      className={`relative p-4 cursor-pointer transition-all duration-300 transform hover:scale-105 ${
+        isSelected ? 'ring-2 ring-blue-500 bg-blue-50' : 'hover:shadow-xl'
+      } ${!canSelect ? 'opacity-75' : ''} ${
+        isPremium ? 'border-2 border-gradient-to-r from-yellow-400 to-orange-500 hover:shadow-2xl hover:shadow-yellow-500/25' : ''
+      }`}
       onClick={() => canSelect && onSelect(template)}
+      style={isPremium ? {
+        background: 'linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%)',
+        boxShadow: '0 4px 20px rgba(251, 191, 36, 0.3)'
+      } : undefined}
     >
-      {template.type === 'premium' && (
-        <Badge variant="secondary" className="absolute top-2 right-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white">
-          <Crown className="mr-1 h-3 w-3" />
-          Premium
-        </Badge>
+      {isPremium && (
+        <>
+          <Badge variant="secondary" className="absolute top-2 right-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white animate-pulse">
+            <Crown className="mr-1 h-3 w-3" />
+            Premium
+          </Badge>
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 via-orange-500 to-pink-500"></div>
+          <Sparkles className="absolute top-2 left-2 h-4 w-4 text-yellow-600 animate-pulse" />
+        </>
       )}
       
-      <div className="aspect-[3/4] bg-gradient-to-b from-gray-100 to-gray-200 rounded-lg mb-3 flex items-center justify-center">
-        <span className="text-gray-500 text-sm">{template.preview}</span>
+      <div className={`aspect-[3/4] rounded-lg mb-3 flex items-center justify-center transition-all duration-300 ${
+        isPremium 
+          ? 'bg-gradient-to-b from-yellow-100 to-orange-100 border-2 border-yellow-300' 
+          : 'bg-gradient-to-b from-gray-100 to-gray-200'
+      }`}>
+        <span className={`text-sm font-medium ${
+          isPremium ? 'text-orange-700' : 'text-gray-500'
+        }`}>
+          {template.preview}
+        </span>
       </div>
       
       <div className="space-y-2">
-        <h3 className="font-semibold text-gray-800">{template.name}</h3>
+        <h3 className={`font-semibold ${isPremium ? 'text-orange-800' : 'text-gray-800'}`}>
+          {template.name}
+        </h3>
         
-        {template.type === 'premium' ? (
+        {isPremium ? (
           <div className="flex items-center justify-between">
-            <span className="text-blue-600 font-medium">₹{template.price}</span>
+            <span className="text-orange-600 font-bold">₹{template.price}</span>
             {hasPremiumAccess && (
               <div className="flex items-center gap-1 text-green-600 text-sm">
                 <Check className="h-4 w-4" />
@@ -48,14 +69,32 @@ const TemplateCard = ({ template, isSelected, onSelect, hasPremiumAccess }: Temp
         ) : (
           <span className="text-green-600 font-medium">Free</span>
         )}
+
+        {isPremium && !hasPremiumAccess && (
+          <div className="text-xs text-orange-600 space-y-1">
+            <div>• No watermark</div>
+            <div>• DOCX export</div>
+            <div>• Color options</div>
+          </div>
+        )}
       </div>
       
       {isSelected && (
-        <div className="absolute inset-0 bg-blue-500/10 rounded-lg border-2 border-blue-500 flex items-center justify-center">
-          <div className="bg-blue-500 text-white rounded-full p-1">
+        <div className={`absolute inset-0 rounded-lg border-2 flex items-center justify-center ${
+          isPremium 
+            ? 'bg-orange-500/10 border-orange-500' 
+            : 'bg-blue-500/10 border-blue-500'
+        }`}>
+          <div className={`text-white rounded-full p-1 ${
+            isPremium ? 'bg-orange-500' : 'bg-blue-500'
+          }`}>
             <Check className="h-4 w-4" />
           </div>
         </div>
+      )}
+
+      {isPremium && (
+        <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/0 via-yellow-400/5 to-orange-500/0 rounded-lg pointer-events-none"></div>
       )}
     </Card>
   );

@@ -1,11 +1,17 @@
 
 import { useState } from 'react';
-import { User, Mail, Phone, GraduationCap, Briefcase, Target, FileText, Download, Loader2, Crown, Sparkles } from 'lucide-react';
+import { FileText, Download, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import PremiumModal from '@/components/PremiumModal';
 import AIObjectiveModal from '@/components/AIObjectiveModal';
+import BundleOfferModal from '@/components/BundleOfferModal';
+import UpgradeReminderModal from '@/components/UpgradeReminderModal';
 import TemplateCard from '@/components/TemplateCard';
+import PersonalInfoSection from '@/components/resume-form/PersonalInfoSection';
+import EducationSkillsSection from '@/components/resume-form/EducationSkillsSection';
+import ExperienceSection from '@/components/resume-form/ExperienceSection';
+import CareerObjectiveSection from '@/components/resume-form/CareerObjectiveSection';
 import { FormData, PaymentState, Template } from '@/types/resume';
 
 const CreateResume = () => {
@@ -32,6 +38,9 @@ const CreateResume = () => {
   const [showDownload, setShowDownload] = useState(false);
   const [showPremiumModal, setShowPremiumModal] = useState(false);
   const [showAIModal, setShowAIModal] = useState(false);
+  const [showBundleModal, setShowBundleModal] = useState(false);
+  const [showReminderModal, setShowReminderModal] = useState(false);
+  const [freeTemplateSelections, setFreeTemplateSelections] = useState(0);
 
   const templates: Template[] = [
     { id: 'modern', name: 'Modern Professional', type: 'free', preview: 'Clean & Simple' },
@@ -47,21 +56,35 @@ const CreateResume = () => {
   const handleTemplateSelect = (template: Template) => {
     if (template.type === 'premium' && !paymentState.hasPremiumAccess) {
       setPaymentState(prev => ({ ...prev, selectedTemplate: template }));
-      setShowPremiumModal(true);
+      
+      // Show bundle offer if user hasn't purchased AI objective
+      if (!paymentState.hasAIObjectiveAccess) {
+        setShowBundleModal(true);
+      } else {
+        setShowPremiumModal(true);
+      }
       return;
+    }
+    
+    if (template.type === 'free') {
+      const newCount = freeTemplateSelections + 1;
+      setFreeTemplateSelections(newCount);
+      
+      // Show reminder after 3 free template selections
+      if (newCount >= 3 && !paymentState.hasPremiumAccess) {
+        setShowReminderModal(true);
+      }
     }
     
     setFormData(prev => ({ ...prev, template: template.id }));
   };
 
   const handlePremiumPayment = () => {
-    // Simulate payment processing
     toast({
       title: "Payment Processing",
       description: "Redirecting to payment gateway...",
     });
     
-    // Simulate successful payment after 2 seconds
     setTimeout(() => {
       setPaymentState(prev => ({ 
         ...prev, 
@@ -72,20 +95,18 @@ const CreateResume = () => {
       }
       setShowPremiumModal(false);
       toast({
-        title: "Payment Successful!",
-        description: "Premium templates unlocked successfully.",
+        title: "🎉 Premium Unlocked!",
+        description: "All premium templates are now available. Download with no watermark!",
       });
     }, 2000);
   };
 
   const handleAIPayment = () => {
-    // Simulate payment processing
     toast({
       title: "Payment Processing",
       description: "Redirecting to payment gateway...",
     });
     
-    // Simulate successful payment after 2 seconds
     setTimeout(() => {
       setPaymentState(prev => ({ 
         ...prev, 
@@ -93,11 +114,33 @@ const CreateResume = () => {
       }));
       setShowAIModal(false);
       toast({
-        title: "Payment Successful!",
-        description: "AI career objective feature unlocked.",
+        title: "🤖 AI Unlocked!",
+        description: "AI career objective generation is now available.",
       });
-      // Auto-generate objective after payment
       generateObjective();
+    }, 2000);
+  };
+
+  const handleBundlePurchase = () => {
+    toast({
+      title: "Bundle Payment Processing",
+      description: "Processing your bundle purchase...",
+    });
+    
+    setTimeout(() => {
+      setPaymentState(prev => ({ 
+        ...prev, 
+        hasPremiumAccess: true,
+        hasAIObjectiveAccess: true
+      }));
+      if (paymentState.selectedTemplate) {
+        setFormData(prev => ({ ...prev, template: paymentState.selectedTemplate!.id }));
+      }
+      setShowBundleModal(false);
+      toast({
+        title: "🎊 Bundle Unlocked!",
+        description: "Premium templates + AI objective unlocked! You saved ₹20!",
+      });
     }, 2000);
   };
 
@@ -118,7 +161,6 @@ const CreateResume = () => {
 
     setIsGeneratingObjective(true);
     try {
-      // Simulated API call for objective generation
       await new Promise(resolve => setTimeout(resolve, 2000));
       
       const generatedObjective = `Dedicated ${formData.fullName.split(' ')[0]} with expertise in ${formData.skills.split(',')[0]} seeking to leverage strong technical skills and passion for innovation to contribute to a dynamic team and drive organizational success.`;
@@ -126,7 +168,7 @@ const CreateResume = () => {
       setFormData(prev => ({ ...prev, careerObjective: generatedObjective }));
       
       toast({
-        title: "Objective Generated!",
+        title: "✨ Objective Generated!",
         description: "Your AI-powered career objective has been created successfully.",
       });
     } catch (error) {
@@ -161,13 +203,12 @@ const CreateResume = () => {
 
     setIsLoading(true);
     try {
-      // Simulated API call
       await new Promise(resolve => setTimeout(resolve, 3000));
       
       setShowDownload(true);
       toast({
-        title: "Resume Generated!",
-        description: "Your resume has been created successfully. You can now download it.",
+        title: "🎉 Resume Generated!",
+        description: "Your professional resume has been created successfully.",
       });
     } catch (error) {
       toast({
@@ -182,12 +223,10 @@ const CreateResume = () => {
 
   const handleDownload = () => {
     toast({
-      title: "Download Started",
+      title: "📄 Download Started",
       description: "Your resume is being downloaded.",
     });
   };
-
-  const selectedTemplate = templates.find(t => t.id === formData.template);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-12">
@@ -202,169 +241,16 @@ const CreateResume = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="bg-white rounded-3xl shadow-2xl p-8 md:p-12">
-          {/* Personal Information */}
-          <div className="mb-10">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
-              <User className="mr-3 h-6 w-6 text-blue-600" />
-              Personal Information
-            </h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-2">
-                  Full Name *
-                </label>
-                <input
-                  type="text"
-                  id="fullName"
-                  name="fullName"
-                  value={formData.fullName}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                  placeholder="Enter your full name"
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                  Email Address *
-                </label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    placeholder="your.email@example.com"
-                    required
-                  />
-                </div>
-              </div>
-              <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-                  Phone Number *
-                </label>
-                <div className="relative">
-                  <Phone className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    placeholder="+91 98765 43210"
-                    required
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Education & Skills */}
-          <div className="mb-10">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
-              <GraduationCap className="mr-3 h-6 w-6 text-purple-600" />
-              Education & Skills
-            </h2>
-            <div className="space-y-6">
-              <div>
-                <label htmlFor="education" className="block text-sm font-medium text-gray-700 mb-2">
-                  Education *
-                </label>
-                <textarea
-                  id="education"
-                  name="education"
-                  value={formData.education}
-                  onChange={handleInputChange}
-                  rows={4}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                  placeholder="Enter your educational background (degree, institution, year)"
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="skills" className="block text-sm font-medium text-gray-700 mb-2">
-                  Skills *
-                </label>
-                <textarea
-                  id="skills"
-                  name="skills"
-                  value={formData.skills}
-                  onChange={handleInputChange}
-                  rows={3}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                  placeholder="List your skills (comma separated)"
-                  required
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Experience */}
-          <div className="mb-10">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
-              <Briefcase className="mr-3 h-6 w-6 text-green-600" />
-              Work Experience
-            </h2>
-            <div>
-              <label htmlFor="experience" className="block text-sm font-medium text-gray-700 mb-2">
-                Work Experience (Optional)
-              </label>
-              <textarea
-                id="experience"
-                name="experience"
-                value={formData.experience}
-                onChange={handleInputChange}
-                rows={5}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                placeholder="Describe your work experience (job title, company, dates, responsibilities)"
-              />
-            </div>
-          </div>
-
-          {/* Career Objective */}
-          <div className="mb-10">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
-              <Target className="mr-3 h-6 w-6 text-orange-600" />
-              Career Objective
-            </h2>
-            <div className="space-y-4">
-              <div>
-                <label htmlFor="careerObjective" className="block text-sm font-medium text-gray-700 mb-2">
-                  Career Objective
-                </label>
-                <textarea
-                  id="careerObjective"
-                  name="careerObjective"
-                  value={formData.careerObjective}
-                  onChange={handleInputChange}
-                  rows={4}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                  placeholder="Your career objective will appear here..."
-                />
-              </div>
-              <Button
-                type="button"
-                onClick={generateObjective}
-                disabled={isGeneratingObjective}
-                variant="outline"
-                className="border-2 border-purple-300 text-purple-700 hover:bg-purple-50"
-              >
-                {isGeneratingObjective ? (
-                  <Loader2 className="animate-spin mr-2 h-4 w-4" />
-                ) : (
-                  <Sparkles className="mr-2 h-4 w-4" />
-                )}
-                {paymentState.hasAIObjectiveAccess 
-                  ? (isGeneratingObjective ? 'Generating...' : 'Generate with AI')
-                  : 'Generate with AI – ₹19'
-                }
-              </Button>
-            </div>
-          </div>
+          <PersonalInfoSection formData={formData} handleInputChange={handleInputChange} />
+          <EducationSkillsSection formData={formData} handleInputChange={handleInputChange} />
+          <ExperienceSection formData={formData} handleInputChange={handleInputChange} />
+          <CareerObjectiveSection 
+            formData={formData}
+            paymentState={paymentState}
+            isGeneratingObjective={isGeneratingObjective}
+            handleInputChange={handleInputChange}
+            generateObjective={generateObjective}
+          />
 
           {/* Template Selection */}
           <div className="mb-10">
@@ -429,6 +315,26 @@ const CreateResume = () => {
         isOpen={showAIModal}
         onClose={() => setShowAIModal(false)}
         onPayment={handleAIPayment}
+      />
+
+      <BundleOfferModal
+        isOpen={showBundleModal}
+        onClose={() => setShowBundleModal(false)}
+        onPurchaseBundle={handleBundlePurchase}
+        onPurchaseSeparate={() => {
+          setShowBundleModal(false);
+          setShowPremiumModal(true);
+        }}
+      />
+
+      <UpgradeReminderModal
+        isOpen={showReminderModal}
+        onClose={() => setShowReminderModal(false)}
+        onUpgrade={() => {
+          setShowReminderModal(false);
+          setShowPremiumModal(true);
+        }}
+        freeTemplateSelections={freeTemplateSelections}
       />
     </div>
   );
