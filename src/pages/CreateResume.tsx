@@ -1,19 +1,12 @@
 
 import { useState } from 'react';
-import { User, Mail, Phone, GraduationCap, Briefcase, Target, FileText, Download, Loader2 } from 'lucide-react';
+import { User, Mail, Phone, GraduationCap, Briefcase, Target, FileText, Download, Loader2, Crown, Sparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { apiCall, API_CONFIG } from '@/config/api';
-
-interface FormData {
-  fullName: string;
-  email: string;
-  phone: string;
-  education: string;
-  skills: string;
-  experience: string;
-  careerObjective: string;
-  template: string;
-}
+import { Button } from '@/components/ui/button';
+import PremiumModal from '@/components/PremiumModal';
+import AIObjectiveModal from '@/components/AIObjectiveModal';
+import TemplateCard from '@/components/TemplateCard';
+import { FormData, PaymentState, Template } from '@/types/resume';
 
 const CreateResume = () => {
   const { toast } = useToast();
@@ -28,22 +21,92 @@ const CreateResume = () => {
     template: 'modern',
   });
   
+  const [paymentState, setPaymentState] = useState<PaymentState>({
+    hasPremiumAccess: false,
+    hasAIObjectiveAccess: false,
+    selectedTemplate: null,
+  });
+  
   const [isLoading, setIsLoading] = useState(false);
   const [isGeneratingObjective, setIsGeneratingObjective] = useState(false);
   const [showDownload, setShowDownload] = useState(false);
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
+  const [showAIModal, setShowAIModal] = useState(false);
 
-  const templates = [
-    { value: 'modern', label: 'Modern Professional' },
-    { value: 'classic', label: 'Classic Traditional' },
-    { value: 'creative', label: 'Creative Designer' },
+  const templates: Template[] = [
+    { id: 'modern', name: 'Modern Professional', type: 'free', preview: 'Clean & Simple' },
+    { id: 'executive', name: 'Executive Premium', type: 'premium', price: 49, preview: 'Professional & Elegant' },
+    { id: 'creative', name: 'Creative Designer', type: 'premium', price: 49, preview: 'Bold & Creative' },
   ];
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleTemplateSelect = (template: Template) => {
+    if (template.type === 'premium' && !paymentState.hasPremiumAccess) {
+      setPaymentState(prev => ({ ...prev, selectedTemplate: template }));
+      setShowPremiumModal(true);
+      return;
+    }
+    
+    setFormData(prev => ({ ...prev, template: template.id }));
+  };
+
+  const handlePremiumPayment = () => {
+    // Simulate payment processing
+    toast({
+      title: "Payment Processing",
+      description: "Redirecting to payment gateway...",
+    });
+    
+    // Simulate successful payment after 2 seconds
+    setTimeout(() => {
+      setPaymentState(prev => ({ 
+        ...prev, 
+        hasPremiumAccess: true 
+      }));
+      if (paymentState.selectedTemplate) {
+        setFormData(prev => ({ ...prev, template: paymentState.selectedTemplate!.id }));
+      }
+      setShowPremiumModal(false);
+      toast({
+        title: "Payment Successful!",
+        description: "Premium templates unlocked successfully.",
+      });
+    }, 2000);
+  };
+
+  const handleAIPayment = () => {
+    // Simulate payment processing
+    toast({
+      title: "Payment Processing",
+      description: "Redirecting to payment gateway...",
+    });
+    
+    // Simulate successful payment after 2 seconds
+    setTimeout(() => {
+      setPaymentState(prev => ({ 
+        ...prev, 
+        hasAIObjectiveAccess: true 
+      }));
+      setShowAIModal(false);
+      toast({
+        title: "Payment Successful!",
+        description: "AI career objective feature unlocked.",
+      });
+      // Auto-generate objective after payment
+      generateObjective();
+    }, 2000);
+  };
+
   const generateObjective = async () => {
+    if (!paymentState.hasAIObjectiveAccess) {
+      setShowAIModal(true);
+      return;
+    }
+
     if (!formData.fullName || !formData.skills) {
       toast({
         title: "Missing Information",
@@ -64,7 +127,7 @@ const CreateResume = () => {
       
       toast({
         title: "Objective Generated!",
-        description: "Your career objective has been created successfully.",
+        description: "Your AI-powered career objective has been created successfully.",
       });
     } catch (error) {
       toast({
@@ -86,6 +149,13 @@ const CreateResume = () => {
         description: "Please fill in all required fields to continue.",
         variant: "destructive",
       });
+      return;
+    }
+
+    const selectedTemplate = templates.find(t => t.id === formData.template);
+    if (selectedTemplate?.type === 'premium' && !paymentState.hasPremiumAccess) {
+      setPaymentState(prev => ({ ...prev, selectedTemplate }));
+      setShowPremiumModal(true);
       return;
     }
 
@@ -115,8 +185,9 @@ const CreateResume = () => {
       title: "Download Started",
       description: "Your resume is being downloaded.",
     });
-    // In a real app, this would trigger the actual download
   };
+
+  const selectedTemplate = templates.find(t => t.id === formData.template);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-12">
@@ -126,7 +197,7 @@ const CreateResume = () => {
             Create Your Professional Resume
           </h1>
           <p className="text-xl text-gray-600">
-            Fill in your details and let AI help you create the perfect resume
+            Fill in your details and choose from free or premium templates
           </p>
         </div>
 
@@ -184,7 +255,7 @@ const CreateResume = () => {
                     value={formData.phone}
                     onChange={handleInputChange}
                     className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    placeholder="+1 (555) 123-4567"
+                    placeholder="+91 98765 43210"
                     required
                   />
                 </div>
@@ -261,35 +332,37 @@ const CreateResume = () => {
               Career Objective
             </h2>
             <div className="space-y-4">
-              <div className="flex flex-col sm:flex-row gap-4">
-                <div className="flex-1">
-                  <label htmlFor="careerObjective" className="block text-sm font-medium text-gray-700 mb-2">
-                    Career Objective
-                  </label>
-                  <textarea
-                    id="careerObjective"
-                    name="careerObjective"
-                    value={formData.careerObjective}
-                    onChange={handleInputChange}
-                    rows={4}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    placeholder="Your career objective will appear here..."
-                  />
-                </div>
+              <div>
+                <label htmlFor="careerObjective" className="block text-sm font-medium text-gray-700 mb-2">
+                  Career Objective
+                </label>
+                <textarea
+                  id="careerObjective"
+                  name="careerObjective"
+                  value={formData.careerObjective}
+                  onChange={handleInputChange}
+                  rows={4}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  placeholder="Your career objective will appear here..."
+                />
               </div>
-              <button
+              <Button
                 type="button"
                 onClick={generateObjective}
                 disabled={isGeneratingObjective}
-                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-medium rounded-xl hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                variant="outline"
+                className="border-2 border-purple-300 text-purple-700 hover:bg-purple-50"
               >
                 {isGeneratingObjective ? (
                   <Loader2 className="animate-spin mr-2 h-4 w-4" />
                 ) : (
-                  <Target className="mr-2 h-4 w-4" />
+                  <Sparkles className="mr-2 h-4 w-4" />
                 )}
-                {isGeneratingObjective ? 'Generating...' : 'Generate with AI'}
-              </button>
+                {paymentState.hasAIObjectiveAccess 
+                  ? (isGeneratingObjective ? 'Generating...' : 'Generate with AI')
+                  : 'Generate with AI – ₹19'
+                }
+              </Button>
             </div>
           </div>
 
@@ -299,30 +372,23 @@ const CreateResume = () => {
               <FileText className="mr-3 h-6 w-6 text-indigo-600" />
               Choose Template
             </h2>
-            <div>
-              <label htmlFor="template" className="block text-sm font-medium text-gray-700 mb-2">
-                Resume Template
-              </label>
-              <select
-                id="template"
-                name="template"
-                value={formData.template}
-                onChange={handleInputChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-              >
-                {templates.map((template) => (
-                  <option key={template.value} value={template.value}>
-                    {template.label}
-                  </option>
-                ))}
-              </select>
+            <div className="grid md:grid-cols-3 gap-6">
+              {templates.map((template) => (
+                <TemplateCard
+                  key={template.id}
+                  template={template}
+                  isSelected={formData.template === template.id}
+                  onSelect={handleTemplateSelect}
+                  hasPremiumAccess={paymentState.hasPremiumAccess}
+                />
+              ))}
             </div>
           </div>
 
           {/* Submit Button */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {!showDownload ? (
-              <button
+              <Button
                 type="submit"
                 disabled={isLoading}
                 className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
@@ -335,20 +401,35 @@ const CreateResume = () => {
                 ) : (
                   'Generate Resume'
                 )}
-              </button>
+              </Button>
             ) : (
-              <button
+              <Button
                 type="button"
                 onClick={handleDownload}
                 className="px-8 py-4 bg-gradient-to-r from-green-600 to-blue-600 text-white font-semibold rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
               >
                 <Download className="mr-2 h-5 w-5 inline" />
                 Download Resume
-              </button>
+              </Button>
             )}
           </div>
         </form>
       </div>
+
+      {/* Modals */}
+      <PremiumModal
+        isOpen={showPremiumModal}
+        onClose={() => setShowPremiumModal(false)}
+        templateName={paymentState.selectedTemplate?.name || ''}
+        price={paymentState.selectedTemplate?.price || 49}
+        onPayment={handlePremiumPayment}
+      />
+
+      <AIObjectiveModal
+        isOpen={showAIModal}
+        onClose={() => setShowAIModal(false)}
+        onPayment={handleAIPayment}
+      />
     </div>
   );
 };
