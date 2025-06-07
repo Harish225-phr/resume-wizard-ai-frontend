@@ -1,24 +1,19 @@
+
 import { useState } from 'react';
 import { FileText, Download, Loader2, FileDown } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { usePayment } from '@/hooks/usePayment';
 import { usePDFDownload } from '@/hooks/usePDFDownload';
 import { Button } from '@/components/ui/button';
-import PremiumModal from '@/components/PremiumModal';
-import AIObjectiveModal from '@/components/AIObjectiveModal';
-import BundleOfferModal from '@/components/BundleOfferModal';
-import UpgradeReminderModal from '@/components/UpgradeReminderModal';
 import TemplateCard from '@/components/TemplateCard';
 import ResumePreview from '@/components/ResumePreview';
 import PersonalInfoSection from '@/components/resume-form/PersonalInfoSection';
 import EducationSkillsSection from '@/components/resume-form/EducationSkillsSection';
 import ExperienceSection from '@/components/resume-form/ExperienceSection';
 import CareerObjectiveSection from '@/components/resume-form/CareerObjectiveSection';
-import { FormData, PaymentState, Template } from '@/types/resume';
+import { FormData, Template } from '@/types/resume';
 
 const CreateResume = () => {
   const { toast } = useToast();
-  const { processPayment, isProcessing } = usePayment();
   const { downloadPDF, isGenerating } = usePDFDownload();
   
   const [formData, setFormData] = useState<FormData>({
@@ -32,25 +27,14 @@ const CreateResume = () => {
     template: 'modern',
   });
   
-  const [paymentState, setPaymentState] = useState<PaymentState>({
-    hasPremiumAccess: false,
-    hasAIObjectiveAccess: false,
-    selectedTemplate: null,
-  });
-  
   const [isLoading, setIsLoading] = useState(false);
   const [isGeneratingObjective, setIsGeneratingObjective] = useState(false);
   const [showDownload, setShowDownload] = useState(false);
-  const [showPremiumModal, setShowPremiumModal] = useState(false);
-  const [showAIModal, setShowAIModal] = useState(false);
-  const [showBundleModal, setShowBundleModal] = useState(false);
-  const [showReminderModal, setShowReminderModal] = useState(false);
-  const [freeTemplateSelections, setFreeTemplateSelections] = useState(0);
 
   const templates: Template[] = [
     { id: 'modern', name: 'Modern Professional', type: 'free', preview: 'Clean & Simple' },
-    { id: 'executive', name: 'Executive Premium', type: 'premium', price: 49, preview: 'Professional & Elegant' },
-    { id: 'creative', name: 'Creative Designer', type: 'premium', price: 49, preview: 'Bold & Creative' },
+    { id: 'executive', name: 'Executive Style', type: 'free', preview: 'Professional & Elegant' },
+    { id: 'creative', name: 'Creative Designer', type: 'free', preview: 'Bold & Creative' },
   ];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -59,132 +43,10 @@ const CreateResume = () => {
   };
 
   const handleTemplateSelect = (template: Template) => {
-    if (template.type === 'premium' && !paymentState.hasPremiumAccess) {
-      setPaymentState(prev => ({ ...prev, selectedTemplate: template }));
-      
-      if (!paymentState.hasAIObjectiveAccess) {
-        setShowBundleModal(true);
-      } else {
-        setShowPremiumModal(true);
-      }
-      return;
-    }
-    
-    if (template.type === 'free') {
-      const newCount = freeTemplateSelections + 1;
-      setFreeTemplateSelections(newCount);
-      
-      if (newCount >= 3 && !paymentState.hasPremiumAccess) {
-        setShowReminderModal(true);
-      }
-    }
-    
     setFormData(prev => ({ ...prev, template: template.id }));
   };
 
-  const handlePremiumPayment = () => {
-    if (!paymentState.selectedTemplate) return;
-
-    processPayment(
-      {
-        amount: paymentState.selectedTemplate.price || 49,
-        currency: 'INR',
-        description: `Premium Template: ${paymentState.selectedTemplate.name}`,
-        prefill: {
-          name: formData.fullName,
-          email: formData.email,
-          contact: formData.phone
-        }
-      },
-      (result) => {
-        setPaymentState(prev => ({ 
-          ...prev, 
-          hasPremiumAccess: true 
-        }));
-        if (paymentState.selectedTemplate) {
-          setFormData(prev => ({ ...prev, template: paymentState.selectedTemplate!.id }));
-        }
-        setShowPremiumModal(false);
-        toast({
-          title: "🎉 Premium Unlocked!",
-          description: "All premium templates are now available. Download with no watermark!",
-        });
-      },
-      (error) => {
-        console.error('Premium payment failed:', error);
-      }
-    );
-  };
-
-  const handleAIPayment = () => {
-    processPayment(
-      {
-        amount: 19,
-        currency: 'INR',
-        description: 'AI Career Objective Generation',
-        prefill: {
-          name: formData.fullName,
-          email: formData.email,
-          contact: formData.phone
-        }
-      },
-      (result) => {
-        setPaymentState(prev => ({ 
-          ...prev, 
-          hasAIObjectiveAccess: true 
-        }));
-        setShowAIModal(false);
-        toast({
-          title: "🤖 AI Unlocked!",
-          description: "AI career objective generation is now available.",
-        });
-        generateObjective();
-      },
-      (error) => {
-        console.error('AI payment failed:', error);
-      }
-    );
-  };
-
-  const handleBundlePurchase = () => {
-    processPayment(
-      {
-        amount: 48,
-        currency: 'INR',
-        description: 'Bundle: Premium Templates + AI Objective',
-        prefill: {
-          name: formData.fullName,
-          email: formData.email,
-          contact: formData.phone
-        }
-      },
-      (result) => {
-        setPaymentState(prev => ({ 
-          ...prev, 
-          hasPremiumAccess: true,
-          hasAIObjectiveAccess: true
-        }));
-        if (paymentState.selectedTemplate) {
-          setFormData(prev => ({ ...prev, template: paymentState.selectedTemplate!.id }));
-        }
-        setShowBundleModal(false);
-        toast({
-          title: "🎊 Bundle Unlocked!",
-          description: "Premium templates + AI objective unlocked! You saved ₹20!",
-        });
-      },
-      (error) => {
-        console.error('Bundle payment failed:', error);
-      }
-    );
-  };
-
   const generateObjective = async () => {
-    if (!paymentState.hasAIObjectiveAccess) {
-      setShowAIModal(true);
-      return;
-    }
-
     if (!formData.fullName || !formData.skills) {
       toast({
         title: "Missing Information",
@@ -196,6 +58,7 @@ const CreateResume = () => {
 
     setIsGeneratingObjective(true);
     try {
+      // Simulate AI generation
       await new Promise(resolve => setTimeout(resolve, 2000));
       
       const generatedObjective = `Dedicated ${formData.fullName.split(' ')[0]} with expertise in ${formData.skills.split(',')[0]} seeking to leverage strong technical skills and passion for innovation to contribute to a dynamic team and drive organizational success.`;
@@ -229,20 +92,13 @@ const CreateResume = () => {
       return;
     }
 
-    const selectedTemplate = templates.find(t => t.id === formData.template);
-    if (selectedTemplate?.type === 'premium' && !paymentState.hasPremiumAccess) {
-      setPaymentState(prev => ({ ...prev, selectedTemplate }));
-      setShowPremiumModal(true);
-      return;
-    }
-
     setIsLoading(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
       setShowDownload(true);
       toast({
-        title: "🎉 Resume Generated!",
+        title: "🎉 Resume Generated Successfully!",
         description: "Your professional resume has been created successfully.",
       });
     } catch (error) {
@@ -269,10 +125,10 @@ const CreateResume = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
-            Create Your Professional Resume
+            Create Your Professional Resume - 100% Free!
           </h1>
           <p className="text-xl text-gray-600">
-            Fill in your details and choose from free or premium templates
+            Fill in your details and choose from our completely free templates
           </p>
         </div>
 
@@ -285,7 +141,6 @@ const CreateResume = () => {
               <ExperienceSection formData={formData} handleInputChange={handleInputChange} />
               <CareerObjectiveSection 
                 formData={formData}
-                paymentState={paymentState}
                 isGeneratingObjective={isGeneratingObjective}
                 handleInputChange={handleInputChange}
                 generateObjective={generateObjective}
@@ -295,7 +150,7 @@ const CreateResume = () => {
               <div className="mb-10">
                 <h2 className="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
                   <FileText className="mr-3 h-6 w-6 text-indigo-600" />
-                  Choose Template
+                  Choose Template - All Free!
                 </h2>
                 <div className="grid md:grid-cols-3 gap-6">
                   {templates.map((template) => (
@@ -304,7 +159,6 @@ const CreateResume = () => {
                       template={template}
                       isSelected={formData.template === template.id}
                       onSelect={handleTemplateSelect}
-                      hasPremiumAccess={paymentState.hasPremiumAccess}
                     />
                   ))}
                 </div>
@@ -359,49 +213,11 @@ const CreateResume = () => {
               Resume Preview
             </h2>
             <div className="overflow-auto max-h-screen">
-              <ResumePreview formData={formData} paymentState={paymentState} />
+              <ResumePreview formData={formData} />
             </div>
           </div>
         </div>
       </div>
-
-      {/* Modals */}
-      <PremiumModal
-        isOpen={showPremiumModal}
-        onClose={() => setShowPremiumModal(false)}
-        templateName={paymentState.selectedTemplate?.name || ''}
-        price={paymentState.selectedTemplate?.price || 49}
-        onPayment={handlePremiumPayment}
-        isProcessing={isProcessing}
-      />
-
-      <AIObjectiveModal
-        isOpen={showAIModal}
-        onClose={() => setShowAIModal(false)}
-        onPayment={handleAIPayment}
-        isProcessing={isProcessing}
-      />
-
-      <BundleOfferModal
-        isOpen={showBundleModal}
-        onClose={() => setShowBundleModal(false)}
-        onPurchaseBundle={handleBundlePurchase}
-        onPurchaseSeparate={() => {
-          setShowBundleModal(false);
-          setShowPremiumModal(true);
-        }}
-        isProcessing={isProcessing}
-      />
-
-      <UpgradeReminderModal
-        isOpen={showReminderModal}
-        onClose={() => setShowReminderModal(false)}
-        onUpgrade={() => {
-          setShowReminderModal(false);
-          setShowPremiumModal(true);
-        }}
-        freeTemplateSelections={freeTemplateSelections}
-      />
     </div>
   );
 };

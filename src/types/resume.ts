@@ -2,8 +2,7 @@
 export interface Template {
   id: string;
   name: string;
-  type: 'free' | 'premium';
-  price?: number;
+  type: 'free';
   preview: string;
 }
 
@@ -18,8 +17,7 @@ export interface FormData {
   template: string;
 }
 
-export interface PaymentState {
-  hasPremiumAccess: boolean;
-  hasAIObjectiveAccess: boolean;
-  selectedTemplate: Template | null;
+// Simplified state - no payment tracking needed
+export interface AppState {
+  // Remove all payment-related state
 }
