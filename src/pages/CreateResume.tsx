@@ -1,13 +1,15 @@
 import { useState } from 'react';
-import { FileText, Download, Loader2 } from 'lucide-react';
+import { FileText, Download, Loader2, FileDown } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { usePayment } from '@/hooks/usePayment';
+import { usePDFDownload } from '@/hooks/usePDFDownload';
 import { Button } from '@/components/ui/button';
 import PremiumModal from '@/components/PremiumModal';
 import AIObjectiveModal from '@/components/AIObjectiveModal';
 import BundleOfferModal from '@/components/BundleOfferModal';
 import UpgradeReminderModal from '@/components/UpgradeReminderModal';
 import TemplateCard from '@/components/TemplateCard';
+import ResumePreview from '@/components/ResumePreview';
 import PersonalInfoSection from '@/components/resume-form/PersonalInfoSection';
 import EducationSkillsSection from '@/components/resume-form/EducationSkillsSection';
 import ExperienceSection from '@/components/resume-form/ExperienceSection';
@@ -17,6 +19,7 @@ import { FormData, PaymentState, Template } from '@/types/resume';
 const CreateResume = () => {
   const { toast } = useToast();
   const { processPayment, isProcessing } = usePayment();
+  const { downloadPDF, isGenerating } = usePDFDownload();
   
   const [formData, setFormData] = useState<FormData>({
     fullName: '',
@@ -59,7 +62,6 @@ const CreateResume = () => {
     if (template.type === 'premium' && !paymentState.hasPremiumAccess) {
       setPaymentState(prev => ({ ...prev, selectedTemplate: template }));
       
-      // Show bundle offer if user hasn't purchased AI objective
       if (!paymentState.hasAIObjectiveAccess) {
         setShowBundleModal(true);
       } else {
@@ -72,7 +74,6 @@ const CreateResume = () => {
       const newCount = freeTemplateSelections + 1;
       setFreeTemplateSelections(newCount);
       
-      // Show reminder after 3 free template selections
       if (newCount >= 3 && !paymentState.hasPremiumAccess) {
         setShowReminderModal(true);
       }
@@ -96,7 +97,6 @@ const CreateResume = () => {
         }
       },
       (result) => {
-        // Payment successful
         setPaymentState(prev => ({ 
           ...prev, 
           hasPremiumAccess: true 
@@ -129,7 +129,6 @@ const CreateResume = () => {
         }
       },
       (result) => {
-        // Payment successful
         setPaymentState(prev => ({ 
           ...prev, 
           hasAIObjectiveAccess: true 
@@ -160,7 +159,6 @@ const CreateResume = () => {
         }
       },
       (result) => {
-        // Payment successful
         setPaymentState(prev => ({ 
           ...prev, 
           hasPremiumAccess: true,
@@ -258,16 +256,17 @@ const CreateResume = () => {
     }
   };
 
-  const handleDownload = () => {
-    toast({
-      title: "📄 Download Started",
-      description: "Your resume is being downloaded.",
+  const handleDownloadPDF = () => {
+    downloadPDF('resume-preview', {
+      filename: `${formData.fullName.replace(/\s+/g, '_')}_Resume.pdf` || 'Resume.pdf',
+      quality: 1,
+      format: 'a4'
     });
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-12">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
             Create Your Professional Resume
@@ -277,66 +276,93 @@ const CreateResume = () => {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-3xl shadow-2xl p-8 md:p-12">
-          <PersonalInfoSection formData={formData} handleInputChange={handleInputChange} />
-          <EducationSkillsSection formData={formData} handleInputChange={handleInputChange} />
-          <ExperienceSection formData={formData} handleInputChange={handleInputChange} />
-          <CareerObjectiveSection 
-            formData={formData}
-            paymentState={paymentState}
-            isGeneratingObjective={isGeneratingObjective}
-            handleInputChange={handleInputChange}
-            generateObjective={generateObjective}
-          />
+        <div className="grid lg:grid-cols-2 gap-8">
+          {/* Form Section */}
+          <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12">
+            <form onSubmit={handleSubmit}>
+              <PersonalInfoSection formData={formData} handleInputChange={handleInputChange} />
+              <EducationSkillsSection formData={formData} handleInputChange={handleInputChange} />
+              <ExperienceSection formData={formData} handleInputChange={handleInputChange} />
+              <CareerObjectiveSection 
+                formData={formData}
+                paymentState={paymentState}
+                isGeneratingObjective={isGeneratingObjective}
+                handleInputChange={handleInputChange}
+                generateObjective={generateObjective}
+              />
 
-          {/* Template Selection */}
-          <div className="mb-10">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
-              <FileText className="mr-3 h-6 w-6 text-indigo-600" />
-              Choose Template
+              {/* Template Selection */}
+              <div className="mb-10">
+                <h2 className="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
+                  <FileText className="mr-3 h-6 w-6 text-indigo-600" />
+                  Choose Template
+                </h2>
+                <div className="grid md:grid-cols-3 gap-6">
+                  {templates.map((template) => (
+                    <TemplateCard
+                      key={template.id}
+                      template={template}
+                      isSelected={formData.template === template.id}
+                      onSelect={handleTemplateSelect}
+                      hasPremiumAccess={paymentState.hasPremiumAccess}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                {!showDownload ? (
+                  <Button
+                    type="submit"
+                    disabled={isLoading}
+                    className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                  >
+                    {isLoading ? (
+                      <div className="flex items-center">
+                        <Loader2 className="animate-spin mr-2 h-5 w-5" />
+                        Generating Resume...
+                      </div>
+                    ) : (
+                      'Generate Resume'
+                    )}
+                  </Button>
+                ) : (
+                  <div className="flex gap-4">
+                    <Button
+                      type="button"
+                      onClick={handleDownloadPDF}
+                      disabled={isGenerating}
+                      className="px-8 py-4 bg-gradient-to-r from-green-600 to-blue-600 text-white font-semibold rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
+                    >
+                      {isGenerating ? (
+                        <div className="flex items-center">
+                          <Loader2 className="animate-spin mr-2 h-5 w-5" />
+                          Generating PDF...
+                        </div>
+                      ) : (
+                        <>
+                          <FileDown className="mr-2 h-5 w-5" />
+                          Download as PDF
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </form>
+          </div>
+
+          {/* Resume Preview Section */}
+          <div className="bg-white rounded-3xl shadow-2xl p-8">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
+              Resume Preview
             </h2>
-            <div className="grid md:grid-cols-3 gap-6">
-              {templates.map((template) => (
-                <TemplateCard
-                  key={template.id}
-                  template={template}
-                  isSelected={formData.template === template.id}
-                  onSelect={handleTemplateSelect}
-                  hasPremiumAccess={paymentState.hasPremiumAccess}
-                />
-              ))}
+            <div className="overflow-auto max-h-screen">
+              <ResumePreview formData={formData} paymentState={paymentState} />
             </div>
           </div>
-
-          {/* Submit Button */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            {!showDownload ? (
-              <Button
-                type="submit"
-                disabled={isLoading}
-                className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-              >
-                {isLoading ? (
-                  <div className="flex items-center">
-                    <Loader2 className="animate-spin mr-2 h-5 w-5" />
-                    Generating Resume...
-                  </div>
-                ) : (
-                  'Generate Resume'
-                )}
-              </Button>
-            ) : (
-              <Button
-                type="button"
-                onClick={handleDownload}
-                className="px-8 py-4 bg-gradient-to-r from-green-600 to-blue-600 text-white font-semibold rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
-              >
-                <Download className="mr-2 h-5 w-5 inline" />
-                Download Resume
-              </Button>
-            )}
-          </div>
-        </form>
+        </div>
       </div>
 
       {/* Modals */}
