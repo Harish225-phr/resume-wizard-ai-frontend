@@ -28,7 +28,7 @@ const TemplateCard = ({ template, isSelected, onSelect }: TemplateCardProps) => 
           {template.name}
         </h3>
         
-        <span className="text-green-600 font-medium">Free</span>
+        <span className="text-green-600 font-medium">100% Free</span>
       </div>
       
       {isSelected && (

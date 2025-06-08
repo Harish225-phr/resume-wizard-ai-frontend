@@ -1,5 +1,5 @@
 
-import { ArrowDown, CheckCircle, FileText, Zap, Download, Crown, Sparkles } from 'lucide-react';
+import { ArrowDown, CheckCircle, FileText, Zap, Download, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
@@ -13,7 +13,7 @@ const Home = () => {
     {
       icon: <FileText className="h-8 w-8 text-purple-600" />,
       title: 'Multiple Templates',
-      description: 'Choose from free and premium professionally designed templates',
+      description: 'Choose from professionally designed templates - all completely free',
     },
     {
       icon: <Download className="h-8 w-8 text-green-600" />,
@@ -25,16 +25,16 @@ const Home = () => {
   const steps = [
     'Fill in your personal information',
     'Add your education and skills',
-    'Choose from free or premium templates',
-    'Upgrade for AI-generated career objectives',
+    'Choose from our free professional templates',
+    'Generate AI career objectives instantly',
     'Download your professional resume',
   ];
 
-  const premiumFeatures = [
-    'Premium template designs',
+  const freeFeatures = [
+    'Professional template designs',
     'AI career objective generation',
     'High-quality PDF export',
-    'Professional formatting',
+    'No watermarks or restrictions',
   ];
 
   return (
@@ -46,19 +46,21 @@ const Home = () => {
             Build Your Resume Instantly with AI
           </h1>
           <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
-            Get a free resume, or upgrade to premium templates starting at ₹49.
+            Create professional resumes with AI assistance - completely free, no restrictions.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/create">
               <Button className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-2xl hover:shadow-2xl hover:scale-105 transition-all duration-300 text-lg">
-                Create Resume
+                Start Building Your Resume
                 <ArrowDown className="ml-2 h-5 w-5" />
               </Button>
             </Link>
-            <Button variant="outline" className="px-8 py-4 border-2 border-purple-300 text-purple-700 font-semibold rounded-2xl hover:bg-purple-50 transition-all duration-300 text-lg">
-              <Crown className="mr-2 h-5 w-5" />
-              View Premium Templates
-            </Button>
+            <Link to="/create">
+              <Button variant="outline" className="px-8 py-4 border-2 border-purple-300 text-purple-700 font-semibold rounded-2xl hover:bg-purple-50 transition-all duration-300 text-lg">
+                <FileText className="mr-2 h-5 w-5" />
+                View Templates
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
@@ -86,23 +88,23 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Premium Features Section */}
+      {/* Free Features Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-purple-50 to-blue-50">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2 rounded-full text-sm font-medium mb-6">
-            <Crown className="h-4 w-4" />
-            Premium Features
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-green-600 to-blue-600 text-white px-6 py-2 rounded-full text-sm font-medium mb-6">
+            <Sparkles className="h-4 w-4" />
+            100% Free Features
           </div>
           <h2 className="text-4xl font-bold mb-6 text-gray-800">
-            Unlock Professional Templates
+            Everything You Need, Completely Free
           </h2>
           <p className="text-xl text-gray-600 mb-8">
-            Upgrade to premium for just ₹49 and access professionally designed templates.
+            Build professional resumes with no hidden costs or restrictions.
           </p>
           <div className="grid md:grid-cols-2 gap-6 mb-8">
-            {premiumFeatures.map((feature, index) => (
+            {freeFeatures.map((feature, index) => (
               <div key={index} className="flex items-center gap-3 bg-white p-4 rounded-xl shadow-md">
-                <Sparkles className="h-6 w-6 text-purple-600" />
+                <CheckCircle className="h-6 w-6 text-green-600" />
                 <span className="text-gray-700 font-medium">{feature}</span>
               </div>
             ))}
@@ -140,11 +142,11 @@ const Home = () => {
             Ready to Build Your Professional Resume?
           </h2>
           <p className="text-xl text-gray-600 mb-8">
-            Join thousands of job seekers who have created amazing resumes with our AI tool.
+            Join thousands of job seekers who have created amazing resumes with our free AI tool.
           </p>
           <Link to="/create">
             <Button className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-2xl hover:shadow-2xl hover:scale-105 transition-all duration-300 text-lg">
-              Get Started Now
+              Get Started Now - It's Free!
             </Button>
           </Link>
         </div>

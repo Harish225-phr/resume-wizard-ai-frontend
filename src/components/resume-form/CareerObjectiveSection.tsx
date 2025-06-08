@@ -43,14 +43,14 @@ const CareerObjectiveSection = ({
             onClick={generateObjective}
             disabled={isGeneratingObjective}
             variant="outline"
-            className="border-2 border-purple-300 text-purple-700 hover:bg-purple-50"
+            className="border-2 border-green-300 text-green-700 hover:bg-green-50"
           >
             {isGeneratingObjective ? (
               <Loader2 className="animate-spin mr-2 h-4 w-4" />
             ) : (
               <Sparkles className="mr-2 h-4 w-4" />
             )}
-            {isGeneratingObjective ? 'Generating...' : 'Generate with AI - Free!'}
+            {isGeneratingObjective ? 'Generating...' : 'Generate with AI - 100% Free!'}
           </Button>
         </div>
       </div>
