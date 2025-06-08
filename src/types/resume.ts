@@ -6,18 +6,47 @@ export interface Template {
   preview: string;
 }
 
+export interface Education {
+  id: string;
+  degree: string;
+  university: string;
+  duration: string;
+  grade: string;
+}
+
+export interface WorkExperience {
+  id: string;
+  company: string;
+  position: string;
+  duration: string;
+  description: string;
+}
+
+export interface Project {
+  id: string;
+  title: string;
+  link: string;
+  description: string;
+}
+
 export interface FormData {
   fullName: string;
   email: string;
   phone: string;
-  education: string;
-  skills: string;
-  experience: string;
+  photo: File | null;
+  address: string;
   careerObjective: string;
+  education: Education[];
+  workExperience: WorkExperience[];
+  hasNoWorkExperience: boolean;
+  skills: string;
+  languages: string;
+  certifications: string;
+  hobbies: string;
+  projects: Project[];
   template: string;
 }
 
-// Simplified state - no payment tracking needed
 export interface AppState {
-  // Remove all payment-related state
+  // No payment-related state needed
 }
