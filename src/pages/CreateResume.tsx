@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { FileText, Download, Loader2, FileDown, Edit3, ArrowLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -42,10 +43,13 @@ const CreateResume = () => {
   const [isGeneratingObjective, setIsGeneratingObjective] = useState(false);
   const [editingSection, setEditingSection] = useState<string | null>(null);
 
-  const templates: Template[] = [
-    { id: 'modern', name: 'Modern Professional', type: 'free', preview: 'Clean & Simple' },
-    { id: 'executive', name: 'Executive Style', type: 'free', preview: 'Professional & Elegant' },
-    { id: 'creative', name: 'Creative Designer', type: 'free', preview: 'Bold & Creative' },
+  const careerObjectives = [
+    "Dedicated professional with expertise in {skills} seeking to leverage strong technical skills and passion for innovation to contribute to a dynamic team and drive organizational success.",
+    "Results-driven {position} with proven track record in {field}, looking to apply analytical thinking and creative problem-solving skills to deliver exceptional value in a growth-oriented organization.",
+    "Motivated individual with strong foundation in {skills} and excellent communication abilities, eager to contribute fresh perspectives and drive meaningful impact in a collaborative environment.",
+    "Ambitious professional passionate about {field} technology and innovation, seeking opportunities to apply technical expertise and leadership skills to solve complex challenges and exceed organizational goals.",
+    "Detail-oriented {position} with commitment to excellence and continuous learning, aiming to utilize comprehensive skill set and industry knowledge to contribute to team success and professional growth.",
+    "Dynamic professional with experience in {field} and strong analytical capabilities, seeking to join a forward-thinking organization where I can apply my skills to drive innovation and achieve measurable results."
   ];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -61,6 +65,8 @@ const CreateResume = () => {
   const handleTemplateSelect = (template: Template) => {
     setSelectedTemplate(template);
     setFormData(prev => ({ ...prev, template: template.id }));
+    // Auto-move to form step
+    setCurrentStep('form');
   };
 
   const generateId = () => Math.random().toString(36).substr(2, 9);
@@ -144,10 +150,10 @@ const CreateResume = () => {
   };
 
   const generateObjective = async () => {
-    if (!formData.fullName || !formData.skills) {
+    if (!formData.fullName) {
       toast({
         title: "Missing Information",
-        description: "Please fill in your name and skills first to generate a career objective.",
+        description: "Please fill in your name first to generate a career objective.",
         variant: "destructive",
       });
       return;
@@ -157,7 +163,12 @@ const CreateResume = () => {
     try {
       await new Promise(resolve => setTimeout(resolve, 2000));
       
-      const generatedObjective = `Dedicated ${formData.fullName.split(' ')[0]} with expertise in ${formData.skills.split(',')[0]} seeking to leverage strong technical skills and passion for innovation to contribute to a dynamic team and drive organizational success.`;
+      const randomObjective = careerObjectives[Math.floor(Math.random() * careerObjectives.length)];
+      
+      let generatedObjective = randomObjective
+        .replace('{skills}', formData.skills || 'various technologies')
+        .replace('{position}', 'professional')
+        .replace('{field}', 'technology');
       
       setFormData(prev => ({ ...prev, careerObjective: generatedObjective }));
       
@@ -289,6 +300,7 @@ const CreateResume = () => {
                   formData={formData}
                   handleInputChange={handleInputChange}
                   handleFileChange={handleFileChange}
+                  selectedTemplate={selectedTemplate}
                 />
               </div>
 
@@ -307,6 +319,7 @@ const CreateResume = () => {
                   handleEducationChange={handleEducationChange}
                   addEducation={addEducation}
                   removeEducation={removeEducation}
+                  selectedTemplate={selectedTemplate}
                 />
               </div>
 
@@ -317,6 +330,7 @@ const CreateResume = () => {
                   addWorkExperience={addWorkExperience}
                   removeWorkExperience={removeWorkExperience}
                   handleNoExperienceChange={handleNoExperienceChange}
+                  selectedTemplate={selectedTemplate}
                 />
               </div>
 
@@ -324,6 +338,7 @@ const CreateResume = () => {
                 <SkillsForm
                   formData={formData}
                   handleInputChange={handleInputChange}
+                  selectedTemplate={selectedTemplate}
                 />
               </div>
 
@@ -333,6 +348,7 @@ const CreateResume = () => {
                   handleProjectChange={handleProjectChange}
                   addProject={addProject}
                   removeProject={removeProject}
+                  selectedTemplate={selectedTemplate}
                 />
               </div>
 
@@ -434,7 +450,7 @@ const CreateResume = () => {
         <div className="bg-white rounded-3xl shadow-2xl p-8">
           <div className="flex justify-center">
             <div className="w-full max-w-4xl">
-              <ResumePreview formData={formData} />
+              <ResumePreview formData={formData} selectedTemplate={selectedTemplate} />
             </div>
           </div>
         </div>

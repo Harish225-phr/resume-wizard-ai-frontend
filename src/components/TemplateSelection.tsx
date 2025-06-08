@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Template } from '@/types/resume';
 import TemplateCard from './TemplateCard';
@@ -21,12 +22,17 @@ const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue }: T
       type: 'free',
       preview: 'Clean & Contemporary',
       description: 'Perfect for tech professionals and modern industries',
-      imageUrl: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=400&h=600&fit=crop',
+      imageUrl: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=300&h=400&fit=crop',
       style: {
         layout: 'single-column',
         fontFamily: 'Inter',
         primaryColor: '#3B82F6',
         accentColor: '#1E40AF'
+      },
+      placeholders: {
+        position: 'Software Engineer',
+        company: 'TechCorp Solutions',
+        skills: 'JavaScript, React, Node.js, TypeScript'
       }
     },
     {
@@ -35,12 +41,17 @@ const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue }: T
       type: 'free',
       preview: 'Sophisticated & Authoritative',
       description: 'Ideal for senior management and executive positions',
-      imageUrl: 'https://images.unsplash.com/photo-1554774853-719586f82d77?w=400&h=600&fit=crop',
+      imageUrl: 'https://images.unsplash.com/photo-1554774853-719586f82d77?w=300&h=400&fit=crop',
       style: {
         layout: 'two-column',
         fontFamily: 'Playfair Display',
         primaryColor: '#1F2937',
         accentColor: '#374151'
+      },
+      placeholders: {
+        position: 'Senior Vice President',
+        company: 'Fortune 500 Company',
+        skills: 'Strategic Planning, Leadership, Business Development'
       }
     },
     {
@@ -49,12 +60,17 @@ const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue }: T
       type: 'free',
       preview: 'Bold & Artistic',
       description: 'Great for designers, artists, and creative professionals',
-      imageUrl: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&h=600&fit=crop',
+      imageUrl: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=300&h=400&fit=crop',
       style: {
         layout: 'sidebar',
         fontFamily: 'Poppins',
         primaryColor: '#8B5CF6',
         accentColor: '#7C3AED'
+      },
+      placeholders: {
+        position: 'UI/UX Designer',
+        company: 'Creative Studio Inc',
+        skills: 'Figma, Adobe Creative Suite, Prototyping, User Research'
       }
     },
     {
@@ -63,12 +79,17 @@ const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue }: T
       type: 'free',
       preview: 'Simple & Elegant',
       description: 'Clean design for any industry, focuses on content',
-      imageUrl: 'https://images.unsplash.com/photo-1618477371303-b2a56b64930f?w=400&h=600&fit=crop',
+      imageUrl: 'https://images.unsplash.com/photo-1618477371303-b2a56b64930f?w=300&h=400&fit=crop',
       style: {
         layout: 'single-column',
         fontFamily: 'Source Sans Pro',
         primaryColor: '#6B7280',
         accentColor: '#4B5563'
+      },
+      placeholders: {
+        position: 'Product Manager',
+        company: 'Innovation Labs',
+        skills: 'Product Strategy, Agile, Data Analysis, Team Leadership'
       }
     },
     {
@@ -77,12 +98,17 @@ const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue }: T
       type: 'free',
       preview: 'Traditional & Reliable',
       description: 'Perfect for banking, finance, and corporate roles',
-      imageUrl: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=600&fit=crop',
+      imageUrl: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=300&h=400&fit=crop',
       style: {
         layout: 'two-column',
         fontFamily: 'Roboto',
         primaryColor: '#1E3A8A',
         accentColor: '#1E40AF'
+      },
+      placeholders: {
+        position: 'Financial Analyst',
+        company: 'Global Bank Corp',
+        skills: 'Financial Modeling, Risk Analysis, Excel, Bloomberg'
       }
     },
     {
@@ -91,12 +117,17 @@ const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue }: T
       type: 'free',
       preview: 'Research & Education',
       description: 'Designed for academics, researchers, and educators',
-      imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop',
+      imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=400&fit=crop',
       style: {
         layout: 'single-column',
         fontFamily: 'Georgia',
         primaryColor: '#059669',
         accentColor: '#047857'
+      },
+      placeholders: {
+        position: 'Research Associate',
+        company: 'University Research Lab',
+        skills: 'Research Methodology, Data Analysis, Academic Writing, SPSS'
       }
     },
     {
@@ -105,12 +136,17 @@ const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue }: T
       type: 'free',
       preview: 'Dynamic & Fresh',
       description: 'Perfect for startup employees and entrepreneurs',
-      imageUrl: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=600&fit=crop',
+      imageUrl: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=300&h=400&fit=crop',
       style: {
         layout: 'sidebar',
         fontFamily: 'Nunito',
         primaryColor: '#F59E0B',
         accentColor: '#D97706'
+      },
+      placeholders: {
+        position: 'Growth Hacker',
+        company: 'TechStartup Inc',
+        skills: 'Digital Marketing, Analytics, A/B Testing, Growth Strategy'
       }
     },
     {
@@ -119,12 +155,17 @@ const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue }: T
       type: 'free',
       preview: 'Trustworthy & Clean',
       description: 'Ideal for doctors, nurses, and healthcare workers',
-      imageUrl: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=600&fit=crop',
+      imageUrl: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=300&h=400&fit=crop',
       style: {
         layout: 'two-column',
         fontFamily: 'Open Sans',
         primaryColor: '#10B981',
         accentColor: '#059669'
+      },
+      placeholders: {
+        position: 'Registered Nurse',
+        company: 'City General Hospital',
+        skills: 'Patient Care, Medical Procedures, Electronic Health Records'
       }
     },
     {
@@ -133,12 +174,17 @@ const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue }: T
       type: 'free',
       preview: 'Technical & Precise',
       description: 'Perfect for engineers and technical professionals',
-      imageUrl: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=600&fit=crop',
+      imageUrl: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=300&h=400&fit=crop',
       style: {
         layout: 'single-column',
         fontFamily: 'IBM Plex Sans',
         primaryColor: '#6366F1',
         accentColor: '#4F46E5'
+      },
+      placeholders: {
+        position: 'Software Engineer',
+        company: 'Tech Solutions Ltd',
+        skills: 'Python, Machine Learning, AWS, DevOps, System Design'
       }
     },
     {
@@ -147,12 +193,17 @@ const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue }: T
       type: 'free',
       preview: 'Confident & Persuasive',
       description: 'Great for sales professionals and business development',
-      imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop',
+      imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=400&fit=crop',
       style: {
         layout: 'sidebar',
         fontFamily: 'Montserrat',
         primaryColor: '#EF4444',
         accentColor: '#DC2626'
+      },
+      placeholders: {
+        position: 'Sales Executive',
+        company: 'Enterprise Solutions Corp',
+        skills: 'B2B Sales, CRM, Lead Generation, Client Relations'
       }
     }
   ];
@@ -165,6 +216,10 @@ const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue }: T
   const handleTemplateSelectFromModal = (template: Template) => {
     onTemplateSelect(template);
     setIsPreviewOpen(false);
+  };
+
+  const handleTemplateSelect = (template: Template) => {
+    onTemplateSelect(template);
   };
 
   return (
@@ -185,33 +240,13 @@ const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue }: T
           </div>
         </div>
 
-        {selectedTemplate && (
-          <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-8 text-center">
-            <div className="flex items-center justify-center gap-3 mb-3">
-              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                <Check className="h-5 w-5 text-white" />
-              </div>
-              <h3 className="text-lg font-semibold text-blue-800">
-                Template Selected: {selectedTemplate.name}
-              </h3>
-            </div>
-            <p className="text-blue-700 mb-4">{selectedTemplate.description}</p>
-            <button
-              onClick={onContinue}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-semibold transition-all duration-200 hover:scale-105"
-            >
-              Continue to Resume Builder →
-            </button>
-          </div>
-        )}
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
           {templates.map((template) => (
             <TemplateCard
               key={template.id}
               template={template}
               isSelected={selectedTemplate?.id === template.id}
-              onSelect={onTemplateSelect}
+              onSelect={handleTemplateSelect}
               onPreview={handlePreview}
             />
           ))}

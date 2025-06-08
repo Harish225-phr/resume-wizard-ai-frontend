@@ -11,6 +11,11 @@ export interface Template {
     primaryColor: string;
     accentColor: string;
   };
+  placeholders?: {
+    position: string;
+    company: string;
+    skills: string;
+  };
 }
 
 export interface Education {
@@ -19,6 +24,13 @@ export interface Education {
   university: string;
   duration: string;
   grade: string;
+  class10Board?: string;
+  class10Year?: string;
+  class10Percentage?: string;
+  class12Stream?: string;
+  class12Board?: string;
+  class12Year?: string;
+  class12Percentage?: string;
 }
 
 export interface WorkExperience {
