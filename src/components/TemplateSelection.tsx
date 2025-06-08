@@ -1,9 +1,8 @@
-
 import React, { useState } from 'react';
 import { Template } from '@/types/resume';
 import TemplateCard from './TemplateCard';
 import TemplatePreviewModal from './TemplatePreviewModal';
-import { FileText, Sparkles } from 'lucide-react';
+import { FileText, Sparkles, Check } from 'lucide-react';
 
 interface TemplateSelectionProps {
   selectedTemplate: Template | null;
