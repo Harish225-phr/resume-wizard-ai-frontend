@@ -1,11 +1,11 @@
-
 import { useState } from 'react';
-import { FileText, Download, Loader2, FileDown, Edit3, ArrowLeft } from 'lucide-react';
+import { FileText, Download, Loader2, FileDown, Edit3, ArrowLeft, Edit } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { usePDFDownload } from '@/hooks/usePDFDownload';
 import { Button } from '@/components/ui/button';
 import TemplateSelection from '@/components/TemplateSelection';
 import ResumePreview from '@/components/ResumePreview';
+import ResumeEditor from '@/components/ResumeEditor';
 import PersonalInfoForm from '@/components/resume-form/PersonalInfoForm';
 import EducationForm from '@/components/resume-form/EducationForm';
 import WorkExperienceForm from '@/components/resume-form/WorkExperienceForm';
@@ -18,7 +18,7 @@ const CreateResume = () => {
   const { toast } = useToast();
   const { downloadPDF, isGenerating } = usePDFDownload();
   
-  const [currentStep, setCurrentStep] = useState<'template' | 'form' | 'preview'>('template');
+  const [currentStep, setCurrentStep] = useState<'template' | 'form' | 'preview' | 'editor'>('template');
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
   
   const [formData, setFormData] = useState<FormData>({
@@ -65,13 +65,11 @@ const CreateResume = () => {
   const handleTemplateSelect = (template: Template) => {
     setSelectedTemplate(template);
     setFormData(prev => ({ ...prev, template: template.id }));
-    // Auto-move to form step
     setCurrentStep('form');
   };
 
   const generateId = () => Math.random().toString(36).substr(2, 9);
 
-  // Education handlers
   const handleEducationChange = (index: number, field: keyof Education, value: string) => {
     const newEducation = [...formData.education];
     newEducation[index] = { ...newEducation[index], [field]: value };
@@ -96,7 +94,6 @@ const CreateResume = () => {
     }));
   };
 
-  // Work experience handlers
   const handleWorkExperienceChange = (index: number, field: keyof WorkExperience, value: string) => {
     const newWorkExperience = [...formData.workExperience];
     newWorkExperience[index] = { ...newWorkExperience[index], [field]: value };
@@ -125,7 +122,6 @@ const CreateResume = () => {
     setFormData(prev => ({ ...prev, hasNoWorkExperience: checked }));
   };
 
-  // Project handlers
   const handleProjectChange = (index: number, field: keyof Project, value: string) => {
     const newProjects = [...formData.projects];
     newProjects[index] = { ...newProjects[index], [field]: value };
@@ -167,7 +163,7 @@ const CreateResume = () => {
       
       let generatedObjective = randomObjective
         .replace('{skills}', formData.skills || 'various technologies')
-        .replace('{position}', 'professional')
+        .replace('{position}', selectedTemplate?.placeholders?.position || 'professional')
         .replace('{field}', 'technology');
       
       setFormData(prev => ({ ...prev, careerObjective: generatedObjective }));
@@ -252,6 +248,19 @@ const CreateResume = () => {
     }, 100);
   };
 
+  const handleOpenEditor = () => {
+    setCurrentStep('editor');
+  };
+
+  const handleSaveFromEditor = (updatedData: FormData) => {
+    setFormData(updatedData);
+    setCurrentStep('preview');
+    toast({
+      title: "Resume Updated!",
+      description: "Your changes have been saved successfully.",
+    });
+  };
+
   // Template Selection Step
   if (currentStep === 'template') {
     return (
@@ -259,6 +268,18 @@ const CreateResume = () => {
         selectedTemplate={selectedTemplate}
         onTemplateSelect={handleTemplateSelect}
         onContinue={handleContinueToForm}
+      />
+    );
+  }
+
+  // Rich Text Editor Step
+  if (currentStep === 'editor') {
+    return (
+      <ResumeEditor
+        formData={formData}
+        selectedTemplate={selectedTemplate}
+        onSave={handleSaveFromEditor}
+        onBack={() => setCurrentStep('preview')}
       />
     );
   }
@@ -300,7 +321,6 @@ const CreateResume = () => {
                   formData={formData}
                   handleInputChange={handleInputChange}
                   handleFileChange={handleFileChange}
-                  selectedTemplate={selectedTemplate}
                 />
               </div>
 
@@ -319,7 +339,6 @@ const CreateResume = () => {
                   handleEducationChange={handleEducationChange}
                   addEducation={addEducation}
                   removeEducation={removeEducation}
-                  selectedTemplate={selectedTemplate}
                 />
               </div>
 
@@ -330,7 +349,6 @@ const CreateResume = () => {
                   addWorkExperience={addWorkExperience}
                   removeWorkExperience={removeWorkExperience}
                   handleNoExperienceChange={handleNoExperienceChange}
-                  selectedTemplate={selectedTemplate}
                 />
               </div>
 
@@ -338,7 +356,6 @@ const CreateResume = () => {
                 <SkillsForm
                   formData={formData}
                   handleInputChange={handleInputChange}
-                  selectedTemplate={selectedTemplate}
                 />
               </div>
 
@@ -348,7 +365,6 @@ const CreateResume = () => {
                   handleProjectChange={handleProjectChange}
                   addProject={addProject}
                   removeProject={removeProject}
-                  selectedTemplate={selectedTemplate}
                 />
               </div>
 
@@ -386,8 +402,8 @@ const CreateResume = () => {
 
   // Preview Step
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-12">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
@@ -426,6 +442,14 @@ const CreateResume = () => {
                 Edit Experience
               </Button>
               <Button
+                onClick={handleOpenEditor}
+                variant="outline"
+                className="flex items-center gap-2 bg-purple-50 hover:bg-purple-100 text-purple-700 border-purple-200"
+              >
+                <Edit className="h-4 w-4" />
+                Edit Resume
+              </Button>
+              <Button
                 onClick={handleDownloadPDF}
                 disabled={isGenerating}
                 className="bg-gradient-to-r from-green-600 to-blue-600 text-white font-semibold hover:shadow-xl transition-all duration-300"
@@ -449,7 +473,7 @@ const CreateResume = () => {
         {/* Resume Preview */}
         <div className="bg-white rounded-3xl shadow-2xl p-8">
           <div className="flex justify-center">
-            <div className="w-full max-w-4xl">
+            <div className="w-full max-w-none">
               <ResumePreview formData={formData} selectedTemplate={selectedTemplate} />
             </div>
           </div>

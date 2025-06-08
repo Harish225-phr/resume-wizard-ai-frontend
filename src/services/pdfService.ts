@@ -21,46 +21,50 @@ class PDFService {
       throw new Error('Resume preview element not found');
     }
 
-    // Configure html2canvas options for better quality
+    // Configure html2canvas options for better quality and A4 format
     const canvas = await html2canvas(element, {
       scale: 2, // Higher scale for better quality
       useCORS: true,
       allowTaint: true,
       backgroundColor: '#ffffff',
-      width: element.scrollWidth,
-      height: element.scrollHeight,
+      width: 794, // A4 width in pixels at 96 DPI
+      height: 1123, // A4 height in pixels at 96 DPI
+      windowWidth: 794,
+      windowHeight: 1123,
     });
 
-    // Calculate dimensions for A4 format
-    const imgWidth = format === 'a4' ? 210 : 216; // A4 width in mm
-    const pageHeight = format === 'a4' ? 297 : 279; // A4 height in mm
+    // A4 dimensions in mm
+    const imgWidth = 210; 
+    const pageHeight = 297; 
     const imgHeight = (canvas.height * imgWidth) / canvas.width;
     
     const pdf = new jsPDF({
-      orientation: imgHeight > pageHeight ? 'portrait' : 'portrait',
+      orientation: 'portrait',
       unit: 'mm',
-      format: format,
+      format: 'a4',
     });
 
     const imgData = canvas.toDataURL('image/png', quality);
     
-    // Add image to PDF
+    // Add image to PDF with proper scaling
     if (imgHeight <= pageHeight) {
-      // Single page
+      // Single page - fits perfectly
       pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
     } else {
-      // Multiple pages
+      // Multiple pages needed
       let heightLeft = imgHeight;
       let position = 0;
+      let pageNumber = 1;
 
       while (heightLeft >= 0) {
+        if (pageNumber > 1) {
+          pdf.addPage();
+        }
+        
         pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
         heightLeft -= pageHeight;
         position -= pageHeight;
-        
-        if (heightLeft > 0) {
-          pdf.addPage();
-        }
+        pageNumber++;
       }
     }
 
