@@ -1,9 +1,16 @@
-
 export interface Template {
   id: string;
   name: string;
   type: 'free';
   preview: string;
+  description: string;
+  imageUrl: string;
+  style: {
+    layout: 'single-column' | 'two-column' | 'sidebar';
+    fontFamily: string;
+    primaryColor: string;
+    accentColor: string;
+  };
 }
 
 export interface Education {
