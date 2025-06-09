@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { FileText, Download, Loader2, FileDown, Edit3, ArrowLeft, Edit } from 'lucide-react';
+import { FileText, Download, Loader2, FileDown, Edit, ArrowLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { usePDFDownload } from '@/hooks/usePDFDownload';
 import { Button } from '@/components/ui/button';
 import TemplateSelection from '@/components/TemplateSelection';
 import ResumePreview from '@/components/ResumePreview';
-import ResumeEditor from '@/components/ResumeEditor';
+import ResumeRichEditor from '@/components/ResumeRichEditor';
 import PersonalInfoForm from '@/components/resume-form/PersonalInfoForm';
 import EducationForm from '@/components/resume-form/EducationForm';
 import WorkExperienceForm from '@/components/resume-form/WorkExperienceForm';
@@ -41,7 +41,6 @@ const CreateResume = () => {
   
   const [isLoading, setIsLoading] = useState(false);
   const [isGeneratingObjective, setIsGeneratingObjective] = useState(false);
-  const [editingSection, setEditingSection] = useState<string | null>(null);
 
   const careerObjectives = [
     "Dedicated professional with expertise in {skills} seeking to leverage strong technical skills and passion for innovation to contribute to a dynamic team and drive organizational success.",
@@ -239,15 +238,6 @@ const CreateResume = () => {
     });
   };
 
-  const scrollToSection = (sectionId: string) => {
-    setEditingSection(sectionId);
-    setCurrentStep('form');
-    setTimeout(() => {
-      document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
-      setTimeout(() => setEditingSection(null), 2000);
-    }, 100);
-  };
-
   const handleOpenEditor = () => {
     setCurrentStep('editor');
   };
@@ -275,7 +265,7 @@ const CreateResume = () => {
   // Rich Text Editor Step
   if (currentStep === 'editor') {
     return (
-      <ResumeEditor
+      <ResumeRichEditor
         formData={formData}
         selectedTemplate={selectedTemplate}
         onSave={handleSaveFromEditor}
@@ -316,57 +306,45 @@ const CreateResume = () => {
           {/* Form Section */}
           <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12">
             <form onSubmit={handleSubmit}>
-              <div id="personal-info" className={editingSection === 'personal-info' ? 'ring-4 ring-blue-200 rounded-xl p-4' : ''}>
-                <PersonalInfoForm 
-                  formData={formData}
-                  handleInputChange={handleInputChange}
-                  handleFileChange={handleFileChange}
-                />
-              </div>
+              <PersonalInfoForm 
+                formData={formData}
+                handleInputChange={handleInputChange}
+                handleFileChange={handleFileChange}
+              />
 
-              <div id="career-objective" className={editingSection === 'career-objective' ? 'ring-4 ring-blue-200 rounded-xl p-4' : ''}>
-                <CareerObjectiveSection 
-                  formData={formData}
-                  isGeneratingObjective={isGeneratingObjective}
-                  handleInputChange={handleInputChange}
-                  generateObjective={generateObjective}
-                />
-              </div>
+              <CareerObjectiveSection 
+                formData={formData}
+                isGeneratingObjective={isGeneratingObjective}
+                handleInputChange={handleInputChange}
+                generateObjective={generateObjective}
+              />
 
-              <div id="education" className={editingSection === 'education' ? 'ring-4 ring-blue-200 rounded-xl p-4' : ''}>
-                <EducationForm
-                  formData={formData}
-                  handleEducationChange={handleEducationChange}
-                  addEducation={addEducation}
-                  removeEducation={removeEducation}
-                />
-              </div>
+              <EducationForm
+                formData={formData}
+                handleEducationChange={handleEducationChange}
+                addEducation={addEducation}
+                removeEducation={removeEducation}
+              />
 
-              <div id="work-experience" className={editingSection === 'work-experience' ? 'ring-4 ring-blue-200 rounded-xl p-4' : ''}>
-                <WorkExperienceForm
-                  formData={formData}
-                  handleWorkExperienceChange={handleWorkExperienceChange}
-                  addWorkExperience={addWorkExperience}
-                  removeWorkExperience={removeWorkExperience}
-                  handleNoExperienceChange={handleNoExperienceChange}
-                />
-              </div>
+              <WorkExperienceForm
+                formData={formData}
+                handleWorkExperienceChange={handleWorkExperienceChange}
+                addWorkExperience={addWorkExperience}
+                removeWorkExperience={removeWorkExperience}
+                handleNoExperienceChange={handleNoExperienceChange}
+              />
 
-              <div id="skills" className={editingSection === 'skills' ? 'ring-4 ring-blue-200 rounded-xl p-4' : ''}>
-                <SkillsForm
-                  formData={formData}
-                  handleInputChange={handleInputChange}
-                />
-              </div>
+              <SkillsForm
+                formData={formData}
+                handleInputChange={handleInputChange}
+              />
 
-              <div id="projects" className={editingSection === 'projects' ? 'ring-4 ring-blue-200 rounded-xl p-4' : ''}>
-                <ProjectsForm
-                  formData={formData}
-                  handleProjectChange={handleProjectChange}
-                  addProject={addProject}
-                  removeProject={removeProject}
-                />
-              </div>
+              <ProjectsForm
+                formData={formData}
+                handleProjectChange={handleProjectChange}
+                addProject={addProject}
+                removeProject={removeProject}
+              />
 
               {/* Submit Button */}
               <div className="flex justify-center gap-4">
@@ -413,34 +391,7 @@ const CreateResume = () => {
                 Template: <span className="font-medium text-blue-600">{selectedTemplate?.name}</span>
               </p>
             </div>
-            <div className="flex flex-wrap gap-2 mt-4 md:mt-0">
-              <Button
-                onClick={() => scrollToSection('personal-info')}
-                variant="outline"
-                size="sm"
-                className="flex items-center gap-2"
-              >
-                <Edit3 className="h-4 w-4" />
-                Edit Personal Info
-              </Button>
-              <Button
-                onClick={() => scrollToSection('education')}
-                variant="outline"
-                size="sm"
-                className="flex items-center gap-2"
-              >
-                <Edit3 className="h-4 w-4" />
-                Edit Education
-              </Button>
-              <Button
-                onClick={() => scrollToSection('work-experience')}
-                variant="outline"
-                size="sm"
-                className="flex items-center gap-2"
-              >
-                <Edit3 className="h-4 w-4" />
-                Edit Experience
-              </Button>
+            <div className="flex gap-4 mt-4 md:mt-0">
               <Button
                 onClick={handleOpenEditor}
                 variant="outline"
