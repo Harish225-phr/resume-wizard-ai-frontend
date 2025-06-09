@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { FormData, Template } from '@/types/resume';
-import { User, Mail, Phone, MapPin, GraduationCap, Briefcase, Target, Star, Globe, Award, Heart, Code, ExternalLink } from 'lucide-react';
+import { User, Mail, Phone, MapPin, GraduationCap, Briefcase, Target, Star, Globe, Award, Heart, Code, ExternalLink, Edit3 } from 'lucide-react';
 
 interface ResumePreviewProps {
   formData: FormData;
@@ -17,7 +16,7 @@ const ResumePreview = ({ formData, selectedTemplate }: ResumePreviewProps) => {
                  selectedTemplate.style.fontFamily === 'Roboto' ? 'Roboto, system-ui, sans-serif' :
                  selectedTemplate.style.fontFamily === 'Lato' ? 'Lato, system-ui, sans-serif' :
                  'Inter, system-ui, sans-serif',
-      color: '#333333', // Fixed dark text color for better readability
+      color: '#333333',
     };
   };
 
@@ -53,7 +52,7 @@ const ResumePreview = ({ formData, selectedTemplate }: ResumePreviewProps) => {
           boxSizing: 'border-box',
           fontSize: '10px',
           lineHeight: '1.3',
-          color: '#333333', // Ensure dark text throughout
+          color: '#333333',
           ...getTemplateStyles()
         }}
       >
@@ -284,6 +283,21 @@ const ResumePreview = ({ formData, selectedTemplate }: ResumePreviewProps) => {
               <p className="leading-relaxed" style={{ fontSize: '9px', color: '#333333' }}>{formData.hobbies}</p>
             </div>
           )}
+
+          {/* Custom Sections */}
+          {formData.customSections && formData.customSections.length > 0 && formData.customSections.map((section) => (
+            <div key={section.id} className="mb-3">
+              <h2 className={`text-xs font-bold mb-2 flex items-center gap-2 ${getSectionTitleStyle()}`} style={{ fontSize: '12px', color: selectedTemplate?.style.primaryColor || '#2563eb' }}>
+                <Edit3 className="h-3 w-3" />
+                {section.heading}
+              </h2>
+              <div 
+                className="leading-relaxed" 
+                style={{ fontSize: '9px', color: '#333333' }}
+                dangerouslySetInnerHTML={{ __html: section.content.replace(/\n/g, '<br />') }}
+              />
+            </div>
+          ))}
         </div>
       </div>
     </div>

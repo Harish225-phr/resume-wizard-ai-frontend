@@ -1,3 +1,4 @@
+
 export interface Template {
   id: string;
   name: string;
@@ -48,6 +49,12 @@ export interface Project {
   description: string;
 }
 
+export interface CustomSection {
+  id: string;
+  heading: string;
+  content: string;
+}
+
 export interface FormData {
   fullName: string;
   email: string;
@@ -63,6 +70,7 @@ export interface FormData {
   certifications: string;
   hobbies: string;
   projects: Project[];
+  customSections: CustomSection[];
   template: string;
 }
 

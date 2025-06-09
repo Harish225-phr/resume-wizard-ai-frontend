@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -20,7 +19,6 @@ const ResumeRichEditor = ({ formData, selectedTemplate, onSave, onBack }: Resume
   const [content, setContent] = useState('');
 
   useEffect(() => {
-    // Generate HTML content from formData
     const htmlContent = generateHTMLFromFormData(formData, selectedTemplate);
     setContent(htmlContent);
   }, [formData, selectedTemplate]);
@@ -161,18 +159,23 @@ const ResumeRichEditor = ({ formData, selectedTemplate, onSave, onBack }: Resume
           <p style="font-size: 14px; line-height: 1.6;">${data.hobbies}</p>
         </div>
         ` : ''}
+
+        <!-- Custom Sections -->
+        ${data.customSections && data.customSections.length > 0 ? data.customSections.map(section => `
+        <div style="margin-bottom: 20px;">
+          <h2 style="color: ${primaryColor}; font-size: 18px; font-weight: bold; margin-bottom: 10px; border-bottom: 2px solid ${primaryColor}; padding-bottom: 5px;">✨ ${section.heading}</h2>
+          <p style="font-size: 14px; line-height: 1.6;">${section.content.replace(/\n/g, '<br />')}</p>
+        </div>
+        `).join('') : ''}
       </div>
     `;
   };
 
   const handleSave = () => {
-    // For now, just save and go back to preview
-    // In a real implementation, you'd parse the HTML content back to FormData
     onSave(formData);
   };
 
   const handleDownloadPDF = () => {
-    // Create a temporary div with the editor content for PDF generation
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = content;
     tempDiv.id = 'temp-resume-content';

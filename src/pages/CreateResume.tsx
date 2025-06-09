@@ -11,6 +11,7 @@ import EducationForm from '@/components/resume-form/EducationForm';
 import WorkExperienceForm from '@/components/resume-form/WorkExperienceForm';
 import SkillsForm from '@/components/resume-form/SkillsForm';
 import ProjectsForm from '@/components/resume-form/ProjectsForm';
+import CustomSectionsForm from '@/components/resume-form/CustomSectionsForm';
 import CareerObjectiveSection from '@/components/resume-form/CareerObjectiveSection';
 import { FormData, Template, Education, WorkExperience, Project } from '@/types/resume';
 
@@ -36,6 +37,7 @@ const CreateResume = () => {
     certifications: '',
     hobbies: '',
     projects: [],
+    customSections: [],
     template: '',
   });
   
@@ -344,6 +346,11 @@ const CreateResume = () => {
                 handleProjectChange={handleProjectChange}
                 addProject={addProject}
                 removeProject={removeProject}
+              />
+
+              <CustomSectionsForm
+                formData={formData}
+                setFormData={setFormData}
               />
 
               {/* Submit Button */}
