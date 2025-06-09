@@ -1,5 +1,6 @@
+
 import { useState } from 'react';
-import { FileText, Download, Loader2, FileDown, Edit, ArrowLeft } from 'lucide-react';
+import { FileText, Download, Loader2, FileDown, Edit, ArrowLeft, Edit3 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { usePDFDownload } from '@/hooks/usePDFDownload';
 import { Button } from '@/components/ui/button';
@@ -399,6 +400,14 @@ const CreateResume = () => {
               </p>
             </div>
             <div className="flex gap-4 mt-4 md:mt-0">
+              <Button
+                onClick={() => setCurrentStep('form')}
+                variant="outline"
+                className="flex items-center gap-2 bg-gray-50 hover:bg-gray-100 text-gray-700 border-gray-200"
+              >
+                <Edit3 className="h-4 w-4" />
+                Back to Edit
+              </Button>
               <Button
                 onClick={handleOpenEditor}
                 variant="outline"
