@@ -2,10 +2,14 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, FileText } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import UserProfile from '@/components/auth/UserProfile';
+import { Button } from '@/components/ui/button';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const { user } = useAuth();
 
   const navItems = [
     { name: 'Home', path: '/' },
@@ -45,10 +49,24 @@ const Navbar = () => {
                 {item.name}
               </Link>
             ))}
+            
+            {/* User Profile or Login Button */}
+            <div className="flex items-center space-x-4">
+              {user ? (
+                <UserProfile />
+              ) : (
+                <Link to="/create">
+                  <Button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-300">
+                    Get Started
+                  </Button>
+                </Link>
+              )}
+            </div>
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center space-x-4">
+            {user && <UserProfile />}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="text-gray-700 hover:text-blue-600 p-2 rounded-lg"
@@ -75,6 +93,15 @@ const Navbar = () => {
                 {item.name}
               </Link>
             ))}
+            {!user && (
+              <div className="px-4 py-2">
+                <Link to="/create" onClick={() => setIsMenuOpen(false)}>
+                  <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg">
+                    Get Started
+                  </Button>
+                </Link>
+              </div>
+            )}
           </div>
         )}
       </div>
