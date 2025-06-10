@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { User, LogOut, Settings } from 'lucide-react';
+import { User, LogOut } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import {
@@ -59,11 +59,13 @@ const UserProfile = () => {
         <DropdownMenuSeparator />
         <DropdownMenuItem>
           <User className="mr-2 h-4 w-4" />
-          <span>Profile</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <Settings className="mr-2 h-4 w-4" />
-          <span>Settings</span>
+          <div className="flex flex-col">
+            <span className="font-medium">Profile</span>
+            <div className="text-xs text-muted-foreground mt-1">
+              <div>Name: {displayName}</div>
+              <div>Email: {user.email}</div>
+            </div>
+          </div>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignOut} disabled={loading}>
