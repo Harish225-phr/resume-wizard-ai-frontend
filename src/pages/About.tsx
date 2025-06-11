@@ -1,6 +1,6 @@
 
 import { Target, Users, Award, Heart, Code, Palette, Zap } from 'lucide-react';
-
+import pic from '../../public/me.jpeg'
 const About = () => {
   const values = [
     {
@@ -59,18 +59,17 @@ const About = () => {
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Image */}
-            <div className="order-2 lg:order-1">
-              <div className="relative">
-                <img
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop&crop=face"
-                  alt="Frontend Developer Harish Rajput - AI Resume Builder Creator"
-                  className="w-full max-w-md mx-auto rounded-3xl shadow-2xl object-cover aspect-square"
-                />
-                <div className="absolute -bottom-6 -right-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-4 shadow-lg">
-                  <Code className="h-8 w-8 text-white" />
-                </div>
-              </div>
-            </div>
+          <div className="order-2 lg:order-1">
+  <div className="relative">
+    <img
+      src={pic}
+      alt="Frontend Developer Harish Rajput - AI Resume Builder Creator"
+      className="w-full max-w-xl mx-auto  shadow-1xl object-contain aspect-square"
+    />
+   
+  </div>
+</div>
+
 
             {/* Content */}
             <div className="order-1 lg:order-2">
