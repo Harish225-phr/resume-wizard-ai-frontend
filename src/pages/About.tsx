@@ -1,5 +1,5 @@
 
-import { Target, Users, Award, Heart } from 'lucide-react';
+import { Target, Users, Award, Heart, Code, Palette, Zap } from 'lucide-react';
 
 const About = () => {
   const values = [
@@ -25,6 +25,12 @@ const About = () => {
     },
   ];
 
+  const skills = [
+    { icon: <Code className="h-6 w-6 text-blue-600" />, skill: 'React.js & JavaScript' },
+    { icon: <Palette className="h-6 w-6 text-purple-600" />, skill: 'UI/UX Design' },
+    { icon: <Zap className="h-6 w-6 text-green-600" />, skill: 'API Integration' },
+  ];
+
   const stats = [
     { number: '50,000+', label: 'Resumes Created' },
     { number: '95%', label: 'Success Rate' },
@@ -37,10 +43,10 @@ const About = () => {
       {/* Hero Section */}
       <section className="pt-20 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             About AI Resume Builder
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
             We're on a mission to revolutionize how people create professional resumes. 
             Our AI-powered platform makes it simple for anyone to build a standout resume 
             in minutes, not hours.
@@ -48,16 +54,73 @@ const About = () => {
         </div>
       </section>
 
+      {/* About Harish Section */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white/50">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Image */}
+            <div className="order-2 lg:order-1">
+              <div className="relative">
+                <img
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop&crop=face"
+                  alt="Frontend Developer Harish Rajput - AI Resume Builder Creator"
+                  className="w-full max-w-md mx-auto rounded-3xl shadow-2xl object-cover aspect-square"
+                />
+                <div className="absolute -bottom-6 -right-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-4 shadow-lg">
+                  <Code className="h-8 w-8 text-white" />
+                </div>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="order-1 lg:order-2">
+              <h1 className="text-3xl md:text-4xl font-bold mb-6 text-gray-800">
+                About Harish Rajput
+              </h1>
+              <div className="space-y-4 text-gray-600 leading-relaxed">
+                <p className="text-lg">
+                  I'm a passionate <strong>Frontend Developer</strong> who specializes in building fast, modern, and responsive web applications. 
+                  I have hands-on experience in <strong>HTML, CSS, JavaScript, React.js</strong>, and integrating APIs.
+                </p>
+                <p className="text-lg">
+                  My focus is on creating smooth <strong>UI/UX experiences</strong> that not only work great but also look professional. 
+                  This <strong>AI Resume Builder</strong> project is part of my journey to build real-world tools that help people present themselves better.
+                </p>
+                <p className="text-lg font-medium text-blue-600">
+                  Let's build something amazing together!
+                </p>
+              </div>
+
+              {/* Skills */}
+              <div className="mt-8">
+                <h3 className="text-xl font-semibold mb-4 text-gray-800">Core Skills</h3>
+                <div className="space-y-3">
+                  {skills.map((item, index) => (
+                    <div key={index} className="flex items-center space-x-3">
+                      {item.icon}
+                      <span className="font-medium text-gray-700">{item.skill}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Stats Section */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white/50">
         <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800">
+            Project Impact
+          </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
+                <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
                   {stat.number}
                 </div>
-                <div className="text-gray-600 font-medium">{stat.label}</div>
+                <div className="text-gray-600 font-medium text-sm md:text-base">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -67,14 +130,14 @@ const About = () => {
       {/* Values Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-16 text-gray-800">
-            What Drives Us
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-800">
+            What Drives This Project
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
             {values.map((value, index) => (
               <div
                 key={index}
-                className="bg-white p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+                className="bg-white p-6 md:p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
               >
                 <div className="mb-4">{value.icon}</div>
                 <h3 className="text-xl font-semibold mb-3 text-gray-800">
@@ -87,47 +150,20 @@ const About = () => {
         </div>
       </section>
 
-      {/* Story Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white/50">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">
-            Our Story
-          </h2>
-          <div className="prose prose-lg mx-auto text-gray-600">
-            <p className="text-lg leading-relaxed mb-6">
-              The idea for AI Resume Builder was born from a simple frustration: creating a 
-              professional resume shouldn't be complicated, expensive, or time-consuming. 
-              We noticed that many talented individuals were held back not by their skills, 
-              but by their inability to present them effectively.
-            </p>
-            <p className="text-lg leading-relaxed mb-6">
-              That's when we decided to harness the power of artificial intelligence to 
-              level the playing field. Our platform combines cutting-edge AI technology 
-              with professional design principles to create resumes that not only look 
-              great but also pass through applicant tracking systems.
-            </p>
-            <p className="text-lg leading-relaxed">
-              Today, we're proud to have helped thousands of job seekers land their dream 
-              jobs with professionally crafted resumes. Our commitment remains the same: 
-              making professional resume creation accessible to everyone, everywhere.
-            </p>
-          </div>
-        </div>
-      </section>
-
       {/* Technology Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white/50">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">
-            Powered by Advanced AI
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800">
+            Powered by Modern Frontend Technologies
           </h2>
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-8 md:p-12 text-white">
+          <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-6 md:p-12 text-white">
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div>
                 <h3 className="text-2xl font-bold mb-4">Smart Career Objective Generation</h3>
                 <p className="text-lg leading-relaxed mb-6">
-                  Our AI analyzes your skills and experience to generate personalized career 
-                  objectives that resonate with employers and highlight your unique value proposition.
+                  Built with <strong>React.js</strong> and modern web technologies, this AI Resume Builder 
+                  analyzes your skills and experience to generate personalized career objectives that 
+                  resonate with employers and highlight your unique value proposition.
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center">
@@ -146,8 +182,9 @@ const About = () => {
               </div>
               <div className="bg-white/10 rounded-2xl p-6 backdrop-blur-sm">
                 <div className="text-center">
-                  <div className="text-6xl font-bold mb-2">AI</div>
+                  <div className="text-4xl md:text-6xl font-bold mb-2">AI</div>
                   <div className="text-lg">Powered Resume Generation</div>
+                  <div className="text-sm mt-2 opacity-80">Built by Frontend Developer Harish Rajput</div>
                 </div>
               </div>
             </div>
