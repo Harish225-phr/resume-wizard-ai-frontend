@@ -4,6 +4,7 @@ import { FileText, Download, Loader2, FileDown, Edit, ArrowLeft, Edit3 } from 'l
 import { useToast } from '@/hooks/use-toast';
 import { usePDFDownload } from '@/hooks/usePDFDownload';
 import { Button } from '@/components/ui/button';
+import ResumeUpload from '@/components/ResumeUpload';
 import TemplateSelection from '@/components/TemplateSelection';
 import ResumePreview from '@/components/ResumePreview';
 import ResumeRichEditor from '@/components/ResumeRichEditor';
@@ -20,7 +21,7 @@ const CreateResume = () => {
   const { toast } = useToast();
   const { downloadPDF, isGenerating } = usePDFDownload();
   
-  const [currentStep, setCurrentStep] = useState<'template' | 'form' | 'preview' | 'editor'>('template');
+  const [currentStep, setCurrentStep] = useState<'upload' | 'template' | 'form' | 'preview' | 'editor'>('upload');
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
   
   const [formData, setFormData] = useState<FormData>({
@@ -254,6 +255,33 @@ const CreateResume = () => {
     });
   };
 
+  const handleParsedData = (parsedData: FormData) => {
+    setFormData(parsedData);
+    setCurrentStep('template');
+    toast({
+      title: "Data Extracted Successfully! ✨",
+      description: "Your resume information has been parsed. Now choose a template to apply.",
+    });
+  };
+
+  const handleSkipUpload = () => {
+    setCurrentStep('template');
+  };
+
+  const handleBackToUpload = () => {
+    setCurrentStep('upload');
+  };
+
+  // Resume Upload Step
+  if (currentStep === 'upload') {
+    return (
+      <ResumeUpload
+        onParsedData={handleParsedData}
+        onSkip={handleSkipUpload}
+      />
+    );
+  }
+
   // Template Selection Step
   if (currentStep === 'template') {
     return (
@@ -261,6 +289,7 @@ const CreateResume = () => {
         selectedTemplate={selectedTemplate}
         onTemplateSelect={handleTemplateSelect}
         onContinue={handleContinueToForm}
+        onBackToUpload={handleBackToUpload}
       />
     );
   }

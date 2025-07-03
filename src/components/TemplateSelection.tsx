@@ -3,15 +3,17 @@ import React, { useState } from 'react';
 import { Template } from '@/types/resume';
 import TemplateCard from './TemplateCard';
 import TemplatePreviewModal from './TemplatePreviewModal';
-import { FileText, Sparkles, Check } from 'lucide-react';
+import { FileText, Sparkles, Check, Upload } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface TemplateSelectionProps {
   selectedTemplate: Template | null;
   onTemplateSelect: (template: Template) => void;
   onContinue: () => void;
+  onBackToUpload?: () => void;
 }
 
-const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue }: TemplateSelectionProps) => {
+const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue, onBackToUpload }: TemplateSelectionProps) => {
   const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
@@ -238,6 +240,18 @@ const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue }: T
             <Sparkles className="h-5 w-5" />
             <span className="font-semibold">All 10 templates completely free - No hidden charges!</span>
           </div>
+          {onBackToUpload && (
+            <div className="mt-6">
+              <Button
+                onClick={onBackToUpload}
+                variant="outline"
+                className="flex items-center gap-2"
+              >
+                <Upload className="h-4 w-4" />
+                Upload Different Resume
+              </Button>
+            </div>
+          )}
         </div>
 
         <div className="grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
