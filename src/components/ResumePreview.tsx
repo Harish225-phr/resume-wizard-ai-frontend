@@ -47,17 +47,17 @@ const ResumePreview = ({ formData, selectedTemplate }: ResumePreviewProps) => {
           width: '210mm',
           minHeight: '297mm',
           maxWidth: '210mm',
-          padding: '15mm',
+          padding: '12mm',
           margin: '0 auto',
           boxSizing: 'border-box',
-          fontSize: '10px',
-          lineHeight: '1.3',
+          fontSize: '11px',
+          lineHeight: '1.4',
           color: '#333333',
           ...getTemplateStyles()
         }}
       >
         {/* Header Section */}
-        <div className={`p-4 mb-4 ${getHeaderStyles()}`} style={{ margin: '-15mm -15mm 15px -15mm', padding: '15px' }}>
+        <div className={`p-4 mb-3 ${getHeaderStyles()}`} style={{ margin: '-12mm -12mm 12px -12mm', padding: '12px' }}>
           <div className="flex items-center gap-4">
             {formData.photo && (
               <img 
@@ -97,7 +97,7 @@ const ResumePreview = ({ formData, selectedTemplate }: ResumePreviewProps) => {
           </div>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-2">
           {/* Career Objective */}
           {formData.careerObjective && (
             <div className="mb-3">
