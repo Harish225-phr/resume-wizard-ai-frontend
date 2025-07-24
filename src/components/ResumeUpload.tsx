@@ -161,6 +161,34 @@ const ResumeUpload = ({ onParsedData, onSkip }: ResumeUploadProps) => {
     };
   };
 
+  const extractTextFromFile = async (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      
+      reader.onload = (e) => {
+        const result = e.target?.result;
+        if (typeof result === 'string') {
+          resolve(result);
+        } else {
+          reject(new Error('Failed to read file as text'));
+        }
+      };
+      
+      reader.onerror = () => {
+        reject(new Error('Error reading file'));
+      };
+      
+      // For text files, read as text
+      if (file.type === 'text/plain') {
+        reader.readAsText(file);
+      } else {
+        // For other files (PDF, DOC), we'll read as text for now
+        // In production, you'd want to use libraries like pdf-parse or mammoth
+        reader.readAsText(file);
+      }
+    });
+  };
+
   const handleFileUpload = async (file: File) => {
     if (!file) return;
     
@@ -179,28 +207,36 @@ const ResumeUpload = ({ onParsedData, onSkip }: ResumeUploadProps) => {
     setUploadedFile(file);
 
     try {
-      // For demo purposes, we'll simulate text extraction
-      // In a real app, you'd use a proper PDF/DOC parser or AI service
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      let extractedText = '';
       
-      // Simulate extracted text (in real implementation, extract from file)
-      const simulatedText = `
-        John Doe
-        john.doe@email.com
-        +1-234-567-8900
-        
-        PROFESSIONAL EXPERIENCE
-        Software Engineer at TechCorp
-        Developed web applications using React and Node.js
-        
-        EDUCATION
-        Computer Science, State University
-        
-        SKILLS
-        JavaScript, React, Node.js, Python, SQL
-      `;
+      // Extract text based on file type
+      if (file.type === 'text/plain') {
+        extractedText = await extractTextFromFile(file);
+      } else {
+        // For PDF and DOC files, we'll provide a fallback message
+        // In production, you'd integrate with libraries like pdf-parse or mammoth
+        extractedText = `
+          Please note: For PDF and DOC files, automatic text extraction is limited.
+          For best results, please convert your resume to a text file (.txt) or manually enter your information.
+          
+          We've pre-filled some sample data that you can edit:
+          
+          Full Name: [Please update with your name]
+          Email: [Please update with your email]
+          Phone: [Please update with your phone]
+          
+          PROFESSIONAL EXPERIENCE
+          [Please update with your work experience]
+          
+          EDUCATION
+          [Please update with your education]
+          
+          SKILLS
+          [Please update with your skills]
+        `;
+      }
       
-      const parsedData = parseResumeText(simulatedText);
+      const parsedData = parseResumeText(extractedText);
       
       toast({
         title: "Resume Parsed Successfully! ✨",
