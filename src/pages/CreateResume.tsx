@@ -256,7 +256,9 @@ const CreateResume = () => {
   };
 
   const handleParsedData = (parsedData: FormData) => {
+    console.log('Parsed Data Received:', parsedData);
     setFormData(parsedData);
+    console.log('Form Data After Setting:', parsedData);
     setCurrentStep('template');
     toast({
       title: "Data Extracted Successfully! ✨",

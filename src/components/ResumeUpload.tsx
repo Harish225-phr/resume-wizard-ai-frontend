@@ -237,6 +237,7 @@ const ResumeUpload = ({ onParsedData, onSkip }: ResumeUploadProps) => {
       }
       
       const parsedData = parseResumeText(extractedText);
+      console.log('Generated Parsed Data:', parsedData);
       
       toast({
         title: "Resume Parsed Successfully! ✨",

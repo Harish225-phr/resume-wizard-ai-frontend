@@ -10,6 +10,7 @@ interface PersonalInfoFormProps {
 }
 
 const PersonalInfoForm = ({ formData, handleInputChange, handleFileChange }: PersonalInfoFormProps) => {
+  console.log('PersonalInfoForm received formData:', formData);
   return (
     <div className="mb-8">
       <h2 className="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
