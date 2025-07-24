@@ -5,6 +5,7 @@ import { useToast } from '@/hooks/use-toast';
 import { usePDFDownload } from '@/hooks/usePDFDownload';
 import { Button } from '@/components/ui/button';
 import ResumeUpload from '@/components/ResumeUpload';
+import ResumeUploadModal from '@/components/ResumeUploadModal';
 import TemplateSelection from '@/components/TemplateSelection';
 import ResumePreview from '@/components/ResumePreview';
 import ResumeRichEditor from '@/components/ResumeRichEditor';
@@ -21,7 +22,8 @@ const CreateResume = () => {
   const { toast } = useToast();
   const { downloadPDF, isGenerating } = usePDFDownload();
   
-  const [currentStep, setCurrentStep] = useState<'upload' | 'template' | 'form' | 'preview' | 'editor'>('upload');
+  const [currentStep, setCurrentStep] = useState<'upload' | 'template' | 'form' | 'preview' | 'editor'>('template');
+  const [showUploadModal, setShowUploadModal] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
   
   const [formData, setFormData] = useState<FormData>({
@@ -68,7 +70,7 @@ const CreateResume = () => {
   const handleTemplateSelect = (template: Template) => {
     setSelectedTemplate(template);
     setFormData(prev => ({ ...prev, template: template.id }));
-    setCurrentStep('form');
+    // Don't automatically move to form - let user choose to upload or continue
   };
 
   const generateId = () => Math.random().toString(36).substr(2, 9);
@@ -257,12 +259,13 @@ const CreateResume = () => {
 
   const handleParsedData = (parsedData: FormData) => {
     console.log('Parsed Data Received:', parsedData);
-    setFormData(parsedData);
-    console.log('Form Data After Setting:', parsedData);
-    setCurrentStep('template');
+    const updatedData = { ...parsedData, template: selectedTemplate?.id || '' };
+    setFormData(updatedData);
+    console.log('Form Data After Setting:', updatedData);
+    setCurrentStep('form');
     toast({
       title: "Data Extracted Successfully! ✨",
-      description: "Your resume information has been parsed. Now choose a template to apply.",
+      description: "Your resume data has been extracted and template applied!",
     });
   };
 
@@ -273,6 +276,11 @@ const CreateResume = () => {
   const handleBackToUpload = () => {
     setCurrentStep('upload');
   };
+
+  const handleUploadResume = () => {
+    setShowUploadModal(true);
+  };
+
 
   // Resume Upload Step
   if (currentStep === 'upload') {
@@ -292,6 +300,7 @@ const CreateResume = () => {
         onTemplateSelect={handleTemplateSelect}
         onContinue={handleContinueToForm}
         onBackToUpload={handleBackToUpload}
+        onUploadResume={handleUploadResume}
       />
     );
   }
@@ -476,6 +485,13 @@ const CreateResume = () => {
             </div>
           </div>
         </div>
+
+        {/* Upload Modal */}
+        <ResumeUploadModal
+          isOpen={showUploadModal}
+          onClose={() => setShowUploadModal(false)}
+          onParsedData={handleParsedData}
+        />
       </div>
     </div>
   );

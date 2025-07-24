@@ -2,16 +2,18 @@ import React, { useState } from 'react';
 import { Upload, FileText, Loader2, CheckCircle, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import { FormData } from '@/types/resume';
 import { resumeParserService } from '@/services/resumeParser';
 
-interface ResumeUploadProps {
+interface ResumeUploadModalProps {
+  isOpen: boolean;
+  onClose: () => void;
   onParsedData: (data: FormData) => void;
-  onSkip: () => void;
 }
 
-const ResumeUpload = ({ onParsedData, onSkip }: ResumeUploadProps) => {
+const ResumeUploadModal = ({ isOpen, onClose, onParsedData }: ResumeUploadModalProps) => {
   const [dragOver, setDragOver] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
@@ -43,7 +45,6 @@ const ResumeUpload = ({ onParsedData, onSkip }: ResumeUploadProps) => {
     }
   };
 
-
   const handleFileUpload = async (file: File) => {
     if (!file) return;
     
@@ -73,6 +74,7 @@ const ResumeUpload = ({ onParsedData, onSkip }: ResumeUploadProps) => {
       });
       
       onParsedData(parsedData);
+      onClose();
       
     } catch (error) {
       console.error('Resume parsing failed:', error);
@@ -91,21 +93,25 @@ const ResumeUpload = ({ onParsedData, onSkip }: ResumeUploadProps) => {
     setUploading(false);
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-12">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
-            Upload Your Existing Resume
-          </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Upload your current resume and we'll automatically extract your information to help you create a better, more professional version.
-          </p>
-        </div>
+  const handleClose = () => {
+    setUploadedFile(null);
+    setUploading(false);
+    setDragOver(false);
+    onClose();
+  };
 
-        <Card className="p-8 mb-8">
+  return (
+    <Dialog open={isOpen} onOpenChange={handleClose}>
+      <DialogContent className="max-w-2xl">
+        <DialogHeader>
+          <DialogTitle className="text-2xl font-bold text-center">
+            Upload Your Resume
+          </DialogTitle>
+        </DialogHeader>
+        
+        <div className="p-6">
           <div
-            className={`border-2 border-dashed rounded-xl p-12 text-center transition-all duration-300 ${
+            className={`border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300 ${
               dragOver
                 ? 'border-blue-400 bg-blue-50'
                 : uploading
@@ -158,10 +164,10 @@ const ResumeUpload = ({ onParsedData, onSkip }: ResumeUploadProps) => {
                     accept=".pdf,.doc,.docx,.txt"
                     onChange={handleFileSelect}
                     className="hidden"
-                    id="resume-upload"
+                    id="resume-upload-modal"
                   />
                   <label
-                    htmlFor="resume-upload"
+                    htmlFor="resume-upload-modal"
                     className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors cursor-pointer"
                   >
                     <Upload className="mr-2 h-4 w-4" />
@@ -172,22 +178,22 @@ const ResumeUpload = ({ onParsedData, onSkip }: ResumeUploadProps) => {
             )}
           </div>
           
-          <div className="text-center space-y-4">
-            <p className="text-sm text-gray-500">
-              Don't have a resume to upload? No problem!
+          <div className="text-center mt-6">
+            <p className="text-sm text-gray-500 mb-4">
+              We'll automatically extract your information to speed up the form filling process.
             </p>
             <Button
-              onClick={onSkip}
+              onClick={handleClose}
               variant="outline"
-              className="px-8 py-3"
+              className="px-6"
             >
-              Skip & Create from Scratch
+              Cancel
             </Button>
           </div>
-        </Card>
-      </div>
-    </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 
-export default ResumeUpload;
+export default ResumeUploadModal;

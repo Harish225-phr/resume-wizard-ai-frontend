@@ -11,9 +11,10 @@ interface TemplateSelectionProps {
   onTemplateSelect: (template: Template) => void;
   onContinue: () => void;
   onBackToUpload?: () => void;
+  onUploadResume?: () => void;
 }
 
-const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue, onBackToUpload }: TemplateSelectionProps) => {
+const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue, onBackToUpload, onUploadResume }: TemplateSelectionProps) => {
   const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
@@ -265,6 +266,42 @@ const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue, onB
             />
           ))}
         </div>
+
+        {selectedTemplate && (
+          <div className="mt-12 text-center">
+            <div className="bg-white rounded-xl shadow-lg p-8 max-w-2xl mx-auto">
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <Check className="h-6 w-6 text-green-600" />
+                <h3 className="text-2xl font-bold text-gray-800">
+                  {selectedTemplate.name} Selected!
+                </h3>
+              </div>
+              <p className="text-gray-600 mb-8">
+                Great choice! Now you can either upload your existing resume for auto-fill or start creating from scratch.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                {onUploadResume && (
+                  <Button
+                    onClick={onUploadResume}
+                    className="flex items-center gap-2 px-8 py-3"
+                  >
+                    <Upload className="h-4 w-4" />
+                    Upload Existing Resume
+                  </Button>
+                )}
+                <Button
+                  onClick={onContinue}
+                  variant="outline"
+                  className="flex items-center gap-2 px-8 py-3"
+                >
+                  <FileText className="h-4 w-4" />
+                  Create from Scratch
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
 
         <TemplatePreviewModal
           template={previewTemplate}
