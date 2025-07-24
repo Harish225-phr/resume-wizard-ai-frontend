@@ -21,22 +21,39 @@ class PDFService {
       throw new Error('Resume preview element not found');
     }
 
-    // Configure html2canvas options for better quality and A4 format
+    // Get actual element dimensions
+    const elementRect = element.getBoundingClientRect();
+    
+    // Configure html2canvas options for better quality and proper sizing
     const canvas = await html2canvas(element, {
       scale: 2, // Higher scale for better quality
       useCORS: true,
       allowTaint: true,
       backgroundColor: '#ffffff',
-      width: 794, // A4 width in pixels at 96 DPI
-      height: 1123, // A4 height in pixels at 96 DPI
-      windowWidth: 794,
-      windowHeight: 1123,
+      width: elementRect.width,
+      height: elementRect.height,
+      scrollX: 0,
+      scrollY: 0,
     });
 
-    // A4 dimensions in mm
-    const imgWidth = 210; 
-    const pageHeight = 297; 
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    // A4 dimensions in mm with margins
+    const pageWidth = 210;
+    const pageHeight = 297;
+    const margin = 10; // 10mm margin on all sides
+    const availableWidth = pageWidth - (2 * margin);
+    const availableHeight = pageHeight - (2 * margin);
+    
+    // Calculate scaling to fit content within one page
+    const scaleX = availableWidth / (canvas.width / (canvas.width / availableWidth));
+    const scaleY = availableHeight / (canvas.height / (canvas.height / availableHeight));
+    const scale = Math.min(scaleX, scaleY, 1); // Don't scale up, only down if needed
+    
+    const imgWidth = (canvas.width * scale * availableWidth) / canvas.width;
+    const imgHeight = (canvas.height * scale * availableHeight) / canvas.height;
+    
+    // Center the content horizontally
+    const xOffset = margin + (availableWidth - imgWidth) / 2;
+    const yOffset = margin;
     
     const pdf = new jsPDF({
       orientation: 'portrait',
@@ -46,27 +63,8 @@ class PDFService {
 
     const imgData = canvas.toDataURL('image/png', quality);
     
-    // Add image to PDF with proper scaling
-    if (imgHeight <= pageHeight) {
-      // Single page - fits perfectly
-      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-    } else {
-      // Multiple pages needed
-      let heightLeft = imgHeight;
-      let position = 0;
-      let pageNumber = 1;
-
-      while (heightLeft >= 0) {
-        if (pageNumber > 1) {
-          pdf.addPage();
-        }
-        
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-        position -= pageHeight;
-        pageNumber++;
-      }
-    }
+    // Add image to PDF centered and scaled to fit one page
+    pdf.addImage(imgData, 'PNG', xOffset, yOffset, imgWidth, imgHeight);
 
     // Download the PDF
     pdf.save(filename);
