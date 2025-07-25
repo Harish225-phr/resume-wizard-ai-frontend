@@ -23,16 +23,22 @@ const PersonalInfoForm = ({ formData, handleInputChange, handleFileChange }: Per
           <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-2">
             Full Name *
           </label>
-          <input
-            type="text"
-            id="fullName"
-            name="fullName"
-            value={formData.fullName}
-            onChange={handleInputChange}
-            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-            placeholder="Enter your full name"
-            required
-          />
+            <input
+              type="text"
+              id="fullName"
+              name="fullName"
+              value={formData.fullName}
+              onChange={(e) => {
+                // Only allow letters, spaces, and common name characters
+                const value = e.target.value;
+                if (/^[a-zA-Z\s.''-]*$/.test(value)) {
+                  handleInputChange(e);
+                }
+              }}
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+              placeholder="Enter your full name"
+              required
+            />
         </div>
 
         <div>
@@ -65,7 +71,13 @@ const PersonalInfoForm = ({ formData, handleInputChange, handleFileChange }: Per
               id="phone"
               name="phone"
               value={formData.phone}
-              onChange={handleInputChange}
+              onChange={(e) => {
+                // Only allow numbers, spaces, hyphens, parentheses, and plus sign
+                const value = e.target.value;
+                if (/^[0-9\s\-\(\)\+]*$/.test(value)) {
+                  handleInputChange(e);
+                }
+              }}
               className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
               placeholder="+91 98765 43210"
               required

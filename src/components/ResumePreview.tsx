@@ -57,78 +57,79 @@ const ResumePreview = ({ formData, selectedTemplate }: ResumePreviewProps) => {
         }}
       >
         {/* Header Section */}
-        <div className={`p-4 mb-3 ${getHeaderStyles()}`} style={{ margin: '-12mm -12mm 12px -12mm', padding: '12px' }}>
-          <div className="flex items-center gap-4">
+        <div className={`p-6 mb-6 ${getHeaderStyles()}`} style={{ margin: '-15mm -15mm 20px -15mm', padding: '20px' }}>
+          <div className="flex items-center gap-6">
             {formData.photo && (
               <img 
                 src={URL.createObjectURL(formData.photo)}
                 alt="Profile"
-                className="w-16 h-16 rounded-full object-cover border-4 border-white/20 shadow-lg"
+                className="w-20 h-20 rounded-full object-cover border-4 border-white/20 shadow-lg"
+                style={{ minWidth: '80px', minHeight: '80px' }}
               />
             )}
             <div className="flex-1">
-              <h1 className="text-xl font-bold mb-1" style={{ fontSize: '20px', lineHeight: '1.2' }}>
+              <h1 className="text-2xl font-bold mb-2" style={{ fontSize: '26px', lineHeight: '1.3', marginBottom: '8px' }}>
                 {formData.fullName || 'Your Name'}
               </h1>
-              <p className="text-sm opacity-90 mb-2" style={{ fontSize: '14px' }}>
+              <p className="text-lg opacity-90 mb-3" style={{ fontSize: '16px', marginBottom: '12px' }}>
                 {selectedTemplate?.placeholders?.position || 'Professional'}
               </p>
-              <div className="flex flex-wrap gap-3 text-xs opacity-80" style={{ fontSize: '9px' }}>
+              <div className="flex flex-wrap gap-4 text-sm opacity-80" style={{ fontSize: '12px', gap: '16px' }}>
                 {formData.email && (
-                  <div className="flex items-center gap-1">
-                    <Mail className="h-3 w-3" />
-                    {formData.email}
+                  <div className="flex items-center gap-2">
+                    <Mail className="h-4 w-4" />
+                    <span>{formData.email}</span>
                   </div>
                 )}
                 {formData.phone && (
-                  <div className="flex items-center gap-1">
-                    <Phone className="h-3 w-3" />
-                    {formData.phone}
+                  <div className="flex items-center gap-2">
+                    <Phone className="h-4 w-4" />
+                    <span>{formData.phone}</span>
                   </div>
                 )}
               </div>
               {formData.address && (
-                <div className="flex items-center gap-1 text-xs opacity-80 mt-1" style={{ fontSize: '9px' }}>
-                  <MapPin className="h-3 w-3" />
-                  {formData.address}
+                <div className="flex items-center gap-2 text-sm opacity-80 mt-2" style={{ fontSize: '12px', marginTop: '8px' }}>
+                  <MapPin className="h-4 w-4" />
+                  <span>{formData.address}</span>
                 </div>
               )}
             </div>
           </div>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-6">
           {/* Career Objective */}
           {formData.careerObjective && (
-            <div className="mb-3">
-              <h2 className={`text-sm font-bold mb-3 flex items-center gap-2 ${getSectionTitleStyle()}`} style={{ fontSize: '14px', color: selectedTemplate?.style.primaryColor || '#2563eb', marginBottom: '8px' }}>
-                <Target className="h-4 w-4" />
+            <div className="mb-6">
+              <h2 className={`text-lg font-bold mb-4 flex items-center gap-2 ${getSectionTitleStyle()}`} style={{ fontSize: '16px', color: selectedTemplate?.style.primaryColor || '#2563eb', marginBottom: '12px' }}>
+                <Target className="h-5 w-5" />
                 Career Objective
               </h2>
-              <p className="leading-relaxed text-justify" style={{ fontSize: '11px', lineHeight: '1.6', color: '#333333', marginBottom: '12px' }}>
+              <p className="leading-relaxed text-justify" style={{ fontSize: '13px', lineHeight: '1.7', color: '#333333', marginBottom: '16px' }}>
                 {formData.careerObjective}
               </p>
             </div>
           )}
 
           {/* Education */}
-          <div className="mb-3">
-            <h2 className={`text-sm font-bold mb-3 flex items-center gap-2 ${getSectionTitleStyle()}`} style={{ fontSize: '14px', color: selectedTemplate?.style.primaryColor || '#2563eb', marginBottom: '10px' }}>
-              <GraduationCap className="h-4 w-4" />
+          <div className="mb-6">
+            <h2 className={`text-lg font-bold mb-4 flex items-center gap-2 ${getSectionTitleStyle()}`} style={{ fontSize: '16px', color: selectedTemplate?.style.primaryColor || '#2563eb', marginBottom: '12px' }}>
+              <GraduationCap className="h-5 w-5" />
               Education
             </h2>
             
             {/* Class 10th */}
             {(formData.education[0]?.class10Board || formData.education[0]?.class10Year || formData.education[0]?.class10Percentage) && (
-              <div className="mb-3 p-3 bg-blue-50 rounded" style={{ fontSize: '11px', marginBottom: '10px' }}>
-                <h3 className="font-semibold mb-2" style={{ color: '#333333', fontSize: '12px' }}>Class 10th</h3>
+              <div className="mb-4 p-4 bg-blue-50 rounded-lg" style={{ fontSize: '12px', marginBottom: '14px', padding: '16px' }}>
+                <h3 className="font-semibold mb-3" style={{ color: '#333333', fontSize: '14px', marginBottom: '12px' }}>Class 10th</h3>
                 <div className="flex justify-between items-center">
                   <div>
-                    <p style={{ color: '#555555', lineHeight: '1.4' }}>{formData.education[0]?.class10Board}</p>
+                    <p style={{ color: '#555555', lineHeight: '1.5' }}>{formData.education[0]?.class10Board}</p>
                   </div>
                   <div className="text-right">
-                    <p style={{ color: '#555555', lineHeight: '1.4' }}>{formData.education[0]?.class10Year}</p>
-                    <p className="font-medium" style={{ color: '#333333', lineHeight: '1.4' }}>{formData.education[0]?.class10Percentage}</p>
+                    <p style={{ color: '#555555', lineHeight: '1.5', marginBottom: '4px' }}>{formData.education[0]?.class10Year}</p>
+                    <p className="font-medium" style={{ color: '#333333', lineHeight: '1.5' }}>{formData.education[0]?.class10Percentage}</p>
                   </div>
                 </div>
               </div>

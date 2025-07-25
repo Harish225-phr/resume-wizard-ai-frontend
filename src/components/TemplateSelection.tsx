@@ -284,6 +284,7 @@ const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue, onB
                 {onUploadResume && (
                   <Button
                     onClick={onUploadResume}
+                    variant="outline"
                     className="flex items-center gap-2 px-8 py-3"
                   >
                     <Upload className="h-4 w-4" />
@@ -292,11 +293,10 @@ const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue, onB
                 )}
                 <Button
                   onClick={onContinue}
-                  variant="outline"
-                  className="flex items-center gap-2 px-8 py-3"
+                  className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold hover:shadow-xl transition-all duration-300"
                 >
                   <FileText className="h-4 w-4" />
-                  Create from Scratch
+                  Continue to Form →
                 </Button>
               </div>
             </div>
