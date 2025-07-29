@@ -70,7 +70,8 @@ const CreateResume = () => {
   const handleTemplateSelect = (template: Template) => {
     setSelectedTemplate(template);
     setFormData(prev => ({ ...prev, template: template.id }));
-    // Don't automatically move to form - let user choose to upload or continue
+    // Automatically proceed to the form step after template selection
+    setTimeout(() => setCurrentStep('form'), 100);
   };
 
   const generateId = () => Math.random().toString(36).substr(2, 9);
@@ -467,10 +468,10 @@ const CreateResume = () => {
                     Generating PDF...
                   </div>
                 ) : (
-                  <>
-                    <FileDown className="mr-2 h-4 w-4" />
+                  <div className="flex items-center">
+                    <FileDown className="h-4 w-4 mr-2" />
                     Download PDF
-                  </>
+                  </div>
                 )}
               </Button>
             </div>
