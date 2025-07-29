@@ -23,8 +23,8 @@ const EducationForm = ({
     <div className="mb-8">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-semibold text-gray-800 flex items-center">
-          <GraduationCap className="mr-3 h-6 w-6 text-purple-600" />
-          Education
+          <GraduationCap className="mr-3 h-6 w-6 text-purple-600 flex-shrink-0" />
+          <span className="leading-none">Education</span>
         </h2>
         <Button
           type="button"

@@ -24,8 +24,8 @@ const WorkExperienceForm = ({
     <div className="mb-8">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-semibold text-gray-800 flex items-center">
-          <Briefcase className="mr-3 h-6 w-6 text-green-600" />
-          Work Experience
+          <Briefcase className="mr-3 h-6 w-6 text-green-600 flex-shrink-0" />
+          <span className="leading-none">Work Experience</span>
         </h2>
         {!formData.hasNoWorkExperience && (
           <Button

@@ -14,8 +14,8 @@ const PersonalInfoForm = ({ formData, handleInputChange, handleFileChange }: Per
   return (
     <div className="mb-8">
       <h2 className="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
-        <User className="mr-3 h-6 w-6 text-blue-600" />
-        Personal Information
+        <User className="mr-3 h-6 w-6 text-blue-600 flex-shrink-0" />
+        <span className="leading-none">Personal Information</span>
       </h2>
       
       <div className="grid md:grid-cols-2 gap-6">

@@ -54,8 +54,8 @@ const CustomSectionsForm = ({ formData, setFormData }: CustomSectionsFormProps) 
     <div className="mb-8">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-semibold text-gray-800 flex items-center">
-          <Edit3 className="mr-3 h-6 w-6 text-purple-600" />
-          Custom Sections
+          <Edit3 className="mr-3 h-6 w-6 text-purple-600 flex-shrink-0" />
+          <span className="leading-none">Custom Sections</span>
         </h2>
         <Button
           type="button"
