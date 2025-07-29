@@ -19,8 +19,8 @@ const CareerObjectiveSection = ({
   return (
     <div className="mb-10">
       <h2 className="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
-        <Target className="mr-3 h-6 w-6 text-orange-600" />
-        Career Objective
+        <Target className="mr-3 h-6 w-6 text-orange-600 flex-shrink-0" />
+        <span className="leading-none">Career Objective</span>
       </h2>
       <div className="space-y-4">
         <div>
