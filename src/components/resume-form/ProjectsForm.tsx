@@ -15,9 +15,8 @@ const ProjectsForm = ({ formData, handleProjectChange, addProject, removeProject
   return (
     <div className="mb-8">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-semibold text-gray-800 flex items-center">
-          <Code className="mr-3 h-6 w-6 text-indigo-600 flex-shrink-0" />
-          <span className="leading-none">Projects (Optional)</span>
+        <h2 className="text-2xl font-semibold text-gray-800">
+          Projects (Optional)
         </h2>
         <Button
           type="button"
