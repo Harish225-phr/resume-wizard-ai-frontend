@@ -21,52 +21,56 @@ class PDFService {
       throw new Error('Resume preview element not found');
     }
 
-    // Configure html2canvas options for better quality and A4 format
+    // Wait a bit to ensure all styles are applied
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
+    // Configure html2canvas with optimized settings for consistent PDF output
     const canvas = await html2canvas(element, {
-      scale: 2, // Higher scale for better quality
+      scale: 3, // Higher scale for crisp text
       useCORS: true,
       allowTaint: true,
       backgroundColor: '#ffffff',
-      width: 794, // A4 width in pixels at 96 DPI
-      height: 1123, // A4 height in pixels at 96 DPI
-      windowWidth: 794,
-      windowHeight: 1123,
+      logging: false,
+      removeContainer: true,
+      imageTimeout: 0,
+      scrollX: 0,
+      scrollY: 0,
     });
 
-    // A4 dimensions in mm
-    const imgWidth = 210; 
-    const pageHeight = 297; 
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    // A4 dimensions in pixels (at 96 DPI)
+    const a4Width = 794; // 210mm at 96 DPI
+    const a4Height = 1123; // 297mm at 96 DPI
     
     const pdf = new jsPDF({
       orientation: 'portrait',
-      unit: 'mm',
-      format: 'a4',
+      unit: 'px',
+      format: [a4Width, a4Height],
+      compress: true
     });
 
-    const imgData = canvas.toDataURL('image/png', quality);
+    const imgData = canvas.toDataURL('image/jpeg', 0.95);
     
-    // Add image to PDF with proper scaling
-    if (imgHeight <= pageHeight) {
-      // Single page - fits perfectly
-      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+    // Calculate dimensions to fit the page while maintaining aspect ratio
+    const canvasAspectRatio = canvas.width / canvas.height;
+    const pageAspectRatio = a4Width / a4Height;
+    
+    let imgWidth = a4Width;
+    let imgHeight = a4Height;
+    
+    if (canvasAspectRatio > pageAspectRatio) {
+      // Canvas is wider, fit to width
+      imgHeight = a4Width / canvasAspectRatio;
     } else {
-      // Multiple pages needed
-      let heightLeft = imgHeight;
-      let position = 0;
-      let pageNumber = 1;
-
-      while (heightLeft >= 0) {
-        if (pageNumber > 1) {
-          pdf.addPage();
-        }
-        
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-        position -= pageHeight;
-        pageNumber++;
-      }
+      // Canvas is taller, fit to height
+      imgWidth = a4Height * canvasAspectRatio;
     }
+    
+    // Center the image on the page
+    const xOffset = (a4Width - imgWidth) / 2;
+    const yOffset = (a4Height - imgHeight) / 2;
+    
+    // Add image to PDF
+    pdf.addImage(imgData, 'JPEG', xOffset, yOffset, imgWidth, imgHeight);
 
     // Download the PDF
     pdf.save(filename);

@@ -34,8 +34,7 @@ const SkillsForm = ({ formData, handleInputChange }: SkillsFormProps) => {
 
   return (
     <div className="mb-8">
-      <h2 className="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
-        <Star className="mr-3 h-6 w-6 text-yellow-600" />
+      <h2 className="text-2xl font-semibold text-gray-800 mb-6">
         Skills & Additional Information
       </h2>
 

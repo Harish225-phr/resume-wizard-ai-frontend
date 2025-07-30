@@ -22,8 +22,7 @@ const EducationForm = ({
   return (
     <div className="mb-8">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-semibold text-gray-800 flex items-center">
-          <GraduationCap className="mr-3 h-6 w-6 text-purple-600" />
+        <h2 className="text-2xl font-semibold text-gray-800">
           Education
         </h2>
         <Button
