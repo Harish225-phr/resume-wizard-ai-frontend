@@ -17,20 +17,20 @@ const Contact = () => {
     {
       icon: <Mail className="h-6 w-6 text-blue-600" />,
       title: 'Email Us',
-      content: 'support@airesume.com',
+      content: 'support.resume.com',
       description: 'We respond within 24 hours',
     },
     {
       icon: <Phone className="h-6 w-6 text-green-600" />,
       title: 'Call Us',
-      content: '+1 (555) 123-4567',
-      description: 'Mon-Fri, 9am-6pm EST',
+      content: 'Not available yet',
+      // description: 'Mon-Fri, 9am-6pm EST',
     },
     {
       icon: <MapPin className="h-6 w-6 text-purple-600" />,
       title: 'Visit Us',
-      content: '123 Tech Street, Suite 100',
-      description: 'San Francisco, CA 94105',
+      content: 'Himachal Pradesh, India',
+      description: 'Currently online only',
     },
   ];
 
