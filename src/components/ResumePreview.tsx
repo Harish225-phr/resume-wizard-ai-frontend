@@ -115,10 +115,10 @@ const ResumePreview = ({ formData, selectedTemplate }: ResumePreviewProps) => {
             
             {/* Class 10th */}
             {(formData.education[0]?.class10Board || formData.education[0]?.class10Year || formData.education[0]?.class10Percentage) && (
-              <div className="mb-4 p-4 bg-blue-50 rounded-lg" style={{ fontSize: '12px', marginBottom: '14px', padding: '16px' }}>
+              <div className="mb-4 p-4 bg-gray-50 rounded-lg" style={{ fontSize: '12px', marginBottom: '14px', padding: '16px' }}>
                 <h3 className="font-semibold mb-3" style={{ color: '#333333', fontSize: '14px', marginBottom: '12px' }}>Class 10th</h3>
-                <div className="flex justify-between items-center">
-                  <div>
+                <div className="flex justify-between items-start">
+                  <div className="flex-1">
                     <p style={{ color: '#555555', lineHeight: '1.5' }}>{formData.education[0]?.class10Board}</p>
                   </div>
                   <div className="text-right">
@@ -131,15 +131,15 @@ const ResumePreview = ({ formData, selectedTemplate }: ResumePreviewProps) => {
 
             {/* Class 12th */}
             {(formData.education[0]?.class12Stream || formData.education[0]?.class12Board || formData.education[0]?.class12Year || formData.education[0]?.class12Percentage) && (
-              <div className="mb-3 p-3 bg-green-50 rounded" style={{ fontSize: '11px', marginBottom: '10px' }}>
-                <h3 className="font-semibold mb-2" style={{ color: '#333333', fontSize: '12px' }}>Class 12th - {formData.education[0]?.class12Stream}</h3>
-                <div className="flex justify-between items-center">
-                  <div>
-                    <p style={{ color: '#555555', lineHeight: '1.4' }}>{formData.education[0]?.class12Board}</p>
+              <div className="mb-4 p-4 bg-gray-50 rounded-lg" style={{ fontSize: '12px', marginBottom: '14px', padding: '16px' }}>
+                <h3 className="font-semibold mb-3" style={{ color: '#333333', fontSize: '14px', marginBottom: '12px' }}>Class 12th - {formData.education[0]?.class12Stream}</h3>
+                <div className="flex justify-between items-start">
+                  <div className="flex-1">
+                    <p style={{ color: '#555555', lineHeight: '1.5' }}>{formData.education[0]?.class12Board}</p>
                   </div>
                   <div className="text-right">
-                    <p style={{ color: '#555555', lineHeight: '1.4' }}>{formData.education[0]?.class12Year}</p>
-                    <p className="font-medium" style={{ color: '#333333', lineHeight: '1.4' }}>{formData.education[0]?.class12Percentage}</p>
+                    <p style={{ color: '#555555', lineHeight: '1.5', marginBottom: '4px' }}>{formData.education[0]?.class12Year}</p>
+                    <p className="font-medium" style={{ color: '#333333', lineHeight: '1.5' }}>{formData.education[0]?.class12Percentage}</p>
                   </div>
                 </div>
               </div>
@@ -147,15 +147,15 @@ const ResumePreview = ({ formData, selectedTemplate }: ResumePreviewProps) => {
 
             {/* College/University Education */}
             {formData.education.filter(edu => edu.degree).map((edu, index) => (
-              <div key={edu.id} className="mb-3 p-3 bg-gray-50 rounded" style={{ fontSize: '11px', marginBottom: '10px' }}>
+              <div key={edu.id} className="mb-4 p-4 bg-gray-50 rounded-lg" style={{ fontSize: '12px', marginBottom: '14px', padding: '16px' }}>
                 <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="font-semibold" style={{ color: '#333333', fontSize: '12px', lineHeight: '1.4', marginBottom: '4px' }}>{edu.degree}</h3>
-                    <p style={{ color: '#555555', lineHeight: '1.4' }}>{edu.university}</p>
+                  <div className="flex-1">
+                    <h3 className="font-semibold" style={{ color: '#333333', fontSize: '14px', lineHeight: '1.5', marginBottom: '8px' }}>{edu.degree}</h3>
+                    <p style={{ color: '#555555', lineHeight: '1.5' }}>{edu.university}</p>
                   </div>
                   <div className="text-right">
-                    <p style={{ color: '#555555', lineHeight: '1.4', marginBottom: '4px' }}>{edu.duration}</p>
-                    <p className="font-medium" style={{ color: '#333333', lineHeight: '1.4' }}>{edu.grade}</p>
+                    <p style={{ color: '#555555', lineHeight: '1.5', marginBottom: '4px' }}>{edu.duration}</p>
+                    <p className="font-medium" style={{ color: '#333333', lineHeight: '1.5' }}>{edu.grade}</p>
                   </div>
                 </div>
               </div>
@@ -193,17 +193,17 @@ const ResumePreview = ({ formData, selectedTemplate }: ResumePreviewProps) => {
               <h2 className={`text-sm font-bold mb-3 ${getSectionTitleStyle()}`} style={{ fontSize: '14px', color: selectedTemplate?.style.primaryColor || '#2563eb', marginBottom: '10px' }}>
                 Technical Skills
               </h2>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2 justify-start">
                 {formData.skills.split(',').map((skill, index) => (
                   <span 
                     key={index}
-                    className={`px-3 py-1 rounded text-xs bg-[${selectedTemplate?.style.primaryColor}]/10 border border-[${selectedTemplate?.style.primaryColor}]/20 font-medium`}
+                    className="px-3 py-1 rounded text-xs font-medium"
                     style={{ 
-                      fontSize: '10px',
+                      fontSize: '11px',
                       lineHeight: '1.4',
                       color: selectedTemplate?.style.primaryColor || '#2563eb',
                       backgroundColor: `${selectedTemplate?.style.primaryColor || '#2563eb'}10`,
-                      borderColor: `${selectedTemplate?.style.primaryColor || '#2563eb'}20`
+                      border: `1px solid ${selectedTemplate?.style.primaryColor || '#2563eb'}20`
                     }}
                   >
                     {skill.trim()}
