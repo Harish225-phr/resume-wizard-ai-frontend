@@ -1,6 +1,6 @@
 
 import { Target, Users, Award, Heart, Code, Palette, Zap } from 'lucide-react';
-import pic from '../../public/me.jpeg'
+import pic from '../../public/unknown.webp'
 const About = () => {
   const values = [
     {
