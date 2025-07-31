@@ -1,0 +1,55 @@
+%% Modern CV Template
+%% A clean, professional resume template optimized for ATS
+\documentclass[11pt,a4paper,sans]{moderncv}
+
+% moderncv themes
+\moderncvstyle{classic}
+\moderncvcolor{blue}
+
+% character encoding
+\usepackage[utf8]{inputenc}
+
+% adjust the page margins
+\usepackage[scale=0.75]{geometry}
+
+% personal data
+\name{<<FIRST_NAME>>}{<<LAST_NAME>>}
+\title{<<TITLE>>}
+\address{<<ADDRESS>>}{}{}
+\phone[mobile]{<<PHONE>>}
+\email{<<EMAIL>>}
+\homepage{<<WEBSITE>>}
+\social[linkedin]{<<LINKEDIN>>}
+\social[github]{<<GITHUB>>}
+
+% to show numerical labels in the bibliography (default is to show no labels); only useful if you make citations in your resume
+\makeatletter
+\renewcommand*{\bibliographyitemlabel}{\@biblabel{\arabic{enumiv}}}
+\makeatother
+
+\begin{document}
+%-----       resume       ---------------------------------------------------------
+\makecvtitle
+
+\section{Career Objective}
+<<CAREER_OBJECTIVE>>
+
+\section{Education}
+<<EDUCATION_SECTION>>
+
+\section{Work Experience}
+<<WORK_EXPERIENCE_SECTION>>
+
+\section{Skills}
+\cvdoubleitem{Technical Skills}{<<TECHNICAL_SKILLS>>}{Languages}{<<LANGUAGES>>}
+\cvitem{Certifications}{<<CERTIFICATIONS>>}
+
+\section{Projects}
+<<PROJECTS_SECTION>>
+
+\section{Additional Information}
+\cvitem{Hobbies}{<<HOBBIES>>}
+
+<<CUSTOM_SECTIONS>>
+
+\end{document}

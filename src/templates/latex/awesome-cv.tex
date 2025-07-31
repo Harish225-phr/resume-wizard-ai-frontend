@@ -1,0 +1,65 @@
+%% Awesome CV Template
+%% Clean and modern resume template with excellent ATS compatibility
+\documentclass[11pt, a4paper]{awesome-cv}
+
+% Configure a directory location for fonts(default: 'fonts/')
+% \fontdir[fonts/]
+
+% Set false if you don't want to highlight section with awesome color
+\setbool{acvSectionColorHighlight}{true}
+
+% If you would like to change the social information separator from a pipe (|) to something else
+\renewcommand{\acvHeaderSocialSep}{\quad\textbar\quad}
+
+%-------------------------------------------------------------------------------
+%	PERSONAL INFORMATION
+%	Comment any of the lines below if they are not required
+%-------------------------------------------------------------------------------
+% Available options: circle|rectangle,edge/noedge,left/right
+% \photo[rectangle,edge,right]{profile}
+\name{<<FIRST_NAME>>}{<<LAST_NAME>>}
+\position{<<POSITION>>{\enskip\cdotp\enskip}<<TITLE>>}
+\address{<<ADDRESS>>}
+
+\mobile{<<PHONE>>}
+\email{<<EMAIL>>}
+\homepage{<<WEBSITE>>}
+\github{<<GITHUB>>}
+\linkedin{<<LINKEDIN>>}
+% \gitlab{gitlab-id}
+% \stackoverflow{SO-id}{SO-name}
+% \twitter{@twit}
+% \skype{skype-id}
+% \reddit{reddit-id}
+% \medium{madium-id}
+% \googlescholar{googlescholar-id}{name-to-display}
+%% \firstname and \lastname will be used
+% \googlescholar{googlescholar-id}{}
+% \extrainfo{extra informations}
+
+\quote{``<<CAREER_OBJECTIVE>>''}
+
+%-------------------------------------------------------------------------------
+\begin{document}
+
+% Print the header with above personal informations
+% Give optional argument to change alignment(C: center, L: left, R: right)
+\makecvheader[C]
+
+% Print the footer with 3 arguments(<left>, <center>, <right>)
+% Leave any of these blank if they are not needed
+\makecvfooter
+  {\today}
+  {<<FIRST_NAME>> <<LAST_NAME>>~~~·~~~Resume}
+  {\thepage}
+
+%-------------------------------------------------------------------------------
+%	CV/RESUME CONTENT
+%	Each section is imported separately, open each file in turn to modify content
+%-------------------------------------------------------------------------------
+\input{sections/education.tex}
+\input{sections/experience.tex}
+\input{sections/skills.tex}
+\input{sections/projects.tex}
+
+\end{document}
