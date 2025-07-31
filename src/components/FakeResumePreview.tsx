@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Template } from '@/types/resume';
-import { User, Mail, Phone, MapPin, GraduationCap, Briefcase, Target, Star, Globe, Award, Heart, Code, ExternalLink } from 'lucide-react';
 
 interface FakeResumePreviewProps {
   template: Template;
@@ -106,16 +105,13 @@ const FakeResumePreview = ({ template }: FakeResumePreviewProps) => {
             <p className="text-lg opacity-90">Frontend Developer</p>
             <div className="flex items-center gap-4 mt-2 text-sm opacity-80">
               <div className="flex items-center gap-1">
-                <Mail className="h-4 w-4" />
                 {fakeData.email}
               </div>
               <div className="flex items-center gap-1">
-                <Phone className="h-4 w-4" />
                 {fakeData.phone}
               </div>
             </div>
             <div className="flex items-center gap-1 mt-1 text-sm opacity-80">
-              <MapPin className="h-4 w-4" />
               {fakeData.address}
             </div>
           </div>
@@ -125,8 +121,7 @@ const FakeResumePreview = ({ template }: FakeResumePreviewProps) => {
       <div className="p-6 space-y-6">
         {/* Career Objective */}
         <div>
-          <h2 className="text-xl font-semibold mb-3 flex items-center gap-2 text-gray-800">
-            <Target className="h-5 w-5" />
+          <h2 className="text-xl font-semibold mb-3 text-gray-800">
             Career Objective
           </h2>
           <p className="text-gray-700 leading-relaxed text-sm">{fakeData.careerObjective}</p>
@@ -134,8 +129,7 @@ const FakeResumePreview = ({ template }: FakeResumePreviewProps) => {
 
         {/* Education */}
         <div>
-          <h2 className="text-xl font-semibold mb-3 flex items-center gap-2 text-gray-800">
-            <GraduationCap className="h-5 w-5" />
+          <h2 className="text-xl font-semibold mb-3 text-gray-800">
             Education
           </h2>
           {fakeData.education.map((edu, index) => (
@@ -156,8 +150,7 @@ const FakeResumePreview = ({ template }: FakeResumePreviewProps) => {
 
         {/* Work Experience */}
         <div>
-          <h2 className="text-xl font-semibold mb-3 flex items-center gap-2 text-gray-800">
-            <Briefcase className="h-5 w-5" />
+          <h2 className="text-xl font-semibold mb-3 text-gray-800">
             Work Experience
           </h2>
           {fakeData.workExperience.map((exp, index) => (
@@ -176,8 +169,7 @@ const FakeResumePreview = ({ template }: FakeResumePreviewProps) => {
 
         {/* Skills */}
         <div>
-          <h2 className="text-xl font-semibold mb-3 flex items-center gap-2 text-gray-800">
-            <Star className="h-5 w-5" />
+          <h2 className="text-xl font-semibold mb-3 text-gray-800">
             Technical Skills
           </h2>
           <div className="flex flex-wrap gap-2">
@@ -194,16 +186,15 @@ const FakeResumePreview = ({ template }: FakeResumePreviewProps) => {
 
         {/* Projects */}
         <div>
-          <h2 className="text-xl font-semibold mb-3 flex items-center gap-2 text-gray-800">
-            <Code className="h-5 w-5" />
+          <h2 className="text-xl font-semibold mb-3 text-gray-800">
             Projects
           </h2>
           {fakeData.projects.map((project, index) => (
             <div key={index} className="mb-3">
               <div className="flex items-center gap-2 mb-1">
                 <h3 className="font-semibold text-gray-800 text-sm">{project.title}</h3>
-                <a href="#" className="text-blue-600 hover:text-blue-800">
-                  <ExternalLink className="h-3 w-3" />
+                <a href="#" className="text-blue-600 hover:text-blue-800 text-xs underline">
+                  View Project
                 </a>
               </div>
               <p className="text-gray-700 text-xs leading-relaxed">{project.description}</p>

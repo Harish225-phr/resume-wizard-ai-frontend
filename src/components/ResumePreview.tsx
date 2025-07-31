@@ -1,6 +1,5 @@
 import React from 'react';
 import { FormData, Template } from '@/types/resume';
-import { User, Mail, Phone, MapPin, GraduationCap, Briefcase, Target, Star, Globe, Award, Heart, Code, ExternalLink, Edit3 } from 'lucide-react';
 
 interface ResumePreviewProps {
   formData: FormData;
@@ -77,20 +76,17 @@ const ResumePreview = ({ formData, selectedTemplate }: ResumePreviewProps) => {
               <div className="flex flex-wrap gap-4 text-sm opacity-80" style={{ fontSize: '12px', gap: '16px' }}>
                 {formData.email && (
                   <div className="flex items-center gap-2">
-                    <Mail className="h-4 w-4" />
                     <span>{formData.email}</span>
                   </div>
                 )}
                 {formData.phone && (
                   <div className="flex items-center gap-2">
-                    <Phone className="h-4 w-4" />
                     <span>{formData.phone}</span>
                   </div>
                 )}
               </div>
               {formData.address && (
                 <div className="flex items-center gap-2 text-sm opacity-80 mt-2" style={{ fontSize: '12px', marginTop: '8px' }}>
-                  <MapPin className="h-4 w-4" />
                   <span>{formData.address}</span>
                 </div>
               )}
@@ -102,8 +98,7 @@ const ResumePreview = ({ formData, selectedTemplate }: ResumePreviewProps) => {
           {/* Career Objective */}
           {formData.careerObjective && (
             <div className="mb-6">
-              <h2 className={`text-lg font-bold mb-4 flex items-center gap-2 ${getSectionTitleStyle()}`} style={{ fontSize: '16px', color: selectedTemplate?.style.primaryColor || '#2563eb', marginBottom: '12px' }}>
-                <Target className="h-5 w-5" />
+              <h2 className={`text-lg font-bold mb-4 ${getSectionTitleStyle()}`} style={{ fontSize: '16px', color: selectedTemplate?.style.primaryColor || '#2563eb', marginBottom: '12px' }}>
                 Career Objective
               </h2>
               <p className="leading-relaxed text-justify" style={{ fontSize: '13px', lineHeight: '1.7', color: '#333333', marginBottom: '16px' }}>
@@ -114,17 +109,16 @@ const ResumePreview = ({ formData, selectedTemplate }: ResumePreviewProps) => {
 
           {/* Education */}
           <div className="mb-6">
-            <h2 className={`text-lg font-bold mb-4 flex items-center gap-2 ${getSectionTitleStyle()}`} style={{ fontSize: '16px', color: selectedTemplate?.style.primaryColor || '#2563eb', marginBottom: '12px' }}>
-              <GraduationCap className="h-5 w-5" />
+            <h2 className={`text-lg font-bold mb-4 ${getSectionTitleStyle()}`} style={{ fontSize: '16px', color: selectedTemplate?.style.primaryColor || '#2563eb', marginBottom: '12px' }}>
               Education
             </h2>
             
             {/* Class 10th */}
             {(formData.education[0]?.class10Board || formData.education[0]?.class10Year || formData.education[0]?.class10Percentage) && (
-              <div className="mb-4 p-4 bg-blue-50 rounded-lg" style={{ fontSize: '12px', marginBottom: '14px', padding: '16px' }}>
+              <div className="mb-4 p-4 bg-gray-50 rounded-lg" style={{ fontSize: '12px', marginBottom: '14px', padding: '16px' }}>
                 <h3 className="font-semibold mb-3" style={{ color: '#333333', fontSize: '14px', marginBottom: '12px' }}>Class 10th</h3>
-                <div className="flex justify-between items-center">
-                  <div>
+                <div className="flex justify-between items-start">
+                  <div className="flex-1">
                     <p style={{ color: '#555555', lineHeight: '1.5' }}>{formData.education[0]?.class10Board}</p>
                   </div>
                   <div className="text-right">
@@ -137,15 +131,15 @@ const ResumePreview = ({ formData, selectedTemplate }: ResumePreviewProps) => {
 
             {/* Class 12th */}
             {(formData.education[0]?.class12Stream || formData.education[0]?.class12Board || formData.education[0]?.class12Year || formData.education[0]?.class12Percentage) && (
-              <div className="mb-3 p-3 bg-green-50 rounded" style={{ fontSize: '11px', marginBottom: '10px' }}>
-                <h3 className="font-semibold mb-2" style={{ color: '#333333', fontSize: '12px' }}>Class 12th - {formData.education[0]?.class12Stream}</h3>
-                <div className="flex justify-between items-center">
-                  <div>
-                    <p style={{ color: '#555555', lineHeight: '1.4' }}>{formData.education[0]?.class12Board}</p>
+              <div className="mb-4 p-4 bg-gray-50 rounded-lg" style={{ fontSize: '12px', marginBottom: '14px', padding: '16px' }}>
+                <h3 className="font-semibold mb-3" style={{ color: '#333333', fontSize: '14px', marginBottom: '12px' }}>Class 12th - {formData.education[0]?.class12Stream}</h3>
+                <div className="flex justify-between items-start">
+                  <div className="flex-1">
+                    <p style={{ color: '#555555', lineHeight: '1.5' }}>{formData.education[0]?.class12Board}</p>
                   </div>
                   <div className="text-right">
-                    <p style={{ color: '#555555', lineHeight: '1.4' }}>{formData.education[0]?.class12Year}</p>
-                    <p className="font-medium" style={{ color: '#333333', lineHeight: '1.4' }}>{formData.education[0]?.class12Percentage}</p>
+                    <p style={{ color: '#555555', lineHeight: '1.5', marginBottom: '4px' }}>{formData.education[0]?.class12Year}</p>
+                    <p className="font-medium" style={{ color: '#333333', lineHeight: '1.5' }}>{formData.education[0]?.class12Percentage}</p>
                   </div>
                 </div>
               </div>
@@ -153,15 +147,15 @@ const ResumePreview = ({ formData, selectedTemplate }: ResumePreviewProps) => {
 
             {/* College/University Education */}
             {formData.education.filter(edu => edu.degree).map((edu, index) => (
-              <div key={edu.id} className="mb-3 p-3 bg-gray-50 rounded" style={{ fontSize: '11px', marginBottom: '10px' }}>
+              <div key={edu.id} className="mb-4 p-4 bg-gray-50 rounded-lg" style={{ fontSize: '12px', marginBottom: '14px', padding: '16px' }}>
                 <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="font-semibold" style={{ color: '#333333', fontSize: '12px', lineHeight: '1.4', marginBottom: '4px' }}>{edu.degree}</h3>
-                    <p style={{ color: '#555555', lineHeight: '1.4' }}>{edu.university}</p>
+                  <div className="flex-1">
+                    <h3 className="font-semibold" style={{ color: '#333333', fontSize: '14px', lineHeight: '1.5', marginBottom: '8px' }}>{edu.degree}</h3>
+                    <p style={{ color: '#555555', lineHeight: '1.5' }}>{edu.university}</p>
                   </div>
                   <div className="text-right">
-                    <p style={{ color: '#555555', lineHeight: '1.4', marginBottom: '4px' }}>{edu.duration}</p>
-                    <p className="font-medium" style={{ color: '#333333', lineHeight: '1.4' }}>{edu.grade}</p>
+                    <p style={{ color: '#555555', lineHeight: '1.5', marginBottom: '4px' }}>{edu.duration}</p>
+                    <p className="font-medium" style={{ color: '#333333', lineHeight: '1.5' }}>{edu.grade}</p>
                   </div>
                 </div>
               </div>
@@ -171,8 +165,7 @@ const ResumePreview = ({ formData, selectedTemplate }: ResumePreviewProps) => {
           {/* Work Experience */}
           {!formData.hasNoWorkExperience && formData.workExperience.length > 0 && formData.workExperience.some(exp => exp.company) && (
             <div className="mb-3">
-              <h2 className={`text-sm font-bold mb-3 flex items-center gap-2 ${getSectionTitleStyle()}`} style={{ fontSize: '14px', color: selectedTemplate?.style.primaryColor || '#2563eb', marginBottom: '10px' }}>
-                <Briefcase className="h-4 w-4" />
+              <h2 className={`text-sm font-bold mb-3 ${getSectionTitleStyle()}`} style={{ fontSize: '14px', color: selectedTemplate?.style.primaryColor || '#2563eb', marginBottom: '10px' }}>
                 Work Experience
               </h2>
               {formData.workExperience.map((exp, index) => (
@@ -197,35 +190,19 @@ const ResumePreview = ({ formData, selectedTemplate }: ResumePreviewProps) => {
           {/* Skills */}
           {formData.skills && (
             <div className="mb-3">
-              <h2 className={`text-sm font-bold mb-3 flex items-center gap-2 ${getSectionTitleStyle()}`} style={{ fontSize: '14px', color: selectedTemplate?.style.primaryColor || '#2563eb', marginBottom: '10px' }}>
-                <Star className="h-4 w-4" />
+              <h2 className={`text-sm font-bold mb-3 ${getSectionTitleStyle()}`} style={{ fontSize: '14px', color: selectedTemplate?.style.primaryColor || '#2563eb', marginBottom: '10px' }}>
                 Technical Skills
               </h2>
-              <div className="flex flex-wrap gap-2">
-                {formData.skills.split(',').map((skill, index) => (
-                  <span 
-                    key={index}
-                    className={`px-3 py-1 rounded text-xs bg-[${selectedTemplate?.style.primaryColor}]/10 border border-[${selectedTemplate?.style.primaryColor}]/20 font-medium`}
-                    style={{ 
-                      fontSize: '10px',
-                      lineHeight: '1.4',
-                      color: selectedTemplate?.style.primaryColor || '#2563eb',
-                      backgroundColor: `${selectedTemplate?.style.primaryColor || '#2563eb'}10`,
-                      borderColor: `${selectedTemplate?.style.primaryColor || '#2563eb'}20`
-                    }}
-                  >
-                    {skill.trim()}
-                  </span>
-                ))}
-              </div>
+              <p className="leading-relaxed" style={{ fontSize: '11px', lineHeight: '1.6', color: '#333333' }}>
+                {formData.skills}
+              </p>
             </div>
           )}
 
           {/* Languages */}
           {formData.languages && (
             <div className="mb-3">
-              <h2 className={`text-sm font-bold mb-3 flex items-center gap-2 ${getSectionTitleStyle()}`} style={{ fontSize: '14px', color: selectedTemplate?.style.primaryColor || '#2563eb', marginBottom: '8px' }}>
-                <Globe className="h-4 w-4" />
+              <h2 className={`text-sm font-bold mb-3 ${getSectionTitleStyle()}`} style={{ fontSize: '14px', color: selectedTemplate?.style.primaryColor || '#2563eb', marginBottom: '8px' }}>
                 Languages
               </h2>
               <p className="leading-relaxed" style={{ fontSize: '11px', lineHeight: '1.6', color: '#333333' }}>{formData.languages}</p>
@@ -235,8 +212,7 @@ const ResumePreview = ({ formData, selectedTemplate }: ResumePreviewProps) => {
           {/* Projects */}
           {formData.projects.length > 0 && formData.projects.some(project => project.title) && (
             <div className="mb-3">
-              <h2 className={`text-sm font-bold mb-3 flex items-center gap-2 ${getSectionTitleStyle()}`} style={{ fontSize: '14px', color: selectedTemplate?.style.primaryColor || '#2563eb', marginBottom: '10px' }}>
-                <Code className="h-4 w-4" />
+              <h2 className={`text-sm font-bold mb-3 ${getSectionTitleStyle()}`} style={{ fontSize: '14px', color: selectedTemplate?.style.primaryColor || '#2563eb', marginBottom: '10px' }}>
                 Projects
               </h2>
               {formData.projects.map((project, index) => (
@@ -250,8 +226,9 @@ const ResumePreview = ({ formData, selectedTemplate }: ResumePreviewProps) => {
                           target="_blank" 
                           rel="noopener noreferrer"
                           style={{ color: selectedTemplate?.style.primaryColor || '#2563eb' }}
+                          className="text-xs underline"
                         >
-                          <ExternalLink className="h-4 w-4" />
+                          View Project
                         </a>
                       )}
                     </div>
@@ -267,8 +244,7 @@ const ResumePreview = ({ formData, selectedTemplate }: ResumePreviewProps) => {
           {/* Certifications */}
           {formData.certifications && (
             <div className="mb-3">
-              <h2 className={`text-sm font-bold mb-3 flex items-center gap-2 ${getSectionTitleStyle()}`} style={{ fontSize: '14px', color: selectedTemplate?.style.primaryColor || '#2563eb', marginBottom: '8px' }}>
-                <Award className="h-4 w-4" />
+              <h2 className={`text-sm font-bold mb-3 ${getSectionTitleStyle()}`} style={{ fontSize: '14px', color: selectedTemplate?.style.primaryColor || '#2563eb', marginBottom: '8px' }}>
                 Certifications
               </h2>
               <p className="leading-relaxed" style={{ fontSize: '11px', lineHeight: '1.6', color: '#333333' }}>{formData.certifications}</p>
@@ -278,8 +254,7 @@ const ResumePreview = ({ formData, selectedTemplate }: ResumePreviewProps) => {
           {/* Hobbies */}
           {formData.hobbies && (
             <div className="mb-3">
-              <h2 className={`text-sm font-bold mb-3 flex items-center gap-2 ${getSectionTitleStyle()}`} style={{ fontSize: '14px', color: selectedTemplate?.style.primaryColor || '#2563eb', marginBottom: '8px' }}>
-                <Heart className="h-4 w-4" />
+              <h2 className={`text-sm font-bold mb-3 ${getSectionTitleStyle()}`} style={{ fontSize: '14px', color: selectedTemplate?.style.primaryColor || '#2563eb', marginBottom: '8px' }}>
                 Hobbies & Interests
               </h2>
               <p className="leading-relaxed" style={{ fontSize: '11px', lineHeight: '1.6', color: '#333333' }}>{formData.hobbies}</p>
@@ -289,8 +264,7 @@ const ResumePreview = ({ formData, selectedTemplate }: ResumePreviewProps) => {
           {/* Custom Sections */}
           {formData.customSections && formData.customSections.length > 0 && formData.customSections.map((section) => (
             <div key={section.id} className="mb-3">
-              <h2 className={`text-sm font-bold mb-3 flex items-center gap-2 ${getSectionTitleStyle()}`} style={{ fontSize: '14px', color: selectedTemplate?.style.primaryColor || '#2563eb', marginBottom: '8px' }}>
-                <Edit3 className="h-4 w-4" />
+              <h2 className={`text-sm font-bold mb-3 ${getSectionTitleStyle()}`} style={{ fontSize: '14px', color: selectedTemplate?.style.primaryColor || '#2563eb', marginBottom: '8px' }}>
                 {section.heading}
               </h2>
               <div 

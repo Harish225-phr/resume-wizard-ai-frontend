@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Star, Globe, Award, Heart, Code, Plus, X } from 'lucide-react';
+import { Plus, X } from 'lucide-react';
 import { FormData } from '@/types/resume';
 import { Button } from '@/components/ui/button';
 
@@ -40,8 +40,7 @@ const SkillsForm = ({ formData, handleInputChange }: SkillsFormProps) => {
 
       <div className="space-y-6">
         <div>
-          <label htmlFor="skills" className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
-            <Code className="mr-2 h-4 w-4" />
+          <label htmlFor="skills" className="block text-sm font-medium text-gray-700 mb-2">
             Technical Skills *
           </label>
           
@@ -99,8 +98,7 @@ const SkillsForm = ({ formData, handleInputChange }: SkillsFormProps) => {
         </div>
 
         <div>
-          <label htmlFor="languages" className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
-            <Globe className="mr-2 h-4 w-4" />
+          <label htmlFor="languages" className="block text-sm font-medium text-gray-700 mb-2">
             Languages Known
           </label>
           <input
@@ -115,8 +113,7 @@ const SkillsForm = ({ formData, handleInputChange }: SkillsFormProps) => {
         </div>
 
         <div>
-          <label htmlFor="certifications" className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
-            <Award className="mr-2 h-4 w-4" />
+          <label htmlFor="certifications" className="block text-sm font-medium text-gray-700 mb-2">
             Certifications
           </label>
           <textarea
@@ -131,8 +128,7 @@ const SkillsForm = ({ formData, handleInputChange }: SkillsFormProps) => {
         </div>
 
         <div>
-          <label htmlFor="hobbies" className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
-            <Heart className="mr-2 h-4 w-4" />
+          <label htmlFor="hobbies" className="block text-sm font-medium text-gray-700 mb-2">
             Hobbies & Interests
           </label>
           <input
