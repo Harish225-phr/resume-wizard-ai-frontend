@@ -193,18 +193,22 @@ const ResumePreview = ({ formData, selectedTemplate }: ResumePreviewProps) => {
               <h2 className={`text-sm font-bold mb-3 ${getSectionTitleStyle()}`} style={{ fontSize: '14px', color: selectedTemplate?.style.primaryColor || '#2563eb', marginBottom: '10px' }}>
                 Technical Skills
               </h2>
-              <div className="flex flex-wrap gap-2 justify-start">
+              <div style={{ textAlign: 'left', lineHeight: '1.8' }}>
                 {formData.skills.split(',').map((skill, index) => (
                   <span 
                     key={index}
-                    className="px-3 py-1 rounded text-xs font-medium text-center"
                     style={{ 
+                      display: 'inline-block',
+                      margin: '2px 4px 2px 0',
+                      padding: '4px 12px',
                       fontSize: '11px',
                       lineHeight: '1.4',
                       color: selectedTemplate?.style.primaryColor || '#2563eb',
                       backgroundColor: `${selectedTemplate?.style.primaryColor || '#2563eb'}10`,
                       border: `1px solid ${selectedTemplate?.style.primaryColor || '#2563eb'}20`,
-                      textAlign: 'center'
+                      borderRadius: '4px',
+                      textAlign: 'center',
+                      fontWeight: '500'
                     }}
                   >
                     {skill.trim()}
