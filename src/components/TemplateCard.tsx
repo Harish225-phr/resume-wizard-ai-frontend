@@ -1,6 +1,6 @@
 
 import { Card } from '@/components/ui/card';
-import { Check, Eye } from 'lucide-react';
+import { Check, Eye, FileText } from 'lucide-react';
 import { Template } from '@/types/resume';
 
 interface TemplateCardProps {
@@ -41,9 +41,17 @@ const TemplateCard = ({ template, isSelected, onSelect, onPreview }: TemplateCar
         <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
           <h3 className="font-bold text-sm mb-1">{template.name}</h3>
           <p className="text-xs opacity-90 line-clamp-2">{template.description}</p>
-          <span className="inline-block mt-2 px-2 py-1 bg-green-500 text-white text-xs font-medium rounded-full">
-            100% Free
-          </span>
+          <div className="flex items-center gap-2 mt-2">
+            <span className="inline-block px-2 py-1 bg-green-500 text-white text-xs font-medium rounded-full">
+              100% Free
+            </span>
+            {template.hasLatexSupport && (
+              <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-500 text-white text-xs font-medium rounded-full">
+                <FileText className="h-3 w-3" />
+                LaTeX PDF
+              </span>
+            )}
+          </div>
         </div>
       </div>
       

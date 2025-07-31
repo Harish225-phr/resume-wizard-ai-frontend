@@ -1,0 +1,81 @@
+%% ClassicPro Template
+%% A sophisticated and professional LaTeX resume template
+%% Perfect for executive and senior-level positions
+\documentclass[11pt,a4paper,roman]{moderncv}
+
+% Modern CV theme with classic styling
+\moderncvstyle{classic}
+\moderncvcolor{black}
+
+% Character encoding
+\usepackage[utf8]{inputenc}
+
+% Page margins
+\usepackage[scale=0.75,top=1.5cm,bottom=1.5cm]{geometry}
+
+% Custom colors
+\definecolor{darkblue}{RGB}{25,25,112}
+\definecolor{mediumgray}{RGB}{64,64,64}
+
+% Custom styling
+\renewcommand{\familydefault}{\rmdefault}
+
+% Personal information
+\name{<<FIRST_NAME>>}{<<LAST_NAME>>}
+\title{<<TITLE>>}
+\address{<<ADDRESS>>}{}{}
+\phone[mobile]{<<PHONE>>}
+\email{<<EMAIL>>}
+\homepage{<<WEBSITE>>}
+\social[linkedin]{<<LINKEDIN>>}
+\social[github]{<<GITHUB>>}
+
+% Professional quote
+\quote{<<CAREER_OBJECTIVE>>}
+
+\begin{document}
+
+% Make the header
+\makecvtitle
+
+% Professional Summary Section
+\section{Professional Summary}
+\cvitem{}{<<CAREER_OBJECTIVE>>}
+
+% Core Competencies
+\section{Core Competencies}
+\cvitem{Technical Skills}{<<TECHNICAL_SKILLS>>}
+\cvitem{Languages}{<<LANGUAGES>>}
+\cvitem{Certifications}{<<CERTIFICATIONS>>}
+
+% Professional Experience
+\section{Professional Experience}
+<<WORK_EXPERIENCE_SECTION>>
+
+% Education
+\section{Education}
+<<EDUCATION_SECTION>>
+
+% Key Projects
+\section{Key Projects}
+<<PROJECTS_SECTION>>
+
+% Professional Development
+\section{Professional Development}
+\cvitem{Certifications}{<<CERTIFICATIONS>>}
+\cvitem{Languages}{<<LANGUAGES>>}
+
+% Additional Information
+\section{Additional Information}
+\cvitem{Interests}{<<HOBBIES>>}
+
+% Custom sections for awards, publications, etc.
+<<CUSTOM_SECTIONS>>
+
+% Footer with professional note
+\vfill
+\begin{center}
+\textcolor{mediumgray}{\footnotesize References available upon request}
+\end{center}
+
+\end{document}

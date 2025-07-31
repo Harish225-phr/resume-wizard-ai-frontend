@@ -1,0 +1,138 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[top=0.2in, bottom=0.2in, left=0.2in, right=0.2in]{geometry}
+\usepackage{enumitem}
+\usepackage[colorlinks=true, urlcolor=black, linkcolor=black]{hyperref}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{titlesec}
+\usepackage{array}
+\pagestyle{empty}
+
+% Enhanced section formatting
+\titleformat{\section}{\bfseries\sffamily\normalsize\uppercase}{}{0em}{}[\titlerule]
+\titlespacing*{\section}{0pt}{1.8ex plus 1ex minus .2ex}{1.2ex plus .2ex}
+
+% Custom itemize environments
+\newenvironment{bolditemize}
+  {\begin{itemize}[noitemsep, itemsep=0.4em, leftmargin=*]
+   \renewcommand{\labelitemi}{\normalfont\bfseries\textbullet}
+   \setlength{\labelsep}{0.5em}}
+  {\end{itemize}}
+
+\newenvironment{subitemize}
+  {\begin{itemize}[noitemsep, itemsep=0.3em, leftmargin=1.5em]
+   \renewcommand{\labelitemi}{\normalfont--}
+   \setlength{\labelsep}{0.5em}}
+  {\end{itemize}}
+
+\begin{document}
+
+% Header
+\noindent
+\begin{minipage}[t]{0.64\textwidth}
+    {\fontsize{22}{24}\selectfont\bfseries {{fullName}}} \\[0.5ex]
+    {\bfseries {{degree}}} \\
+    {\bfseries {{university}}}
+\end{minipage}%
+\begin{minipage}[t]{0.34\textwidth}\raggedleft
+    \textbf{{{phone}}} \\
+    \href{mailto:{{email}}}{{{email}}} \\
+    {{#linkedinUrl}}\href{{{linkedinUrl}}}{{{linkedinHandle}}} \\{{/linkedinUrl}}
+    {{#githubUrl}}\href{{{githubUrl}}}{{{githubHandle}}}{{/githubUrl}}
+\end{minipage}
+
+\section*{EDUCATION}
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|>{\centering\arraybackslash}p{4.6cm}|>{\centering\arraybackslash}p{6.6cm}|>{\centering\arraybackslash}p{3.4cm}|>{\centering\arraybackslash}p{3.4cm}|}
+\hline
+\textbf{Degree} & \textbf{Institute/Board} & \textbf{CGPA/\%} & \textbf{Year} \\
+\hline
+{{#education}}
+\textbf{{{degree}}} & \textbf{{{university}}} & \textbf{{{grade}}} & \textbf{{{duration}}} \\
+\hline
+{{/education}}
+\end{tabular}
+\end{center}
+
+{{#hasWorkExperience}}
+\section*{EXPERIENCE}
+\begin{bolditemize}
+{{#workExperience}}
+    \item \textbf{{{company}}} \hfill \textit{{{duration}}}
+    \begin{subitemize}
+        \item \textit{{{position}}}
+        {{#descriptionPoints}}
+        \item {{.}}
+        {{/descriptionPoints}}
+    \end{subitemize}
+{{/workExperience}}
+\end{bolditemize}
+{{/hasWorkExperience}}
+
+{{#hasProjects}}
+\section*{PROJECTS}
+\begin{bolditemize}
+{{#projects}}
+    \item \textbf{{{title}}} \hfill \textit{{{duration}}}
+    \begin{subitemize}
+        {{#descriptionPoints}}
+        \item {{.}}
+        {{/descriptionPoints}}
+        {{#link}}\item \href{{{link}}}{\textbf{GitHub}: {{link}}}{{/link}}
+    \end{subitemize}
+{{/projects}}
+\end{bolditemize}
+{{/hasProjects}}
+
+{{#hasSkills}}
+\section*{SKILLS}
+\begin{bolditemize}
+{{#skillCategories}}
+    \item \textbf{{{category}}:} {{skills}}
+{{/skillCategories}}
+\end{bolditemize}
+{{/hasSkills}}
+
+{{#hasAchievements}}
+\section*{ACHIEVEMENTS}
+\begin{bolditemize}
+{{#achievements}}
+    \item {{.}}
+{{/achievements}}
+\end{bolditemize}
+{{/hasAchievements}}
+
+{{#hasCodingProfiles}}
+\section*{CODING PROFILES}
+\begin{bolditemize}
+{{#codingProfiles}}
+    \item \href{{{url}}}{\textbf{{{platform}}}: {{handle}}}
+{{/codingProfiles}}
+\end{bolditemize}
+{{/hasCodingProfiles}}
+
+{{#hasLanguages}}
+\section*{LANGUAGES}
+\begin{bolditemize}
+    \item {{languages}}
+\end{bolditemize}
+{{/hasLanguages}}
+
+{{#hasCertifications}}
+\section*{CERTIFICATIONS}
+\begin{bolditemize}
+{{#certificationList}}
+    \item {{.}}
+{{/certificationList}}
+\end{bolditemize}
+{{/hasCertifications}}
+
+{{#hasHobbies}}
+\section*{INTERESTS}
+\begin{bolditemize}
+    \item {{hobbies}}
+\end{bolditemize}
+{{/hasHobbies}}
+
+\end{document}

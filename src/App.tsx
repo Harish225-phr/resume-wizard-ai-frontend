@@ -7,10 +7,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Index from "./pages/Index";
 import Home from "./pages/Home";
-import CreateResume from "./pages/CreateResume";
+import CreateResumeNew from "./pages/CreateResumeNew";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
+import ATSAnalysisPage from "./pages/ATSAnalysisPage";
 import Footer from "./components/Footer";
 
 const queryClient = new QueryClient();
@@ -26,7 +27,8 @@ const App = () => (
           <main className="flex-1">
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/create" element={<CreateResume />} />
+              <Route path="/create" element={<CreateResumeNew />} />
+              <Route path="/ats-analysis" element={<ATSAnalysisPage />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="*" element={<NotFound />} />

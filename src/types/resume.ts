@@ -2,12 +2,12 @@
 export interface Template {
   id: string;
   name: string;
-  type: 'free';
+  type: 'free' | 'premium';
   preview: string;
   description: string;
   imageUrl: string;
   style: {
-    layout: 'single-column' | 'two-column' | 'sidebar';
+    layout: 'single-column' | 'two-column' | 'sidebar' | 'creative' | 'minimal' | 'modern';
     fontFamily: string;
     primaryColor: string;
     accentColor: string;
@@ -17,6 +17,12 @@ export interface Template {
     company: string;
     skills: string;
   };
+  latexTemplate?: string | null; // Optional LaTeX template ID for PDF generation
+  hasLatexSupport?: boolean; // Whether this template supports LaTeX PDF generation
+  category?: string; // Template category (academic, technology, creative, etc.)
+  rating?: number; // Template rating
+  downloads?: string; // Download count
+  features?: string[]; // Template features
 }
 
 export interface Education {

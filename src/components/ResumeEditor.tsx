@@ -4,9 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { ArrowLeft, Save, Download } from 'lucide-react';
+import { ArrowLeft, Save, Download, FileText } from 'lucide-react';
 import { FormData, Template } from '@/types/resume';
 import { usePDFDownload } from '@/hooks/usePDFDownload';
+import { useLaTeXDownload } from '@/hooks/useLaTeXDownload';
 import ResumePreview from './ResumePreview';
 
 interface ResumeEditorProps {
@@ -19,6 +20,7 @@ interface ResumeEditorProps {
 const ResumeEditor = ({ formData, selectedTemplate, onSave, onBack }: ResumeEditorProps) => {
   const [editedData, setEditedData] = useState<FormData>(formData);
   const { downloadPDF, isGenerating } = usePDFDownload();
+  const { downloadLaTeXPDF, isGenerating: isLaTeXGenerating } = useLaTeXDownload();
 
   useEffect(() => {
     setEditedData(formData);
@@ -58,6 +60,12 @@ const ResumeEditor = ({ formData, selectedTemplate, onSave, onBack }: ResumeEdit
     });
   };
 
+  const handleDownloadLaTeX = async () => {
+    if (selectedTemplate?.latexTemplate) {
+      await downloadLaTeXPDF(selectedTemplate.latexTemplate, editedData);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -90,11 +98,22 @@ const ResumeEditor = ({ formData, selectedTemplate, onSave, onBack }: ResumeEdit
               <Button
                 onClick={handleDownloadPDF}
                 disabled={isGenerating}
-                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700"
+                variant="outline"
+                className="flex items-center gap-2"
               >
                 <Download className="h-4 w-4" />
-                {isGenerating ? 'Generating...' : 'Download PDF'}
+                {isGenerating ? 'Generating...' : 'Download HTML PDF'}
               </Button>
+              {selectedTemplate?.hasLatexSupport && (
+                <Button
+                  onClick={handleDownloadLaTeX}
+                  disabled={isLaTeXGenerating}
+                  className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700"
+                >
+                  <FileText className="h-4 w-4" />
+                  {isLaTeXGenerating ? 'Generating...' : 'Download LaTeX PDF'}
+                </Button>
+              )}
             </div>
           </div>
         </div>

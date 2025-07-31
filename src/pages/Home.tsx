@@ -1,5 +1,5 @@
 
-import { ArrowDown, CheckCircle, FileText, Zap, Download, Sparkles } from 'lucide-react';
+import { ArrowDown, CheckCircle, FileText, Zap, Download, Sparkles, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
@@ -14,6 +14,11 @@ const Home = () => {
       icon: <FileText className="h-8 w-8 text-purple-600" />,
       title: 'Multiple Templates',
       description: 'Choose from professionally designed templates - all completely free',
+    },
+    {
+      icon: <Search className="h-8 w-8 text-orange-600" />,
+      title: 'ATS Compatibility',
+      description: 'Check and optimize your resume for Applicant Tracking Systems',
     },
     {
       icon: <Download className="h-8 w-8 text-green-600" />,
@@ -33,6 +38,7 @@ const Home = () => {
   const freeFeatures = [
     'Professional template designs',
     'AI career objective generation',
+    'ATS compatibility checking',
     'High-quality PDF export',
     'No watermarks or restrictions',
   ];

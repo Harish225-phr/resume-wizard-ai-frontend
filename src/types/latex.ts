@@ -2,7 +2,7 @@ export interface LaTeXTemplate {
   id: string;
   name: string;
   description: string;
-  category: 'modern' | 'classic' | 'creative';
+  category: 'modern' | 'classic' | 'creative' | 'academic';
   previewImage: string;
   templateContent: string;
   requiredPackages: string[];

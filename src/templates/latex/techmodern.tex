@@ -1,0 +1,78 @@
+%% TechModern Template
+%% A cutting-edge LaTeX resume template designed for tech professionals
+%% Features modern typography and clean layout
+\documentclass[11pt,a4paper,sans]{moderncv}
+
+% Modern styling
+\moderncvstyle{banking}
+\moderncvcolor{blue}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[scale=0.8,top=1cm,bottom=1cm]{geometry}
+\usepackage{fontawesome}
+\usepackage{xcolor}
+
+% Custom colors
+\definecolor{techblue}{RGB}{0,123,255}
+\definecolor{darkgray}{RGB}{33,37,41}
+\definecolor{lightgray}{RGB}{108,117,125}
+
+% Custom commands for tech-focused sections
+\newcommand{\techskill}[1]{\textcolor{techblue}{\textbf{#1}}}
+\newcommand{\highlight}[1]{\textcolor{techblue}{#1}}
+
+% Personal information
+\name{<<FIRST_NAME>>}{<<LAST_NAME>>}
+\title{\textcolor{techblue}{<<TITLE>>}}
+\address{<<ADDRESS>>}{}{}
+\phone[mobile]{\faPhone\ <<PHONE>>}
+\email{\faEnvelope\ <<EMAIL>>}
+\homepage{\faGlobe\ <<WEBSITE>>}
+\social[linkedin][\faLinkedin\ LinkedIn]{<<LINKEDIN>>}
+\social[github][\faGithub\ GitHub]{<<GITHUB>>}
+
+% Professional objective
+\quote{\textit{<<CAREER_OBJECTIVE>>}}
+
+\begin{document}
+
+\makecvtitle
+
+% Technical Skills Section (Prominent for tech professionals)
+\section{\textcolor{techblue}{Technical Expertise}}
+\cvitem{\techskill{Programming}}{<<TECHNICAL_SKILLS>>}
+\cvitem{\techskill{Languages}}{<<LANGUAGES>>}
+\cvitem{\techskill{Certifications}}{<<CERTIFICATIONS>>}
+
+% Professional Experience
+\section{\textcolor{techblue}{Professional Experience}}
+<<WORK_EXPERIENCE_SECTION>>
+
+% Key Projects (Important for tech roles)
+\section{\textcolor{techblue}{Key Projects \& Achievements}}
+<<PROJECTS_SECTION>>
+
+% Education
+\section{\textcolor{techblue}{Education}}
+<<EDUCATION_SECTION>>
+
+% Additional Sections
+\section{\textcolor{techblue}{Professional Development}}
+\cvitem{Certifications}{<<CERTIFICATIONS>>}
+\cvitem{Languages}{<<LANGUAGES>>}
+
+% Personal Interests
+\section{\textcolor{techblue}{Personal Interests}}
+\cvitem{}{<<HOBBIES>>}
+
+% Custom sections for additional information
+<<CUSTOM_SECTIONS>>
+
+% Footer
+\vspace{1cm}
+\begin{center}
+\textcolor{lightgray}{\small \faInfoCircle\ This resume was generated using LaTeX for optimal formatting and ATS compatibility}
+\end{center}
+
+\end{document}

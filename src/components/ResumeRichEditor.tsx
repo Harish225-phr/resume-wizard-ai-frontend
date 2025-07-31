@@ -3,9 +3,10 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { ArrowLeft, Save, Download } from 'lucide-react';
+import { ArrowLeft, Save, Download, FileText } from 'lucide-react';
 import { FormData, Template } from '@/types/resume';
 import { usePDFDownload } from '@/hooks/usePDFDownload';
+import { useLaTeXDownload } from '@/hooks/useLaTeXDownload';
 
 interface ResumeRichEditorProps {
   formData: FormData;
@@ -16,6 +17,7 @@ interface ResumeRichEditorProps {
 
 const ResumeRichEditor = ({ formData, selectedTemplate, onSave, onBack }: ResumeRichEditorProps) => {
   const { downloadPDF, isGenerating } = usePDFDownload();
+  const { downloadLaTeXPDF, isGenerating: isLaTeXGenerating } = useLaTeXDownload();
   const [content, setContent] = useState('');
 
   useEffect(() => {
@@ -191,6 +193,12 @@ const ResumeRichEditor = ({ formData, selectedTemplate, onSave, onBack }: Resume
     });
   };
 
+  const handleDownloadLaTeX = async () => {
+    if (selectedTemplate?.latexTemplate) {
+      await downloadLaTeXPDF(selectedTemplate.latexTemplate, formData);
+    }
+  };
+
   const modules = {
     toolbar: [
       [{ 'header': [1, 2, 3, false] }],
@@ -247,11 +255,22 @@ const ResumeRichEditor = ({ formData, selectedTemplate, onSave, onBack }: Resume
               <Button
                 onClick={handleDownloadPDF}
                 disabled={isGenerating}
-                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700"
+                variant="outline"
+                className="flex items-center gap-2"
               >
                 <Download className="h-4 w-4" />
-                {isGenerating ? 'Generating...' : 'Download PDF'}
+                {isGenerating ? 'Generating...' : 'Download HTML PDF'}
               </Button>
+              {selectedTemplate?.hasLatexSupport && (
+                <Button
+                  onClick={handleDownloadLaTeX}
+                  disabled={isLaTeXGenerating}
+                  className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700"
+                >
+                  <FileText className="h-4 w-4" />
+                  {isLaTeXGenerating ? 'Generating...' : 'Download LaTeX PDF'}
+                </Button>
+              )}
             </div>
           </div>
         </div>
