@@ -26,15 +26,10 @@ class PDFService {
     
     // Configure html2canvas with optimized settings for consistent PDF output
     const canvas = await html2canvas(element, {
-      scale: 3, // Higher scale for crisp text
       useCORS: true,
       allowTaint: true,
-      backgroundColor: '#ffffff',
+      background: '#ffffff',
       logging: false,
-      removeContainer: true,
-      imageTimeout: 0,
-      scrollX: 0,
-      scrollY: 0,
     });
 
     // A4 dimensions in pixels (at 96 DPI)

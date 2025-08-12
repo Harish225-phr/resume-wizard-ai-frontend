@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { convertFormToAcademicData } from '@/utils/dataConverters';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -62,7 +63,8 @@ const ResumeEditor = ({ formData, selectedTemplate, onSave, onBack }: ResumeEdit
 
   const handleDownloadLaTeX = async () => {
     if (selectedTemplate?.latexTemplate) {
-      await downloadLaTeXPDF(selectedTemplate.latexTemplate, editedData);
+      const academicData = convertFormToAcademicData(editedData);
+      await downloadLaTeXPDF(selectedTemplate.latexTemplate, academicData);
     }
   };
 

@@ -6,7 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Plus, Trash2, Download, Eye, User, GraduationCap, Briefcase, Code, Cpu, Award, Globe, FileText, Search, Upload } from 'lucide-react';
-import { latexService } from '@/services/latexService';
+import latexService from '@/services/latexService';
 import ATSCheckerModal from './ATSCheckerModal';
 import ResumeUploadModal from './ResumeUploadModal';
 

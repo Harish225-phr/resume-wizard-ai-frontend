@@ -3,11 +3,11 @@ import { Upload, FileText, Loader2, CheckCircle, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { FormData } from '@/types/resume';
+import { AcademicResumeData } from '@/types/academicResume';
 import { resumeParserService } from '@/services/resumeParser';
 
 interface ResumeUploadProps {
-  onParsedData: (data: FormData) => void;
+  onParsedData: (data: AcademicResumeData) => void;
   onSkip: () => void;
 }
 
@@ -64,15 +64,15 @@ const ResumeUpload = ({ onParsedData, onSkip }: ResumeUploadProps) => {
     try {
       console.log('Starting resume parsing for file:', file.name, 'Type:', file.type);
       
-      const parsedData = await resumeParserService.parseResume(file);
+      const parsedData = await resumeParserService.parseResumeFile(file);
       console.log('Generated Parsed Data:', parsedData);
       
       toast({
         title: "Resume Parsed Successfully! ✨",
-        description: `Extracted: ${parsedData.fullName}, ${parsedData.email}, ${parsedData.skills ? 'skills' : ''} and more!`,
+        description: `Extracted: ${parsedData.parsedData.personalInfo.fullName}, ${parsedData.parsedData.personalInfo.email}, ${parsedData.parsedData.skills ? 'skills' : ''} and more!`,
       });
       
-      onParsedData(parsedData);
+      onParsedData(parsedData.parsedData);
       
     } catch (error) {
       console.error('Resume parsing failed:', error);

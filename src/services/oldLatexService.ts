@@ -424,10 +424,9 @@ ${this.escapeLatex(section.content)}
       
       // Convert HTML to canvas
       const canvas = await html2canvas(tempDiv, {
-        scale: 2,
         useCORS: true,
         allowTaint: true,
-        backgroundColor: '#ffffff',
+        background: '#ffffff',
         width: tempDiv.offsetWidth,
         height: Math.max(tempDiv.offsetHeight, 1056) // A4 height in pixels
       });

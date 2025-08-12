@@ -17,6 +17,7 @@ import ProjectsForm from '@/components/resume-form/ProjectsForm';
 import CustomSectionsForm from '@/components/resume-form/CustomSectionsForm';
 import CareerObjectiveSection from '@/components/resume-form/CareerObjectiveSection';
 import { FormData, Template, Education, WorkExperience, Project } from '@/types/resume';
+import { AcademicResumeData } from '@/types/academicResume';
 
 const CreateResume = () => {
   const { toast } = useToast();
@@ -258,11 +259,51 @@ const CreateResume = () => {
     });
   };
 
-  const handleParsedData = (parsedData: FormData) => {
+  const handleParsedData = (parsedData: AcademicResumeData) => {
     console.log('Parsed Data Received:', parsedData);
-    const updatedData = { ...parsedData, template: selectedTemplate?.id || '' };
-    setFormData(updatedData);
-    console.log('Form Data After Setting:', updatedData);
+    // Convert AcademicResumeData to FormData format
+    const convertedData: FormData = {
+      fullName: parsedData.personalInfo.fullName || '',
+      email: parsedData.personalInfo.email || '',
+      phone: parsedData.personalInfo.phone || '',
+      photo: null,
+      address: parsedData.personalInfo.address || '',
+      careerObjective: '',
+      education: parsedData.education.map(edu => ({
+        id: edu.id,
+        degree: edu.degree,
+        university: edu.institute,
+        duration: edu.year,
+        grade: edu.cgpa
+      })) || [],
+      workExperience: parsedData.experience.map(exp => ({
+        id: exp.id,
+        company: exp.company,
+        position: exp.position,
+        duration: exp.duration,
+        description: exp.description.join('\n')
+      })) || [],
+      hasNoWorkExperience: false,
+      skills: [
+        ...parsedData.skills.languages,
+        ...parsedData.skills.frontend,
+        ...parsedData.skills.backend,
+        ...parsedData.skills.tools
+      ].join(', '),
+      languages: '',
+      certifications: parsedData.certifications?.join(', ') || '',
+      hobbies: parsedData.interests || '',
+      projects: parsedData.projects.map(proj => ({
+        id: proj.id,
+        title: proj.title,
+        link: proj.githubLink || '',
+        description: proj.description.join('\n')
+      })) || [],
+      customSections: [],
+      template: selectedTemplate?.id || ''
+    };
+    setFormData(convertedData);
+    console.log('Form Data After Setting:', convertedData);
     setCurrentStep('form');
     toast({
       title: "Data Extracted Successfully! ✨",
@@ -491,7 +532,7 @@ const CreateResume = () => {
         <ResumeUploadModal
           isOpen={showUploadModal}
           onClose={() => setShowUploadModal(false)}
-          onParsedData={handleParsedData}
+          onResumeData={handleParsedData}
         />
       </div>
     </div>

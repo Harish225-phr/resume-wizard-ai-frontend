@@ -7,6 +7,7 @@ import { ArrowLeft, Save, Download, FileText } from 'lucide-react';
 import { FormData, Template } from '@/types/resume';
 import { usePDFDownload } from '@/hooks/usePDFDownload';
 import { useLaTeXDownload } from '@/hooks/useLaTeXDownload';
+import { convertFormToAcademicData } from '@/utils/dataConverters';
 
 interface ResumeRichEditorProps {
   formData: FormData;
@@ -195,7 +196,8 @@ const ResumeRichEditor = ({ formData, selectedTemplate, onSave, onBack }: Resume
 
   const handleDownloadLaTeX = async () => {
     if (selectedTemplate?.latexTemplate) {
-      await downloadLaTeXPDF(selectedTemplate.latexTemplate, formData);
+      const academicData = convertFormToAcademicData(formData);
+      await downloadLaTeXPDF(selectedTemplate.latexTemplate, academicData);
     }
   };
 

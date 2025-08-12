@@ -5,7 +5,7 @@ import { FileText, Sparkles, Check, Upload, ExternalLink, Eye, ArrowRight, Star,
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { latexService } from '@/services/latexService';
+import latexService from '@/services/latexService';
 import { getDummyDataForTemplate } from '@/data/dummyResumeData';
 
 interface TemplateSelectionProps {

@@ -1,6 +1,6 @@
 // Example: How to use the new LaTeX templates
 
-import { latexService } from '@/services/latexService';
+import latexService from '@/services/latexService';
 import { useLaTeXDownload } from '@/hooks/useLaTeXDownload';
 import { AcademicResumeData } from '@/types/academicResume';
 
