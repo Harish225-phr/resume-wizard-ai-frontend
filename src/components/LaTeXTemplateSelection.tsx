@@ -3,28 +3,28 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { FileText, Eye, Download } from 'lucide-react';
-import { latexService } from '@/services/latexService';
-import { LaTeXTemplate } from '@/types/latex';
-import { FormData } from '@/types/resume';
+import latexService from '@/services/latexService';
+import { LatexTemplate } from '@/services/latexService';
+import { AcademicResumeData } from '@/types/academicResume';
 import { useLaTeXDownload } from '@/hooks/useLaTeXDownload';
 
 interface LaTeXTemplateSelectionProps {
-  formData: FormData;
+  formData: AcademicResumeData;
   onBack: () => void;
 }
 
 const LaTeXTemplateSelection: React.FC<LaTeXTemplateSelectionProps> = ({ formData, onBack }) => {
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
-  const [previewTemplate, setPreviewTemplate] = useState<LaTeXTemplate | null>(null);
+  const [previewTemplate, setPreviewTemplate] = useState<LatexTemplate | null>(null);
   const { downloadLaTeXPDF, isGenerating } = useLaTeXDownload();
 
-  const templates = latexService.getTemplates();
+  const templates = latexService.templates;
 
   const handleTemplateSelect = (templateId: string) => {
     setSelectedTemplate(templateId);
   };
 
-  const handlePreview = (template: LaTeXTemplate) => {
+  const handlePreview = (template: LatexTemplate) => {
     setPreviewTemplate(template);
   };
 

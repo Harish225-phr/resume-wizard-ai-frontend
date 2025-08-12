@@ -356,6 +356,11 @@ export const previewLatexResume = (data: AcademicResumeData, templateId: string)
 export interface LatexTemplate {
   id: string;
   name: string;
+  description: string;
+  category: string;
+  previewImage?: string;
+  templateContent: string;
+  requiredPackages: string[];
   generate: (data: AcademicResumeData) => string;
 }
 
@@ -363,16 +368,28 @@ export const latexTemplates: LatexTemplate[] = [
   {
     id: 'academic',
     name: 'Academic Professional',
+    description: 'Clean academic format with structured sections',
+    category: 'academic',
+    templateContent: 'Academic LaTeX template with proper formatting',
+    requiredPackages: ['geometry', 'enumitem', 'hyperref', 'helvet', 'titlesec'],
     generate: generateAcademicLatex
   },
   {
     id: 'techmodern', 
     name: 'Tech Modern',
+    description: 'Modern design with color accents for tech professionals',
+    category: 'modern',
+    templateContent: 'Tech modern LaTeX template with colors',
+    requiredPackages: ['geometry', 'xcolor', 'fontspec', 'titlesec'],
     generate: generateTechModernLatex
   },
   {
     id: 'classicpro',
     name: 'Classic Professional', 
+    description: 'Traditional formal layout for corporate environments',
+    category: 'classic',
+    templateContent: 'Classic professional LaTeX template',
+    requiredPackages: ['geometry', 'times', 'titlesec'],
     generate: generateClassicProLatex
   }
 ];
@@ -1112,8 +1129,12 @@ const generateClassicProHTML = (data: AcademicResumeData, colors: any, isModal: 
 </html>`;
 };
 
-export const latexService = {
+const latexService = {
   templates: latexTemplates,
+  getTemplates: () => latexTemplates,
+  getTemplate: (id: string) => latexTemplates.find(t => t.id === id),
   generatePDF: generateLatexPDF,
   preview: previewLatexResume
 };
+
+export default latexService;

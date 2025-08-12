@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
-import { latexService } from '@/services/latexService';
+import latexService from '@/services/latexService';
 import { LaTeXGenerationOptions } from '@/types/latex';
-import { FormData } from '@/types/resume';
+import { AcademicResumeData } from '@/types/academicResume';
 
 export const useLaTeXDownload = () => {
   const [isGenerating, setIsGenerating] = useState(false);
@@ -10,8 +10,7 @@ export const useLaTeXDownload = () => {
 
   const downloadLaTeXPDF = async (
     templateId: string,
-    formData: FormData,
-    options: LaTeXGenerationOptions = { templateId, outputFormat: 'pdf', compiler: 'pdflatex' },
+    formData: AcademicResumeData,
     onSuccess?: () => void,
     onError?: (error: string) => void
   ) => {
@@ -23,26 +22,23 @@ export const useLaTeXDownload = () => {
         description: "Compiling your professional resume...",
       });
 
-      const result = await latexService.generatePDF(templateId, formData, options);
+      const result = await latexService.generatePDF(formData, templateId);
       
-      if (result.success && result.pdfUrl) {
-        // Create download link
-        const link = document.createElement('a');
-        link.href = result.pdfUrl;
-        link.download = `resume-${templateId}-${Date.now()}.pdf`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        
-        toast({
-          title: "✅ LaTeX Resume Generated!",
-          description: "Your professional resume has been compiled and downloaded.",
-        });
-        
-        onSuccess?.();
-      } else {
-        throw new Error(result.error || 'Failed to generate LaTeX PDF');
-      }
+      // Create download link using blob
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(result);
+      link.download = `resume-${templateId}-${Date.now()}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+      
+      toast({
+        title: "✅ LaTeX Resume Generated!",
+        description: "Your professional resume has been compiled and downloaded.",
+      });
+      
+      onSuccess?.();
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to generate LaTeX PDF';
       
@@ -60,16 +56,15 @@ export const useLaTeXDownload = () => {
 
   const previewLaTeXContent = async (
     templateId: string,
-    formData: FormData
-  ): Promise<string> => {
-    const template = latexService.getTemplate(templateId);
+    formData: AcademicResumeData
+  ): Promise<void> => {
+    const template = latexService.templates.find(t => t.id === templateId);
     if (!template) {
       throw new Error(`Template ${templateId} not found`);
     }
     
-    // This would return the generated LaTeX content for preview
-    // For now, return the template content
-    return template.templateContent;
+    // Use the preview function from service
+    latexService.preview(formData, templateId);
   };
 
   return {
