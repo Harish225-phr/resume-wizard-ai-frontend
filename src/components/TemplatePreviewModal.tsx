@@ -21,19 +21,19 @@ const TemplatePreviewModal = ({ template, isOpen, onClose, onSelect }: TemplateP
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
-        <div className="flex justify-between items-center p-6 border-b">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-card rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden border shadow-lg">
+        <div className="flex justify-between items-center p-6 border-b border-border">
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">{template.name}</h2>
-            <p className="text-gray-600">{template.description}</p>
+            <h2 className="text-2xl font-bold text-foreground">{template.name}</h2>
+            <p className="text-muted-foreground">{template.description}</p>
           </div>
           <div className="flex items-center gap-3">
-            <Button onClick={handleSelect} className="bg-blue-600 hover:bg-blue-700 text-white">
+            <Button onClick={handleSelect}>
               <Check className="mr-2 h-4 w-4" />
               Use This Template
             </Button>
-            <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full">
+            <button onClick={onClose} className="p-2 hover:bg-muted rounded-full text-muted-foreground hover:text-foreground">
               <X className="h-6 w-6" />
             </button>
           </div>

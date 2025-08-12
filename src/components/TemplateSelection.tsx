@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import latexService from '@/services/latexService';
 import { getDummyDataForTemplate } from '@/data/dummyResumeData';
+import TemplatePreviewModal from '@/components/TemplatePreviewModal';
 
 interface TemplateSelectionProps {
   selectedTemplate: Template | null;
@@ -19,6 +20,8 @@ interface TemplateSelectionProps {
 const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue, onBackToUpload, onUploadResume }: TemplateSelectionProps) => {
   const [hoveredTemplate, setHoveredTemplate] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   const templates: Template[] = [
     {
@@ -110,14 +113,18 @@ const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue, onB
     : templates.filter(template => template.category === selectedCategory);
 
   const handlePreview = (template: Template) => {
-    // Only show preview for LaTeX templates (academic, techmodern, classicpro)
-    if (template.hasLatexSupport && template.latexTemplate) {
-      const dummyData = getDummyDataForTemplate(template.latexTemplate);
-      latexService.preview(dummyData, template.latexTemplate);
-    } else {
-      // For non-LaTeX templates, show a coming soon message
-      alert('Preview for this template is coming soon! For now, you can select it to start building your resume.');
-    }
+    setPreviewTemplate(template);
+    setIsPreviewOpen(true);
+  };
+
+  const handleClosePreview = () => {
+    setIsPreviewOpen(false);
+    setPreviewTemplate(null);
+  };
+
+  const handleSelectFromPreview = (template: Template) => {
+    onTemplateSelect(template);
+    handleClosePreview();
   };
 
   const handleTemplateSelect = (template: Template) => {
@@ -372,6 +379,14 @@ const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue, onB
           </Button>
         </div>
       )}
+
+      {/* Template Preview Modal */}
+      <TemplatePreviewModal
+        template={previewTemplate}
+        isOpen={isPreviewOpen}
+        onClose={handleClosePreview}
+        onSelect={handleSelectFromPreview}
+      />
     </div>
   );
 };

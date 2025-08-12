@@ -55,35 +55,47 @@ const FakeResumePreview = ({ template }: FakeResumePreviewProps) => {
 
   const getTemplateStyles = () => {
     switch (template.id) {
+      case 'academic-professional':
+        return 'bg-card border-l-4 border-primary shadow-lg';
+      case 'tech-modern':
+        return 'bg-card border border-border shadow-lg';
+      case 'classic-professional':
+        return 'bg-card border border-border shadow-lg';
       case 'modern':
-        return 'bg-white border-l-4 border-blue-500';
+        return 'bg-card border-l-4 border-primary';
       case 'executive':
-        return 'bg-gray-50 border border-gray-300';
+        return 'bg-muted border border-border';
       case 'creative':
-        return 'bg-gradient-to-br from-purple-50 to-blue-50';
+        return 'bg-gradient-to-br from-muted to-accent';
       case 'minimalist':
-        return 'bg-white border border-gray-200';
+        return 'bg-card border border-border';
       case 'professional':
-        return 'bg-white shadow-lg';
+        return 'bg-card shadow-lg';
       default:
-        return 'bg-white';
+        return 'bg-card';
     }
   };
 
   const getHeaderStyles = () => {
     switch (template.id) {
+      case 'academic-professional':
+        return 'bg-primary text-primary-foreground p-6';
+      case 'tech-modern':
+        return 'bg-gradient-to-r from-primary to-accent text-primary-foreground p-6';
+      case 'classic-professional':
+        return 'bg-foreground text-background p-6';
       case 'modern':
-        return 'bg-blue-600 text-white p-6';
+        return 'bg-primary text-primary-foreground p-6';
       case 'executive':
-        return 'bg-gray-800 text-white p-6';
+        return 'bg-foreground text-background p-6';
       case 'creative':
-        return 'bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6';
+        return 'bg-gradient-to-r from-primary to-accent text-primary-foreground p-6';
       case 'minimalist':
-        return 'border-b-2 border-gray-300 p-6';
+        return 'border-b-2 border-border p-6 bg-card text-foreground';
       case 'professional':
-        return 'bg-navy-900 text-white p-6';
+        return 'bg-primary text-primary-foreground p-6';
       default:
-        return 'border-b border-gray-300 p-6';
+        return 'border-b border-border p-6 bg-card text-foreground';
     }
   };
 
@@ -121,25 +133,25 @@ const FakeResumePreview = ({ template }: FakeResumePreviewProps) => {
       <div className="p-6 space-y-6">
         {/* Career Objective */}
         <div>
-          <h2 className="text-xl font-semibold mb-3 text-gray-800">
+          <h2 className="text-xl font-semibold mb-3 text-foreground">
             Career Objective
           </h2>
-          <p className="text-gray-700 leading-relaxed text-sm">{fakeData.careerObjective}</p>
+          <p className="text-muted-foreground leading-relaxed text-sm">{fakeData.careerObjective}</p>
         </div>
 
         {/* Education */}
         <div>
-          <h2 className="text-xl font-semibold mb-3 text-gray-800">
+          <h2 className="text-xl font-semibold mb-3 text-foreground">
             Education
           </h2>
           {fakeData.education.map((edu, index) => (
             <div key={index} className="mb-3">
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="font-semibold text-gray-800">{edu.degree}</h3>
-                  <p className="text-gray-600 text-sm">{edu.university}</p>
+                  <h3 className="font-semibold text-foreground">{edu.degree}</h3>
+                  <p className="text-muted-foreground text-sm">{edu.university}</p>
                 </div>
-                <div className="text-right text-xs text-gray-600">
+                <div className="text-right text-xs text-muted-foreground">
                   <p>{edu.duration}</p>
                   <p className="font-medium">{edu.grade}</p>
                 </div>
@@ -150,33 +162,33 @@ const FakeResumePreview = ({ template }: FakeResumePreviewProps) => {
 
         {/* Work Experience */}
         <div>
-          <h2 className="text-xl font-semibold mb-3 text-gray-800">
+          <h2 className="text-xl font-semibold mb-3 text-foreground">
             Work Experience
           </h2>
           {fakeData.workExperience.map((exp, index) => (
             <div key={index} className="mb-4">
               <div className="flex justify-between items-start mb-2">
                 <div>
-                  <h3 className="font-semibold text-gray-800">{exp.position}</h3>
-                  <p className="text-gray-600 text-sm">{exp.company}</p>
+                  <h3 className="font-semibold text-foreground">{exp.position}</h3>
+                  <p className="text-muted-foreground text-sm">{exp.company}</p>
                 </div>
-                <p className="text-xs text-gray-600">{exp.duration}</p>
+                <p className="text-xs text-muted-foreground">{exp.duration}</p>
               </div>
-              <p className="text-gray-700 text-xs leading-relaxed">{exp.description}</p>
+              <p className="text-muted-foreground text-xs leading-relaxed">{exp.description}</p>
             </div>
           ))}
         </div>
 
         {/* Skills */}
         <div>
-          <h2 className="text-xl font-semibold mb-3 text-gray-800">
+          <h2 className="text-xl font-semibold mb-3 text-foreground">
             Technical Skills
           </h2>
           <div className="flex flex-wrap gap-2">
             {fakeData.skills.split(',').map((skill, index) => (
               <span 
                 key={index}
-                className="px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-700"
+                className="px-2 py-1 rounded-full text-xs bg-muted text-muted-foreground"
               >
                 {skill.trim()}
               </span>
@@ -186,18 +198,18 @@ const FakeResumePreview = ({ template }: FakeResumePreviewProps) => {
 
         {/* Projects */}
         <div>
-          <h2 className="text-xl font-semibold mb-3 text-gray-800">
+          <h2 className="text-xl font-semibold mb-3 text-foreground">
             Projects
           </h2>
           {fakeData.projects.map((project, index) => (
             <div key={index} className="mb-3">
               <div className="flex items-center gap-2 mb-1">
-                <h3 className="font-semibold text-gray-800 text-sm">{project.title}</h3>
-                <a href="#" className="text-blue-600 hover:text-blue-800 text-xs underline">
+                <h3 className="font-semibold text-foreground text-sm">{project.title}</h3>
+                <a href="#" className="text-primary hover:text-primary/80 text-xs underline">
                   View Project
                 </a>
               </div>
-              <p className="text-gray-700 text-xs leading-relaxed">{project.description}</p>
+              <p className="text-muted-foreground text-xs leading-relaxed">{project.description}</p>
             </div>
           ))}
         </div>
