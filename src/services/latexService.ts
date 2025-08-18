@@ -326,19 +326,38 @@ export const previewLatexResume = (data: AcademicResumeData, templateId: string)
   modalOverlay.appendChild(modalContent);
   document.body.appendChild(modalOverlay);
 
-  // Load content into iframe
-  iframe.onload = () => {
-    iframe.contentDocument!.open();
-    iframe.contentDocument!.write(htmlContent);
-    iframe.contentDocument!.close();
-  };
+  // Load content into iframe - use a more reliable approach
+  setTimeout(() => {
+    try {
+      if (iframe.contentDocument) {
+        iframe.contentDocument.open();
+        iframe.contentDocument.write(htmlContent);
+        iframe.contentDocument.close();
+      } else {
+        // Fallback: set src with data URI
+        iframe.src = 'data:text/html;charset=utf-8,' + encodeURIComponent(htmlContent);
+      }
+    } catch (error) {
+      console.error('Error loading preview content:', error);
+      // Fallback: set src with data URI
+      iframe.src = 'data:text/html;charset=utf-8,' + encodeURIComponent(htmlContent);
+    }
+  }, 100);
 
   // Close modal handlers
   const closeModal = () => {
-    document.body.removeChild(modalOverlay);
+    if (document.body.contains(modalOverlay)) {
+      document.body.removeChild(modalOverlay);
+    }
   };
 
-  document.getElementById('close-preview')!.onclick = closeModal;
+  // Wait for the close button to be available
+  setTimeout(() => {
+    const closeButton = document.getElementById('close-preview');
+    if (closeButton) {
+      closeButton.onclick = closeModal;
+    }
+  }, 100);
   modalOverlay.onclick = (e) => {
     if (e.target === modalOverlay) closeModal();
   };
