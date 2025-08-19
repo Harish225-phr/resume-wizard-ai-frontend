@@ -1,13 +1,19 @@
 
 import React, { useState } from 'react';
 import { Template } from '@/types/resume';
-import { FileText, Sparkles, Check, Upload, ExternalLink, Eye, ArrowRight, Star, Users, Zap, Palette } from 'lucide-react';
+import { FileText, Sparkles, Check, Upload, ExternalLink, Eye, ArrowRight, Star, Users, Zap, Palette, Brush, Code, Award, Layout } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import latexService from '@/services/latexService';
 import { getDummyDataForTemplate } from '@/data/dummyResumeData';
 import TemplatePreviewModal from '@/components/TemplatePreviewModal';
+import academicPreview from '@/assets/template-academic-preview.jpg';
+import techPreview from '@/assets/template-tech-preview.jpg';
+import executivePreview from '@/assets/template-executive-preview.jpg';
+import creativePreview from '@/assets/template-creative-preview.jpg';
+import minimalPreview from '@/assets/template-minimal-preview.jpg';
+import sidebarPreview from '@/assets/template-sidebar-preview.jpg';
 
 interface TemplateSelectionProps {
   selectedTemplate: Template | null;
@@ -30,7 +36,7 @@ const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue, onB
       type: 'premium',
       preview: 'Perfect for Research & Academia',
       description: 'Sophisticated template designed for researchers, professors, and academic professionals. Features clean typography and structured sections with professional table layouts.',
-      imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop&crop=center',
+      imageUrl: academicPreview,
       style: {
         layout: 'single-column',
         fontFamily: 'Merriweather',
@@ -55,7 +61,7 @@ const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue, onB
       type: 'premium',
       preview: 'Built for Tech Professionals',
       description: 'Modern, sleek design perfect for software engineers, developers, and tech professionals. Highlights technical skills with clean formatting and professional presentation.',
-      imageUrl: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=400&h=600&fit=crop&crop=center',
+      imageUrl: techPreview,
       style: {
         layout: 'single-column',
         fontFamily: 'Inter',
@@ -80,7 +86,7 @@ const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue, onB
       type: 'premium',
       preview: 'For C-Suite & Senior Executives',
       description: 'Elegant, traditional template designed for executives, managers, and senior professionals. Emphasizes leadership experience and achievements with formal styling.',
-      imageUrl: 'https://images.unsplash.com/photo-1554774853-719586f82d77?w=400&h=600&fit=crop&crop=center',
+      imageUrl: executivePreview,
       style: {
         layout: 'single-column',
         fontFamily: 'Times New Roman',
@@ -98,14 +104,92 @@ const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue, onB
       rating: 4.9,
       downloads: '15.7k',
       features: ['Executive Focus', 'Achievement-Driven', 'Leadership Emphasis', 'Premium Layout']
+    },
+    {
+      id: 'creative-modern',
+      name: 'Creative Modern',
+      type: 'premium',
+      preview: 'For Creative Professionals',
+      description: 'Eye-catching template perfect for designers, artists, and creative professionals. Features vibrant colors and modern design elements to showcase your creativity.',
+      imageUrl: creativePreview,
+      style: {
+        layout: 'single-column',
+        fontFamily: 'Poppins',
+        primaryColor: '#7c3aed',
+        accentColor: '#a855f7'
+      },
+      placeholders: {
+        position: 'Creative Director',
+        company: 'Design Studio',
+        skills: 'Adobe Creative Suite, UI/UX Design, Branding, Typography, Illustration'
+      },
+      latexTemplate: 'creative',
+      hasLatexSupport: true,
+      category: 'creative',
+      rating: 4.7,
+      downloads: '9.8k',
+      features: ['Creative Layout', 'Portfolio Focus', 'Visual Impact', 'Color Accents']
+    },
+    {
+      id: 'minimal-clean',
+      name: 'Minimal Clean',
+      type: 'free',
+      preview: 'Simplicity at its Best',
+      description: 'Ultra-clean minimalist design that focuses on content. Perfect for any profession with its timeless and professional appearance.',
+      imageUrl: minimalPreview,
+      style: {
+        layout: 'single-column',
+        fontFamily: 'Open Sans',
+        primaryColor: '#374151',
+        accentColor: '#6b7280'
+      },
+      placeholders: {
+        position: 'Professional',
+        company: 'Company Name',
+        skills: 'Communication, Leadership, Problem Solving, Team Work'
+      },
+      latexTemplate: 'minimal',
+      hasLatexSupport: true,
+      category: 'general',
+      rating: 4.6,
+      downloads: '25.3k',
+      features: ['Clean Design', 'ATS Friendly', 'Minimalist', 'Universal']
+    },
+    {
+      id: 'sidebar-professional',
+      name: 'Sidebar Professional',
+      type: 'premium',
+      preview: 'Two-Column Excellence',
+      description: 'Professional two-column layout with sidebar for skills and contact information. Modern design that maximizes space utilization.',
+      imageUrl: sidebarPreview,
+      style: {
+        layout: 'two-column',
+        fontFamily: 'Roboto',
+        primaryColor: '#0f172a',
+        accentColor: '#1e293b'
+      },
+      placeholders: {
+        position: 'Business Analyst',
+        company: 'Tech Corporation',
+        skills: 'Data Analysis, Excel, SQL, Project Management, Business Intelligence'
+      },
+      latexTemplate: 'sidebar',
+      hasLatexSupport: true,
+      category: 'business',
+      rating: 4.8,
+      downloads: '14.1k',
+      features: ['Two-Column Layout', 'Space Efficient', 'Professional', 'Modern']
     }
   ];
 
   const categories = [
     { id: 'all', name: 'All Templates', icon: Palette },
     { id: 'academic', name: 'Academic', icon: FileText },
-    { id: 'technology', name: 'Technology', icon: Zap },
-    { id: 'executive', name: 'Executive', icon: Star }
+    { id: 'technology', name: 'Technology', icon: Code },
+    { id: 'executive', name: 'Executive', icon: Award },
+    { id: 'creative', name: 'Creative', icon: Brush },
+    { id: 'business', name: 'Business', icon: Layout },
+    { id: 'general', name: 'General', icon: Star }
   ];
 
   const filteredTemplates = selectedCategory === 'all' 
