@@ -33,7 +33,7 @@ const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue, onB
     {
       id: 'academic-professional',
       name: 'Academic Professional',
-      type: 'premium',
+      type: 'free',
       preview: 'Perfect for Research & Academia',
       description: 'Sophisticated template designed for researchers, professors, and academic professionals. Features clean typography and structured sections with professional table layouts.',
       imageUrl: academicPreview,
@@ -58,7 +58,7 @@ const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue, onB
     {
       id: 'tech-modern',
       name: 'Tech Modern',
-      type: 'premium',
+      type: 'free',
       preview: 'Built for Tech Professionals',
       description: 'Modern, sleek design perfect for software engineers, developers, and tech professionals. Highlights technical skills with clean formatting and professional presentation.',
       imageUrl: techPreview,
@@ -83,7 +83,7 @@ const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue, onB
     {
       id: 'classic-professional',
       name: 'Classic Professional',
-      type: 'premium',
+      type: 'free',
       preview: 'For C-Suite & Senior Executives',
       description: 'Elegant, traditional template designed for executives, managers, and senior professionals. Emphasizes leadership experience and achievements with formal styling.',
       imageUrl: executivePreview,
@@ -108,7 +108,7 @@ const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue, onB
     {
       id: 'creative-modern',
       name: 'Creative Modern',
-      type: 'premium',
+      type: 'free',
       preview: 'For Creative Professionals',
       description: 'Eye-catching template perfect for designers, artists, and creative professionals. Features vibrant colors and modern design elements to showcase your creativity.',
       imageUrl: creativePreview,
@@ -158,7 +158,7 @@ const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue, onB
     {
       id: 'sidebar-professional',
       name: 'Sidebar Professional',
-      type: 'premium',
+      type: 'free',
       preview: 'Two-Column Excellence',
       description: 'Professional two-column layout with sidebar for skills and contact information. Modern design that maximizes space utilization.',
       imageUrl: sidebarPreview,
@@ -334,13 +334,10 @@ const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue, onB
                 {/* Template Type Badge */}
                 <div className="absolute top-4 left-4">
                   <Badge 
-                    variant={template.type === 'premium' ? 'default' : 'secondary'}
-                    className={template.type === 'premium' 
-                      ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-white' 
-                      : 'bg-green-500 text-white'
-                    }
+                    variant="secondary"
+                    className="bg-green-500 text-white"
                   >
-                    {template.type === 'premium' ? '⭐ Premium' : '🆓 Free'}
+                    🆓 Free
                   </Badge>
                 </div>
 

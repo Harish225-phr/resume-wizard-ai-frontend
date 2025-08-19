@@ -43,7 +43,7 @@ const TemplateCard = ({ template, isSelected, onSelect, onPreview }: TemplateCar
           <p className="text-xs opacity-90 line-clamp-2">{template.description}</p>
           <div className="flex items-center gap-2 mt-2">
             <span className="inline-block px-2 py-1 bg-green-500 text-white text-xs font-medium rounded-full">
-              100% Free
+              🆓 Free
             </span>
             {template.hasLatexSupport && (
               <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-500 text-white text-xs font-medium rounded-full">
