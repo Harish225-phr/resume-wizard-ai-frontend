@@ -10,32 +10,22 @@ import {
   Target, 
   TrendingUp, 
   CheckCircle,
-  Lightbulb,
-  BarChart3
+  Lightbulb
 } from 'lucide-react';
 import ATSAnalysis from '../components/ATSAnalysis';
 import ResumeUploadModal from '../components/ResumeUploadModal';
 import { AcademicResumeData } from '../types/academicResume';
-import { academicDummyData, techModernDummyData, classicProDummyData } from '../data/dummyResumeData';
+
 
 const ATSAnalysisPage: React.FC = () => {
   const [selectedResume, setSelectedResume] = useState<AcademicResumeData | null>(null);
-  const [analysisMode, setAnalysisMode] = useState<'demo' | 'upload' | 'manual'>('demo');
+  
   const [showUploadModal, setShowUploadModal] = useState(false);
 
-  const handleDemoAnalysis = (resumeType: 'academic' | 'tech' | 'executive') => {
-    const dummyData = {
-      academic: academicDummyData,
-      tech: techModernDummyData,
-      executive: classicProDummyData
-    };
-    setSelectedResume(dummyData[resumeType]);
-    setAnalysisMode('demo');
-  };
 
   const handleUploadedResume = (data: AcademicResumeData) => {
     setSelectedResume(data);
-    setAnalysisMode('upload');
+    
     setShowUploadModal(false);
   };
 
@@ -124,63 +114,6 @@ const ATSAnalysisPage: React.FC = () => {
           ))}
         </div>
 
-        {/* Demo Analysis Section */}
-        <Card className="mb-12 border-2 border-blue-200 bg-blue-50">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl flex items-center justify-center gap-2">
-              <BarChart3 className="h-6 w-6 text-blue-600" />
-              Try Demo Analysis
-            </CardTitle>
-            <CardDescription className="text-lg">
-              See how our ATS checker works with sample resumes from different industries
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card className="border border-blue-200 hover:border-blue-400 transition-colors cursor-pointer group" 
-                    onClick={() => handleDemoAnalysis('academic')}>
-                <CardContent className="p-6 text-center">
-                  <div className="flex justify-center mb-4">
-                    <div className="p-3 bg-blue-100 rounded-full group-hover:bg-blue-200 transition-colors">
-                      <FileText className="h-8 w-8 text-blue-600" />
-                    </div>
-                  </div>
-                  <h3 className="text-lg font-semibold mb-2">Academic Resume</h3>
-                  <p className="text-gray-600 text-sm mb-4">Research-focused resume with publications and grants</p>
-                  <Button className="w-full">Analyze Academic Resume</Button>
-                </CardContent>
-              </Card>
-
-              <Card className="border border-green-200 hover:border-green-400 transition-colors cursor-pointer group" 
-                    onClick={() => handleDemoAnalysis('tech')}>
-                <CardContent className="p-6 text-center">
-                  <div className="flex justify-center mb-4">
-                    <div className="p-3 bg-green-100 rounded-full group-hover:bg-green-200 transition-colors">
-                      <FileText className="h-8 w-8 text-green-600" />
-                    </div>
-                  </div>
-                  <h3 className="text-lg font-semibold mb-2">Tech Resume</h3>
-                  <p className="text-gray-600 text-sm mb-4">Software engineer resume with technical projects</p>
-                  <Button className="w-full bg-green-600 hover:bg-green-700">Analyze Tech Resume</Button>
-                </CardContent>
-              </Card>
-
-              <Card className="border border-purple-200 hover:border-purple-400 transition-colors cursor-pointer group" 
-                    onClick={() => handleDemoAnalysis('executive')}>
-                <CardContent className="p-6 text-center">
-                  <div className="flex justify-center mb-4">
-                    <div className="p-3 bg-purple-100 rounded-full group-hover:bg-purple-200 transition-colors">
-                      <FileText className="h-8 w-8 text-purple-600" />
-                    </div>
-                  </div>
-                  <h3 className="text-lg font-semibold mb-2">Executive Resume</h3>
-                  <p className="text-gray-600 text-sm mb-4">Leadership-focused resume with management experience</p>
-                  <Button className="w-full bg-purple-600 hover:bg-purple-700">Analyze Executive Resume</Button>
-                </CardContent>
-              </Card>
-            </div>
-          </CardContent>
-        </Card>
 
           {/* Upload Section */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
