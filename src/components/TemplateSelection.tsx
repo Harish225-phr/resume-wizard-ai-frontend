@@ -14,6 +14,7 @@ import executivePreview from '@/assets/template-executive-preview.jpg';
 import creativePreview from '@/assets/template-creative-preview.jpg';
 import minimalPreview from '@/assets/template-minimal-preview.jpg';
 import sidebarPreview from '@/assets/template-sidebar-preview.jpg';
+import elegantPreview from '@/assets/template-elegant-preview.jpg';
 
 interface TemplateSelectionProps {
   selectedTemplate: Template | null;
@@ -186,7 +187,7 @@ const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue, onB
       type: 'free',
       preview: 'Modern Teal Accent Design',
       description: 'Sophisticated two-column layout with teal accents, modern typography, and LaTeX-quality formatting. Perfect for frontend engineers and tech professionals.',
-      imageUrl: '/src/assets/template-elegant-preview.jpg',
+      imageUrl: elegantPreview,
       style: {
         layout: 'two-column',
         fontFamily: 'Inter, Lora',
