@@ -179,6 +179,31 @@ const TemplateSelection = ({ selectedTemplate, onTemplateSelect, onContinue, onB
       rating: 4.8,
       downloads: '14.1k',
       features: ['Two-Column Layout', 'Space Efficient', 'Professional', 'Modern']
+    },
+    {
+      id: 'elegant',
+      name: 'Elegant Professional',
+      type: 'free',
+      preview: 'Modern Teal Accent Design',
+      description: 'Sophisticated two-column layout with teal accents, modern typography, and LaTeX-quality formatting. Perfect for frontend engineers and tech professionals.',
+      imageUrl: '/src/assets/template-elegant-preview.jpg',
+      style: {
+        layout: 'two-column',
+        fontFamily: 'Inter, Lora',
+        primaryColor: '#0E7490',
+        accentColor: '#0EA5E9'
+      },
+      placeholders: {
+        position: 'Frontend Engineer',
+        company: 'Tech Innovation Co.',
+        skills: 'React, TypeScript, Design Systems'
+      },
+      latexTemplate: 'elegant',
+      hasLatexSupport: true,
+      category: 'technology',
+      rating: 4.9,
+      downloads: '2.1k',
+      features: ['Teal Accents', 'Modern Typography', 'Two-Column', 'LaTeX Quality']
     }
   ];
 

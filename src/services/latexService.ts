@@ -243,6 +243,168 @@ ${project.description.join(' ')} \\\\
 \\end{document}`;
 };
 
+// Generate Elegant Professional LaTeX
+const generateElegantLatex = (data: AcademicResumeData): string => {
+  const { personalInfo, education, experience, projects, skills, achievements } = data;
+
+  return `% ==========================
+% ELEGANT ONE-PAGE RESUME
+% Engine: pdfLaTeX (recommended) — no custom class required
+% Compile: pdflatex resume.tex  (2x for links)
+% ==========================
+\\documentclass[10pt,a4paper]{article}
+
+% ---- Packages ----
+\\usepackage[margin=1.35cm]{geometry}
+\\usepackage[T1]{fontenc}
+\\usepackage[utf8]{inputenc}
+\\usepackage{lmodern}
+\\usepackage{microtype}
+\\usepackage{xcolor}
+\\usepackage{hyperref}
+\\usepackage{titlesec}
+\\usepackage{enumitem}
+\\usepackage{paracol}
+\\usepackage{tabularx}
+\\usepackage{array}
+\\usepackage{graphicx}
+\\usepackage{tikz}
+\\usepackage{fontawesome5}
+
+% ---- Colors ----
+\\definecolor{pri}{HTML}{0E7490}   % teal
+\\definecolor{accent}{HTML}{0EA5E9} % light teal
+\\definecolor{text}{HTML}{111827}   % near-black
+\\definecolor{muted}{HTML}{6B7280}  % gray
+
+% ---- Hyperref ----
+\\hypersetup{
+  colorlinks=true,
+  urlcolor=pri,
+  linkcolor=pri
+}
+
+% ---- Spacing + Lists ----
+\\setlength{\\parskip}{0.2em}
+\\setlength{\\parindent}{0pt}
+\\setlist[itemize]{left=0pt,label=\\textbullet,itemsep=0.2em,topsep=0.2em}
+\\setlist[description]{style=unboxed,leftmargin=0pt,font=\\color{muted}\\bfseries}
+
+% ---- Section formatting ----
+\\titleformat{\\section}{\\large\\bfseries\\color{text}}{}{0pt}{}
+\\titlespacing*{\\section}{0pt}{0.6em}{0.4em}
+
+% ---- Custom commands ----
+\\newcommand{\\name}[1]{\\def\\@name{#1}}
+\\newcommand{\\role}[1]{\\def\\@role{#1}}
+\\newcommand{\\contact}[1]{\\def\\@contact{#1}}
+\\newcommand{\\tag}[1]{\\fcolorbox{accent!25}{accent!10}{\\footnotesize\\ \\textcolor{pri}{#1}\\ }}
+
+% Experience/Project entry
+\\newcommand{\\entry}[5]{% title, org, loc, dates, bullets (itemize)
+  \\textbf{#1} \\hfill \\textcolor{muted}{#4}\\\\
+  \\textcolor{pri}{#2} \\textcolor{muted}{\\footnotesize\\,(#3)}\\\\[-0.3em]
+  #5\\vspace{0.5em}}
+
+% Education entry
+\\newcommand{\\edu}[4]{% degree, school, year, extras
+  \\textbf{#1}\\\\
+  \\textcolor{pri}{#2} \\hfill \\textcolor{muted}{#3}\\\\
+  {\\footnotesize #4}\\vspace{0.5em}}
+
+% Sidebar row helper
+\\newcommand{\\siderow}[2]{\\textcolor{muted}{#1}\\\\\\textbf{#2}\\vspace{0.6em}}
+
+% ---- Header block ----
+\\makeatletter
+\\newcommand{\\makeheader}{%
+  \\begingroup
+  \\vspace*{-2mm}
+  {\\Huge\\bfseries\\color{text}\\@name}\\\\[-1mm]
+  {\\normalsize\\color{muted}\\@role}\\\\[0.6em]
+  \\@contact\\\\[0.8em]
+  % Accent rule with node
+  \\begin{tikzpicture}
+    \\draw[draw=pri!70, line width=0.8pt] (0,0) -- (\\linewidth,0);
+    \\filldraw[fill=pri, draw=pri] (0,0) circle (1.2pt);
+  \\end{tikzpicture}
+  \\par\\vspace{0.6em}
+  \\endgroup}
+\\makeatother
+
+% ---- Meta (edit these!) ----
+\\name{${personalInfo.fullName || 'Your Name'}}
+\\role{${experience.length > 0 ? experience[0].position : 'Frontend Engineer'} • ${skills.frontend?.join(' / ') || 'React / TypeScript'}}
+\\contact{\\faIcon{map-marker-alt}\\, ${personalInfo.address || 'City, Country'} \\quad
+  \\faIcon{phone}\\, ${personalInfo.phone || '+91-00000-00000'} \\quad
+  \\faIcon{envelope}\\, \\href{mailto:${personalInfo.email || 'you@mail.com'}}{${personalInfo.email || 'you@mail.com'}} \\quad
+  ${personalInfo.githubUrl ? `\\faIcon{github}\\, \\href{${personalInfo.githubUrl}}{github.com/yourid} \\quad` : ''}
+  ${personalInfo.linkedinUrl ? `\\faIcon{linkedin}\\, \\href{${personalInfo.linkedinUrl}}{linkedin.com/in/yourid}` : ''}}
+
+% ==========================
+\\begin{document}
+\\makeheader
+
+% Two-column layout: left sidebar (0.32) / right main (0.68)
+\\columnratio{0.32}
+\\begin{paracol}{2}
+\\switchcolumn* % LEFT SIDEBAR
+
+% ---- SUMMARY ----
+\\section*{Summary}
+Results-driven engineer crafting accessible, performant web apps. Passion for design systems, DX, and shipping pixel-perfect UIs at speed.
+
+% ---- SKILLS ----
+\\section*{Skills}
+${skills.languages?.length ? `\\siderow{Languages}{${skills.languages.join(', ')}}` : ''}
+${skills.frontend?.length ? `\\siderow{Frontend}{${skills.frontend.join(', ')}}` : ''}
+${skills.backend?.length ? `\\siderow{Backend}{${skills.backend.join(', ')}}` : ''}
+${skills.tools?.length ? `\\siderow{Tools}{${skills.tools.join(', ')}}` : ''}
+${skills.databases?.length ? `\\siderow{Databases}{${skills.databases.join(', ')}}` : ''}
+\\vspace{0.2em}
+${skills.concepts?.length ? skills.concepts.map(skill => `\\tag{${skill}}`).join(' ') : '\\tag{Accessibility} \\tag{Web Performance} \\tag{Design Systems}'}
+
+% ---- EDUCATION ----
+\\section*{Education}
+${education.map(edu => 
+  `\\edu{${edu.degree}}{${edu.institute}}{${edu.year}}{CGPA: ${edu.cgpa}/10}`
+).join('\n')}
+
+% ---- HIGHLIGHTS ----
+\\section*{Highlights}
+\\begin{itemize}
+${achievements.map(achievement => `  \\item ${achievement.title}${achievement.description ? ` - ${achievement.description}` : ''}`).join('\n')}
+\\end{itemize}
+
+\\switchcolumn % RIGHT MAIN
+
+% ---- EXPERIENCE ----
+\\section*{Experience}
+${experience.map(exp => 
+  `\\entry{${exp.position}}{${exp.company}}{Remote}{${exp.duration}}{
+  \\begin{itemize}
+${exp.description.map(desc => `    \\item ${desc}`).join('\n')}
+  \\end{itemize}}`
+).join('\n\n')}
+
+% ---- PROJECTS ----
+\\section*{Selected Projects}
+${projects.map(project => 
+  `\\entry{${project.title}}{${project.technologies?.join(', ') || 'React, Node.js'}}{Project}{${project.duration || '2024'}}{
+  \\begin{itemize}
+${project.description.map(desc => `    \\item ${desc}`).join('\n')}
+  \\end{itemize}}`
+).join('\n\n')}
+
+% ---- EXTRA: FOOTNOTE TAGS EXAMPLE ----
+\\vspace{0.2em}
+\\small\\textcolor{muted}{References available on request}
+
+\\end{paracol}
+
+\\end{document}`;
+};
+
 // Preview Generation - opens HTML in modal
 export const previewLatexResume = (data: AcademicResumeData, templateId: string): void => {
   const template = latexTemplates.find(t => t.id === templateId);
@@ -410,6 +572,15 @@ export const latexTemplates: LatexTemplate[] = [
     templateContent: 'Classic professional LaTeX template',
     requiredPackages: ['geometry', 'times', 'titlesec'],
     generate: generateClassicProLatex
+  },
+  {
+    id: 'elegant',
+    name: 'Elegant Professional',
+    description: 'Modern two-column layout with teal accents and sidebar design',
+    category: 'modern',
+    templateContent: 'Elegant professional LaTeX template with two-column layout',
+    requiredPackages: ['geometry', 'xcolor', 'fontawesome5', 'paracol', 'tikz'],
+    generate: generateElegantLatex
   }
 ];
 
@@ -493,7 +664,8 @@ const convertLatexToHTML = (data: AcademicResumeData, templateId: string, isModa
   const colors = {
     academic: { primary: '#000000', accent: '#333333' },
     techmodern: { primary: '#2563eb', accent: '#1d4ed8' },
-    classicpro: { primary: '#1f2937', accent: '#374151' }
+    classicpro: { primary: '#1f2937', accent: '#374151' },
+    elegant: { primary: '#0E7490', accent: '#0EA5E9' }
   };
 
   const templateColors = colors[templateId as keyof typeof colors] || colors.academic;
@@ -504,6 +676,8 @@ const convertLatexToHTML = (data: AcademicResumeData, templateId: string, isModa
     return generateTechModernHTML(data, templateColors, isModal);
   } else if (templateId === 'classicpro') {
     return generateClassicProHTML(data, templateColors, isModal);
+  } else if (templateId === 'elegant') {
+    return generateElegantHTML(data, templateColors, isModal);
   }
   
   return generateAcademicHTML(data, templateColors, isModal);
@@ -1143,6 +1317,394 @@ const generateClassicProHTML = (data: AcademicResumeData, colors: any, isModal: 
       `).join('')}
     </div>
     ` : ''}
+  </div>
+</body>
+</html>`;
+};
+
+const generateElegantHTML = (data: AcademicResumeData, colors: any, isModal: boolean = false): string => {
+  const containerWidth = isModal ? '21cm' : '8.27in';
+  const containerHeight = isModal ? '29.7cm' : 'auto';
+  
+  return `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>${data.personalInfo.fullName} - Resume</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:wght@400;500;600&display=swap');
+    
+    @page { size: A4; margin: 1.35cm; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+      font-size: ${isModal ? '11pt' : '10pt'}; 
+      line-height: 1.4; 
+      color: #111827;
+      background: ${isModal ? '#f8fafc' : 'white'};
+      ${isModal ? `
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
+        padding: 20px;
+      ` : ''}
+    }
+    .container { 
+      width: ${containerWidth}; 
+      ${isModal ? `height: ${containerHeight}; min-height: ${containerHeight};` : 'max-width: 8.27in;'} 
+      margin: 0 auto; 
+      padding: ${isModal ? '24px' : '16px'}; 
+      background: white;
+      ${isModal ? `
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: 0.32fr 0.68fr;
+        gap: 2em;
+      ` : 'display: grid; grid-template-columns: 0.32fr 0.68fr; gap: 2em;'}
+    }
+    
+    /* Header spanning both columns */
+    .main-header {
+      grid-column: 1 / -1;
+      margin-bottom: 1.5em;
+      padding-bottom: 1em;
+      position: relative;
+    }
+    .name { 
+      font-family: 'Lora', serif;
+      font-size: ${isModal ? '32pt' : '28pt'}; 
+      font-weight: 600; 
+      line-height: 1.1; 
+      margin-bottom: 0.2em; 
+      color: #111827;
+    }
+    .role { 
+      font-size: ${isModal ? '14pt' : '12pt'}; 
+      color: #6b7280; 
+      margin-bottom: 0.8em;
+    }
+    .contact-info { 
+      font-size: ${isModal ? '10pt' : '9pt'}; 
+      color: #6b7280;
+      line-height: 1.5;
+    }
+    .header-line {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, ${colors.primary} 0%, ${colors.primary} 10px, transparent 10px);
+    }
+    .header-dot {
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 4px;
+      height: 4px;
+      background: ${colors.primary};
+      border-radius: 50%;
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5em;
+    }
+    
+    /* Main content */
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5em;
+    }
+    
+    .section-title { 
+      font-size: ${isModal ? '14pt' : '12pt'}; 
+      font-weight: 600; 
+      color: #111827;
+      margin-bottom: 0.8em;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    /* Skills section */
+    .skill-group {
+      margin-bottom: 0.8em;
+    }
+    .skill-label {
+      font-size: ${isModal ? '9pt' : '8pt'};
+      color: #6b7280;
+      text-transform: uppercase;
+      font-weight: 500;
+      margin-bottom: 0.3em;
+    }
+    .skill-value {
+      font-weight: 600;
+      color: #111827;
+      font-size: ${isModal ? '10pt' : '9pt'};
+      margin-bottom: 0.8em;
+    }
+    
+    /* Tags */
+    .tags-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3em;
+      margin-top: 0.5em;
+    }
+    .tag {
+      background: rgba(14, 116, 144, 0.1);
+      border: 1px solid rgba(14, 116, 144, 0.25);
+      color: ${colors.primary};
+      padding: 0.2em 0.5em;
+      border-radius: 4px;
+      font-size: ${isModal ? '8pt' : '7pt'};
+      font-weight: 500;
+    }
+    
+    /* Education */
+    .education-item {
+      margin-bottom: 1em;
+    }
+    .edu-degree {
+      font-weight: 600;
+      color: #111827;
+      font-size: ${isModal ? '11pt' : '10pt'};
+    }
+    .edu-institute {
+      color: ${colors.primary};
+      font-weight: 500;
+      font-size: ${isModal ? '10pt' : '9pt'};
+    }
+    .edu-year {
+      color: #6b7280;
+      font-size: ${isModal ? '9pt' : '8pt'};
+      float: right;
+    }
+    .edu-details {
+      font-size: ${isModal ? '9pt' : '8pt'};
+      color: #6b7280;
+      margin-top: 0.2em;
+    }
+    
+    /* Experience and Projects */
+    .entry-item {
+      margin-bottom: 1.5em;
+    }
+    .entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.3em;
+    }
+    .entry-title {
+      font-weight: 600;
+      color: #111827;
+      font-size: ${isModal ? '12pt' : '11pt'};
+    }
+    .entry-duration {
+      color: #6b7280;
+      font-size: ${isModal ? '9pt' : '8pt'};
+      font-style: italic;
+    }
+    .entry-org {
+      color: ${colors.primary};
+      font-weight: 500;
+      font-size: ${isModal ? '10pt' : '9pt'};
+      margin-bottom: 0.5em;
+    }
+    .entry-desc {
+      list-style: none;
+      margin-left: 0;
+    }
+    .entry-desc li {
+      position: relative;
+      padding-left: 1.2em;
+      margin-bottom: 0.4em;
+      font-size: ${isModal ? '10pt' : '9pt'};
+      line-height: 1.4;
+    }
+    .entry-desc li:before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: ${colors.primary};
+      font-weight: 600;
+    }
+    
+    /* Summary text */
+    .summary-text {
+      font-size: ${isModal ? '10pt' : '9pt'};
+      color: #374151;
+      line-height: 1.5;
+      text-align: justify;
+    }
+    
+    /* Highlights/Achievements */
+    .highlights-list {
+      list-style: none;
+      margin-left: 0;
+    }
+    .highlights-list li {
+      position: relative;
+      padding-left: 1.2em;
+      margin-bottom: 0.5em;
+      font-size: ${isModal ? '9pt' : '8pt'};
+      line-height: 1.4;
+    }
+    .highlights-list li:before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: ${colors.primary};
+      font-weight: 600;
+    }
+    
+    @media print {
+      body { background: white; }
+      .container { 
+        box-shadow: none;
+        border-radius: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="main-header">
+      <div class="name">${data.personalInfo.fullName}</div>
+      <div class="role">${data.experience.length > 0 ? data.experience[0].position : 'Frontend Engineer'} • ${data.skills.frontend?.join(' / ') || 'React / TypeScript'}</div>
+      <div class="contact-info">
+        📍 ${data.personalInfo.address || 'City, Country'} • 
+        📞 ${data.personalInfo.phone || '+91-00000-00000'} • 
+        ✉️ <a href="mailto:${data.personalInfo.email}" style="color: inherit; text-decoration: none;">${data.personalInfo.email}</a>
+        ${data.personalInfo.githubUrl ? ` • 🔗 <a href="${data.personalInfo.githubUrl}" style="color: inherit; text-decoration: none;">GitHub</a>` : ''}
+        ${data.personalInfo.linkedinUrl ? ` • 💼 <a href="${data.personalInfo.linkedinUrl}" style="color: inherit; text-decoration: none;">LinkedIn</a>` : ''}
+      </div>
+      <div class="header-line"></div>
+      <div class="header-dot"></div>
+    </div>
+
+    <!-- Left Sidebar -->
+    <div class="sidebar">
+      <!-- Summary -->
+      <div>
+        <div class="section-title">Summary</div>
+        <div class="summary-text">
+          Results-driven engineer crafting accessible, performant web apps. Passion for design systems, DX, and shipping pixel-perfect UIs at speed.
+        </div>
+      </div>
+
+      <!-- Skills -->
+      <div>
+        <div class="section-title">Skills</div>
+        ${data.skills.languages?.length ? `
+        <div class="skill-group">
+          <div class="skill-label">Languages</div>
+          <div class="skill-value">${data.skills.languages.join(', ')}</div>
+        </div>
+        ` : ''}
+        ${data.skills.frontend?.length ? `
+        <div class="skill-group">
+          <div class="skill-label">Frontend</div>
+          <div class="skill-value">${data.skills.frontend.join(', ')}</div>
+        </div>
+        ` : ''}
+        ${data.skills.backend?.length ? `
+        <div class="skill-group">
+          <div class="skill-label">Backend</div>
+          <div class="skill-value">${data.skills.backend.join(', ')}</div>
+        </div>
+        ` : ''}
+        ${data.skills.tools?.length ? `
+        <div class="skill-group">
+          <div class="skill-label">Tools</div>
+          <div class="skill-value">${data.skills.tools.join(', ')}</div>
+        </div>
+        ` : ''}
+        ${data.skills.databases?.length ? `
+        <div class="skill-group">
+          <div class="skill-label">Databases</div>
+          <div class="skill-value">${data.skills.databases.join(', ')}</div>
+        </div>
+        ` : ''}
+        
+        <div class="tags-container">
+          ${data.skills.concepts?.length ? data.skills.concepts.map(skill => `<span class="tag">${skill}</span>`).join('') : '<span class="tag">Accessibility</span><span class="tag">Web Performance</span><span class="tag">Design Systems</span>'}
+        </div>
+      </div>
+
+      <!-- Education -->
+      ${data.education.length > 0 ? `
+      <div>
+        <div class="section-title">Education</div>
+        ${data.education.map(edu => `
+        <div class="education-item">
+          <div class="edu-degree">${edu.degree}</div>
+          <div class="edu-institute">${edu.institute} <span class="edu-year">${edu.year}</span></div>
+          <div class="edu-details">CGPA: ${edu.cgpa}/10</div>
+        </div>
+        `).join('')}
+      </div>
+      ` : ''}
+
+      <!-- Highlights -->
+      ${data.achievements.length > 0 ? `
+      <div>
+        <div class="section-title">Highlights</div>
+        <ul class="highlights-list">
+          ${data.achievements.map(achievement => `<li>${achievement.title}${achievement.description ? ` - ${achievement.description}` : ''}</li>`).join('')}
+        </ul>
+      </div>
+      ` : ''}
+    </div>
+
+    <!-- Right Main Content -->
+    <div class="main-content">
+      <!-- Experience -->
+      ${data.experience.length > 0 ? `
+      <div>
+        <div class="section-title">Experience</div>
+        ${data.experience.map(exp => `
+        <div class="entry-item">
+          <div class="entry-header">
+            <span class="entry-title">${exp.position}</span>
+            <span class="entry-duration">${exp.duration}</span>
+          </div>
+          <div class="entry-org">${exp.company}</div>
+          <ul class="entry-desc">
+            ${exp.description.map(desc => `<li>${desc}</li>`).join('')}
+          </ul>
+        </div>
+        `).join('')}
+      </div>
+      ` : ''}
+
+      <!-- Projects -->
+      ${data.projects.length > 0 ? `
+      <div>
+        <div class="section-title">Selected Projects</div>
+        ${data.projects.map(project => `
+        <div class="entry-item">
+          <div class="entry-header">
+            <span class="entry-title">${project.title}</span>
+            <span class="entry-duration">${project.duration || '2024'}</span>
+          </div>
+          <div class="entry-org">${project.technologies?.join(', ') || 'React, Node.js'}</div>
+          <ul class="entry-desc">
+            ${project.description.map(desc => `<li>${desc}</li>`).join('')}
+          </ul>
+        </div>
+        `).join('')}
+      </div>
+      ` : ''}
+    </div>
   </div>
 </body>
 </html>`;
