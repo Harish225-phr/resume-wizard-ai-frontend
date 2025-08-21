@@ -3,7 +3,6 @@ import React from 'react';
 import { X, Check } from 'lucide-react';
 import { Template } from '@/types/resume';
 import { Button } from '@/components/ui/button';
-import FakeResumePreview from './FakeResumePreview';
 
 interface TemplatePreviewModalProps {
   template: Template | null;
@@ -41,8 +40,12 @@ const TemplatePreviewModal = ({ template, isOpen, onClose, onSelect }: TemplateP
         
         <div className="p-6 overflow-y-auto max-h-[70vh]">
           <div className="flex justify-center">
-            <div className="transform scale-75 origin-top">
-              <FakeResumePreview template={template} />
+            <div className="max-w-2xl w-full">
+              <img 
+                src={template.imageUrl}
+                alt={`${template.name} template preview`}
+                className="w-full h-auto rounded-lg shadow-lg border border-border"
+              />
             </div>
           </div>
         </div>
