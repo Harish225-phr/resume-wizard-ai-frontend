@@ -391,9 +391,9 @@ const ATSAnalysis: React.FC<ATSAnalysisProps> = ({ resumeData, onClose }) => {
       <Card>
         <CardContent className="pt-6">
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button onClick={performAnalysis} variant="outline" className="flex items-center gap-2">
+            <Button onClick={onClose} variant="outline" className="flex items-center gap-2">
               <Search className="h-4 w-4" />
-              Re-analyze Resume
+              Back
             </Button>
             <Button className="flex items-center gap-2">
               <FileText className="h-4 w-4" />
