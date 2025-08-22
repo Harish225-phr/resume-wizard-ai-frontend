@@ -395,13 +395,9 @@ const ATSAnalysis: React.FC<ATSAnalysisProps> = ({ resumeData, onClose }) => {
               <Search className="h-4 w-4" />
               Back
             </Button>
-            <Button className="flex items-center gap-2">
-              <FileText className="h-4 w-4" />
-              Generate ATS Report
-            </Button>
-            <Button variant="outline" className="flex items-center gap-2">
-              <TrendingUp className="h-4 w-4" />
-              Compare with Industry Standards
+            <Button onClick={performAnalysis} className="flex items-center gap-2">
+              <Target className="h-4 w-4" />
+              Re-generate ATS Score
             </Button>
           </div>
         </CardContent>
