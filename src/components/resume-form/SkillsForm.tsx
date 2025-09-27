@@ -41,7 +41,7 @@ const SkillsForm = ({ formData, handleInputChange }: SkillsFormProps) => {
       <div className="space-y-6">
         <div>
           <label htmlFor="skills" className="block text-sm font-medium text-gray-700 mb-2">
-            Technical Skills *
+            Skills *
           </label>
           
           {/* Skills Input */}
@@ -52,7 +52,7 @@ const SkillsForm = ({ formData, handleInputChange }: SkillsFormProps) => {
               onChange={(e) => setNewSkill(e.target.value)}
               onKeyPress={handleKeyPress}
               className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-              placeholder="e.g., JavaScript, React, Communication"
+              placeholder="e.g., Communication, Leadership, Microsoft Office, Problem Solving"
             />
             <Button
               type="button"
@@ -93,7 +93,7 @@ const SkillsForm = ({ formData, handleInputChange }: SkillsFormProps) => {
             onChange={handleInputChange}
             rows={2}
             className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-            placeholder="Or enter skills manually separated by commas"
+            placeholder="Enter your skills separated by commas (e.g., Communication, Microsoft Office, Problem Solving, Time Management)"
           />
         </div>
 
